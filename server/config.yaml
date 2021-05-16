@@ -69,7 +69,7 @@ redis:
   password: ""
 system:
   env: public
-  addr: 888
+  addr: 8200
   db-type: mysql
   oss-type: local
   use-multipoint: false
