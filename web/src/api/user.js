@@ -19,7 +19,7 @@ export const login = (data) => {
 export const captcha = (data) => {
     return service({
         url: "/base/captcha",
-        method: 'post',
+        method: 'get',
         data: data
     })
 }
