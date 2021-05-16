@@ -49,8 +49,8 @@ mysql:
   path: 127.0.0.1:3306
   config: charset=utf8mb4&parseTime=True&loc=Local
   db-name: avf
-  username: root
-  password: wx8805780
+  username: avf
+  password: pa2pDs8daPfNYGhD
   max-idle-conns: 0
   max-open-conns: 0
   log-mode: false
@@ -69,7 +69,7 @@ redis:
   password: ""
 system:
   env: public
-  addr: 8888
+  addr: 888
   db-type: mysql
   oss-type: local
   use-multipoint: false

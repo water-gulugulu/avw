@@ -18,6 +18,7 @@
 package web
 
 import (
+	"fmt"
 	web_tools "gin-vue-admin/api/web/tools"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
@@ -25,6 +26,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"strconv"
+	"time"
 )
 
 func LuckyDraw(c *gin.Context) {
@@ -60,7 +62,13 @@ func LuckyDraw(c *gin.Context) {
 	}
 
 	err = DB.Transaction(func(tx *gorm.DB) error {
+		Order.Number = Order.Number - 1
+		Order.UpdatedAt = time.Now()
 
+		OrderCard := model.AvfOrderCard{
+			OrderId: oid,
+		}
+		fmt.Printf("%s", OrderCard)
 		return nil
 	})
 	if err != nil {
