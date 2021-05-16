@@ -1120,6 +1120,462 @@ var doc = `{
                 }
             }
         },
+        "/avfOrder/createAvfOrder": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AvfOrder"
+                ],
+                "summary": "创建AvfOrder",
+                "parameters": [
+                    {
+                        "description": "创建AvfOrder",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.AvfOrder"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/avfOrder/deleteAvfOrder": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AvfOrder"
+                ],
+                "summary": "删除AvfOrder",
+                "parameters": [
+                    {
+                        "description": "删除AvfOrder",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.AvfOrder"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"删除成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/avfOrder/deleteAvfOrderByIds": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AvfOrder"
+                ],
+                "summary": "批量删除AvfOrder",
+                "parameters": [
+                    {
+                        "description": "批量删除AvfOrder",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.IdsReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"批量删除成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/avfOrder/findAvfOrder": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AvfOrder"
+                ],
+                "summary": "用id查询AvfOrder",
+                "parameters": [
+                    {
+                        "description": "用id查询AvfOrder",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.AvfOrder"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"查询成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/avfOrder/getAvfOrderList": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AvfOrder"
+                ],
+                "summary": "分页获取AvfOrder列表",
+                "parameters": [
+                    {
+                        "description": "分页获取AvfOrder列表",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.AvfOrderSearch"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/avfOrder/updateAvfOrder": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AvfOrder"
+                ],
+                "summary": "更新AvfOrder",
+                "parameters": [
+                    {
+                        "description": "更新AvfOrder",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.AvfOrder"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"更新成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/avfOrderCard/createAvfOrderCard": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AvfOrderCard"
+                ],
+                "summary": "创建AvfOrderCard",
+                "parameters": [
+                    {
+                        "description": "创建AvfOrderCard",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.AvfOrderCard"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/avfOrderCard/deleteAvfOrderCard": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AvfOrderCard"
+                ],
+                "summary": "删除AvfOrderCard",
+                "parameters": [
+                    {
+                        "description": "删除AvfOrderCard",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.AvfOrderCard"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"删除成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/avfOrderCard/deleteAvfOrderCardByIds": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AvfOrderCard"
+                ],
+                "summary": "批量删除AvfOrderCard",
+                "parameters": [
+                    {
+                        "description": "批量删除AvfOrderCard",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.IdsReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"批量删除成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/avfOrderCard/findAvfOrderCard": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AvfOrderCard"
+                ],
+                "summary": "用id查询AvfOrderCard",
+                "parameters": [
+                    {
+                        "description": "用id查询AvfOrderCard",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.AvfOrderCard"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"查询成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/avfOrderCard/getAvfOrderCardList": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AvfOrderCard"
+                ],
+                "summary": "分页获取AvfOrderCard列表",
+                "parameters": [
+                    {
+                        "description": "分页获取AvfOrderCard列表",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.AvfOrderCardSearch"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/avfOrderCard/updateAvfOrderCard": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AvfOrderCard"
+                ],
+                "summary": "更新AvfOrderCard",
+                "parameters": [
+                    {
+                        "description": "更新AvfOrderCard",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.AvfOrderCard"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"更新成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/avfUser/createAvfUser": {
             "post": {
                 "security": [
@@ -3442,6 +3898,260 @@ var doc = `{
                 }
             }
         },
+        "/web/card/list": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "前端接口"
+                ],
+                "summary": "获取卡牌列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "数量",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web_tools.CardListResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/web/order/cancelOrder": {
+            "post": {
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "前端接口"
+                ],
+                "summary": "取消订单",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "x-token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "订单ID",
+                        "name": "order_id",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "status\":200,\"msg\":\"成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/web/order/createOrder": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "前端接口"
+                ],
+                "summary": "创建订单",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "x-token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "盲盒类型 1-一连抽 2-十连抽",
+                        "name": "type",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "数量 购买盲盒数量",
+                        "name": "num",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web_tools.CreateOrderResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/web/order/list": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "前端接口"
+                ],
+                "summary": "订单列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "x-token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web_tools.OrderListResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/web/order/orderDetail": {
+            "get": {
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "前端接口"
+                ],
+                "summary": "订单详情",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "x-token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "订单ID",
+                        "name": "order_id",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web_tools.OrderDetailResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/web/order/payOrder": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "前端接口"
+                ],
+                "summary": "支付订单",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "x-token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "订单ID",
+                        "name": "order_id",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "发起交易后的事务hash",
+                        "name": "tx_hash",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "发起交易的钱包地址",
+                        "name": "address",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":200,\"message\":\"200\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/web/user/getUserInfo": {
             "get": {
                 "consumes": [
@@ -3465,9 +4175,9 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"code\":0,\"data\":{\"user\":{\"UUID\":\"\",\"ID\":1,\"Username\":\"\",\"NickName\":\"\",\"AuthorityId\":\"\",\"BufferTime\":86400,\"exp\":1621475281,\"iss\":\"qmPlus\",\"nbf\":1620869481},\"avw_balance\":\"9.5\",\"ht_balance\":null},\"msg\":\"操作成功\"}",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/web_tools.UserInfo"
                         }
                     }
                 }
@@ -3502,9 +4212,9 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"code\":0,\"data\":{\"id\":1,\"username\":\"\",\"status\":true,\"wallet_address\":\"\",\"token\":\"\"},\"msg\":\"操作成功\"}",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/web_tools.LoginResponse"
                         }
                     }
                 }
@@ -3576,6 +4286,17 @@ var doc = `{
                 }
             }
         },
+        "config.BlindBox": {
+            "type": "object",
+            "properties": {
+                "one": {
+                    "type": "integer"
+                },
+                "ten": {
+                    "type": "integer"
+                }
+            }
+        },
         "config.Captcha": {
             "type": "object",
             "properties": {
@@ -3598,6 +4319,15 @@ var doc = `{
             "properties": {
                 "modelPath": {
                     "description": "Model路径",
+                    "type": "string"
+                }
+            }
+        },
+        "config.CollectionAddress": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "description": "收款地址",
                     "type": "string"
                 }
             }
@@ -3778,11 +4508,17 @@ var doc = `{
                     "description": "auto",
                     "$ref": "#/definitions/config.Autocode"
                 },
+                "blindBox": {
+                    "$ref": "#/definitions/config.BlindBox"
+                },
                 "captcha": {
                     "$ref": "#/definitions/config.Captcha"
                 },
                 "casbin": {
                     "$ref": "#/definitions/config.Casbin"
+                },
+                "collectionAddress": {
+                    "$ref": "#/definitions/config.CollectionAddress"
                 },
                 "email": {
                     "$ref": "#/definitions/config.Email"
@@ -3970,12 +4706,15 @@ var doc = `{
             "type": "object",
             "properties": {
                 "author": {
+                    "description": "作者",
                     "type": "string"
                 },
                 "contractAddress": {
+                    "description": "合约地址",
                     "type": "string"
                 },
                 "createDate": {
+                    "description": "创建时间",
                     "type": "string"
                 },
                 "createdAt": {
@@ -3983,6 +4722,7 @@ var doc = `{
                     "type": "string"
                 },
                 "desc": {
+                    "description": "描述",
                     "type": "string"
                 },
                 "id": {
@@ -3990,24 +4730,31 @@ var doc = `{
                     "type": "integer"
                 },
                 "level": {
+                    "description": "等级 1-N 2-R 3-SR 4-SSR",
                     "type": "integer"
                 },
                 "money": {
+                    "description": "价格",
                     "type": "number"
                 },
                 "name": {
+                    "description": "卡牌名称",
                     "type": "string"
                 },
                 "number": {
+                    "description": "发行数量",
                     "type": "integer"
                 },
                 "star": {
+                    "description": "算力值",
                     "type": "integer"
                 },
                 "status": {
+                    "description": "状态 true-正常 false-禁用",
                     "type": "boolean"
                 },
                 "updateDate": {
+                    "description": "修改时间",
                     "type": "string"
                 },
                 "updatedAt": {
@@ -4015,6 +4762,7 @@ var doc = `{
                     "type": "string"
                 },
                 "walletAddress": {
+                    "description": "收款钱包地址",
                     "type": "string"
                 }
             }
@@ -4066,6 +4814,128 @@ var doc = `{
                 }
             }
         },
+        "model.AvfOrder": {
+            "type": "object",
+            "properties": {
+                "block": {
+                    "description": "区块号",
+                    "type": "string"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "from": {
+                    "description": "支付地址",
+                    "type": "string"
+                },
+                "gas": {
+                    "description": "手续费",
+                    "type": "string"
+                },
+                "gasPrice": {
+                    "description": "手续费价格",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "num": {
+                    "description": "数量",
+                    "type": "integer"
+                },
+                "number": {
+                    "description": "剩余数量",
+                    "type": "integer"
+                },
+                "orderSn": {
+                    "description": "订单编号",
+                    "type": "string"
+                },
+                "payTime": {
+                    "description": "支付时间",
+                    "type": "integer"
+                },
+                "price": {
+                    "description": "价格",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态 1-待支付 2-待确认 3-已完成 4-已取消5-已关闭",
+                    "type": "integer"
+                },
+                "to": {
+                    "description": "收款地址",
+                    "type": "string"
+                },
+                "txHash": {
+                    "description": "交易hash",
+                    "type": "string"
+                },
+                "uid": {
+                    "description": "用户ID",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
+        "model.AvfOrderCard": {
+            "type": "object",
+            "properties": {
+                "cardId": {
+                    "description": "卡牌ID",
+                    "type": "integer"
+                },
+                "createTime": {
+                    "description": "创建时间",
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "giveType": {
+                    "description": "获得方式 1-抽奖 2-购买",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "level": {
+                    "description": "等级 1-N 2-R 3-SR 4-SSR",
+                    "type": "integer"
+                },
+                "orderId": {
+                    "description": "订单ID",
+                    "type": "integer"
+                },
+                "star": {
+                    "description": "算力值",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态 1-正常 2-转让中",
+                    "type": "integer"
+                },
+                "uid": {
+                    "description": "用户ID",
+                    "type": "integer"
+                },
+                "updateTime": {
+                    "description": "修改时间",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
         "model.AvfUser": {
             "type": "object",
             "properties": {
@@ -4074,6 +4944,7 @@ var doc = `{
                     "type": "string"
                 },
                 "createdTime": {
+                    "description": "创建时间",
                     "type": "integer"
                 },
                 "id": {
@@ -4081,30 +4952,35 @@ var doc = `{
                     "type": "integer"
                 },
                 "loginIp": {
+                    "description": "登录IP",
                     "type": "string"
                 },
                 "loginTime": {
+                    "description": "登录时间",
                     "type": "integer"
                 },
                 "loginTimes": {
-                    "type": "integer"
-                },
-                "lottery": {
+                    "description": "登录次数",
                     "type": "integer"
                 },
                 "mobile": {
+                    "description": "手机号",
                     "type": "string"
                 },
                 "password": {
+                    "description": "密码",
                     "type": "string"
                 },
                 "payPassword": {
+                    "description": "支付密码",
                     "type": "string"
                 },
                 "pid": {
+                    "description": "上级地址",
                     "type": "string"
                 },
                 "status": {
+                    "description": "状态",
                     "type": "boolean"
                 },
                 "updatedAt": {
@@ -4112,9 +4988,11 @@ var doc = `{
                     "type": "string"
                 },
                 "username": {
+                    "description": "用户名",
                     "type": "string"
                 },
                 "walletAddress": {
+                    "description": "钱包地址",
                     "type": "string"
                 }
             }
@@ -4646,12 +5524,15 @@ var doc = `{
             "type": "object",
             "properties": {
                 "author": {
+                    "description": "作者",
                     "type": "string"
                 },
                 "contractAddress": {
+                    "description": "合约地址",
                     "type": "string"
                 },
                 "createDate": {
+                    "description": "创建时间",
                     "type": "string"
                 },
                 "createdAt": {
@@ -4659,6 +5540,7 @@ var doc = `{
                     "type": "string"
                 },
                 "desc": {
+                    "description": "描述",
                     "type": "string"
                 },
                 "id": {
@@ -4666,15 +5548,19 @@ var doc = `{
                     "type": "integer"
                 },
                 "level": {
+                    "description": "等级 1-N 2-R 3-SR 4-SSR",
                     "type": "integer"
                 },
                 "money": {
+                    "description": "价格",
                     "type": "number"
                 },
                 "name": {
+                    "description": "卡牌名称",
                     "type": "string"
                 },
                 "number": {
+                    "description": "发行数量",
                     "type": "integer"
                 },
                 "page": {
@@ -4686,12 +5572,15 @@ var doc = `{
                     "type": "integer"
                 },
                 "star": {
+                    "description": "算力值",
                     "type": "integer"
                 },
                 "status": {
+                    "description": "状态 true-正常 false-禁用",
                     "type": "boolean"
                 },
                 "updateDate": {
+                    "description": "修改时间",
                     "type": "string"
                 },
                 "updatedAt": {
@@ -4699,6 +5588,7 @@ var doc = `{
                     "type": "string"
                 },
                 "walletAddress": {
+                    "description": "收款钱包地址",
                     "type": "string"
                 }
             }
@@ -4758,6 +5648,144 @@ var doc = `{
                 }
             }
         },
+        "request.AvfOrderCardSearch": {
+            "type": "object",
+            "properties": {
+                "cardId": {
+                    "description": "卡牌ID",
+                    "type": "integer"
+                },
+                "createTime": {
+                    "description": "创建时间",
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "giveType": {
+                    "description": "获得方式 1-抽奖 2-购买",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "level": {
+                    "description": "等级 1-N 2-R 3-SR 4-SSR",
+                    "type": "integer"
+                },
+                "orderId": {
+                    "description": "订单ID",
+                    "type": "integer"
+                },
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "description": "每页大小",
+                    "type": "integer"
+                },
+                "star": {
+                    "description": "算力值",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态 1-正常 2-转让中",
+                    "type": "integer"
+                },
+                "uid": {
+                    "description": "用户ID",
+                    "type": "integer"
+                },
+                "updateTime": {
+                    "description": "修改时间",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
+        "request.AvfOrderSearch": {
+            "type": "object",
+            "properties": {
+                "block": {
+                    "description": "区块号",
+                    "type": "string"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "from": {
+                    "description": "支付地址",
+                    "type": "string"
+                },
+                "gas": {
+                    "description": "手续费",
+                    "type": "string"
+                },
+                "gasPrice": {
+                    "description": "手续费价格",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "num": {
+                    "description": "数量",
+                    "type": "integer"
+                },
+                "number": {
+                    "description": "剩余数量",
+                    "type": "integer"
+                },
+                "orderSn": {
+                    "description": "订单编号",
+                    "type": "string"
+                },
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "description": "每页大小",
+                    "type": "integer"
+                },
+                "payTime": {
+                    "description": "支付时间",
+                    "type": "integer"
+                },
+                "price": {
+                    "description": "价格",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态 1-待支付 2-待确认 3-已完成 4-已取消5-已关闭",
+                    "type": "integer"
+                },
+                "to": {
+                    "description": "收款地址",
+                    "type": "string"
+                },
+                "txHash": {
+                    "description": "交易hash",
+                    "type": "string"
+                },
+                "uid": {
+                    "description": "用户ID",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
         "request.AvfUserSearch": {
             "type": "object",
             "properties": {
@@ -4766,6 +5794,7 @@ var doc = `{
                     "type": "string"
                 },
                 "createdTime": {
+                    "description": "创建时间",
                     "type": "integer"
                 },
                 "id": {
@@ -4773,18 +5802,19 @@ var doc = `{
                     "type": "integer"
                 },
                 "loginIp": {
+                    "description": "登录IP",
                     "type": "string"
                 },
                 "loginTime": {
+                    "description": "登录时间",
                     "type": "integer"
                 },
                 "loginTimes": {
-                    "type": "integer"
-                },
-                "lottery": {
+                    "description": "登录次数",
                     "type": "integer"
                 },
                 "mobile": {
+                    "description": "手机号",
                     "type": "string"
                 },
                 "page": {
@@ -4796,15 +5826,19 @@ var doc = `{
                     "type": "integer"
                 },
                 "password": {
+                    "description": "密码",
                     "type": "string"
                 },
                 "payPassword": {
+                    "description": "支付密码",
                     "type": "string"
                 },
                 "pid": {
+                    "description": "上级地址",
                     "type": "string"
                 },
                 "status": {
+                    "description": "状态",
                     "type": "boolean"
                 },
                 "updatedAt": {
@@ -4812,9 +5846,11 @@ var doc = `{
                     "type": "string"
                 },
                 "username": {
+                    "description": "用户名",
                     "type": "string"
                 },
                 "walletAddress": {
+                    "description": "钱包地址",
                     "type": "string"
                 }
             }
@@ -5189,6 +6225,133 @@ var doc = `{
                 },
                 "oldAuthorityId": {
                     "description": "旧角色ID",
+                    "type": "string"
+                }
+            }
+        },
+        "web_tools.CardListResponse": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "description": "卡牌列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.AvfCard"
+                    }
+                },
+                "total": {
+                    "description": "总条数",
+                    "type": "integer"
+                }
+            }
+        },
+        "web_tools.CreateOrderResponse": {
+            "type": "object",
+            "properties": {
+                "order_id": {
+                    "description": "订单ID",
+                    "type": "integer"
+                },
+                "order_sn": {
+                    "description": "订单号",
+                    "type": "string"
+                },
+                "price": {
+                    "description": "订单价格",
+                    "type": "integer"
+                }
+            }
+        },
+        "web_tools.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "用户ID",
+                    "type": "integer"
+                },
+                "pid": {
+                    "description": "上级地址",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "状态",
+                    "type": "boolean"
+                },
+                "token": {
+                    "description": "token",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "用户名",
+                    "type": "string"
+                },
+                "wallet_address": {
+                    "description": "钱包地址",
+                    "type": "string"
+                }
+            }
+        },
+        "web_tools.OrderDetailResponse": {
+            "type": "object",
+            "properties": {
+                "order_card_list": {
+                    "description": "卡牌列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.AvfOrderCard"
+                    }
+                },
+                "order_info": {
+                    "description": "订单详情",
+                    "$ref": "#/definitions/model.AvfOrder"
+                }
+            }
+        },
+        "web_tools.OrderListResponse": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "description": "订单列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.AvfOrder"
+                    }
+                },
+                "total": {
+                    "description": "总条数",
+                    "type": "integer"
+                }
+            }
+        },
+        "web_tools.UserInfo": {
+            "type": "object",
+            "properties": {
+                "avw_balance": {
+                    "description": "avw余额",
+                    "type": "number"
+                },
+                "ht_balance": {
+                    "description": "ht余额",
+                    "type": "number"
+                },
+                "id": {
+                    "description": "用户ID",
+                    "type": "integer"
+                },
+                "pid": {
+                    "description": "上级地址",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "状态",
+                    "type": "boolean"
+                },
+                "username": {
+                    "description": "用户名",
+                    "type": "string"
+                },
+                "wallet_address": {
+                    "description": "钱包地址",
                     "type": "string"
                 }
             }

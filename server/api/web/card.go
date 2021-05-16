@@ -18,6 +18,7 @@
 package web
 
 import (
+	web_tools "gin-vue-admin/api/web/tools"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/response"
@@ -25,6 +26,14 @@ import (
 	"strconv"
 )
 
+// @Tags 前端接口
+// @Summary 获取卡牌列表
+// @accept application/json
+// @Produce application/json
+// @Param page query string  false "页码"
+// @Param size query string  false "数量"
+// @Success 200  {object} web_tools.CardListResponse
+// @Router /web/card/list [get]
 func GetCardList(c *gin.Context) {
 	page := c.Query("page")
 	size := c.Query("size")
@@ -33,25 +42,20 @@ func GetCardList(c *gin.Context) {
 		size = "10"
 	}
 	if len(page) == 0 {
-		page = "1"
+		page = "0"
 	}
 
 	Card := model.AvfCard{}
-	s, _ := strconv.Atoi(size)
 	p, _ := strconv.Atoi(page)
+	s, _ := strconv.Atoi(size)
 
 	list, total, err := Card.GetList(global.GVA_DB, p, s)
 	if err != nil {
 		response.OkWithDetailed("", "获取成功", c)
 	}
-	res := ListResponse{
+	res := web_tools.CardListResponse{
 		List:  list,
 		Total: total,
 	}
 	response.OkWithDetailed(res, "获取成功", c)
-}
-
-type ListResponse struct {
-	List  []model.AvfCard `json:"list"` // 卡牌列表
-	Total int64           `json:"total"`
 }

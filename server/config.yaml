@@ -5,7 +5,7 @@ aliyun-oss:
   bucket-name: yourBucketName
   bucket-url: yourBucketUrl
 autocode:
-  root: /Users/mt/tools/接单/NEF/gin-admin
+  root: /Users/mt/tools/接单/NEF
   server: /server
   server-api: /api/v1
   server-initialize: /initialize
@@ -18,12 +18,17 @@ autocode:
   web-form: /view
   web-table: /view
   web-flow: /view
+blind-box:
+  one: 100
+  ten: 950
 captcha:
   key-long: 6
   img-width: 240
   img-height: 80
 casbin:
   model-path: ./resource/rbac_model.conf
+collection-address:
+  address: 0x5029C7e715cB5FAA4c17E6f503f6a1ea8b3870A5
 email:
   to: xxx@qq.com
   port: 465

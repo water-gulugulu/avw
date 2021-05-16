@@ -17,6 +17,8 @@
 
 package tools
 
+import "math/big"
+
 type Address struct {
 	Address string `json:"address"`
 	Crypto  Crypto `json:"crypto"`
@@ -40,4 +42,19 @@ type Crypto struct {
 	Kdf          string       `json:"kdf"`
 	Kdfparams    Kdfparams    `json:"kdfparams"`
 	Mac          string       `json:"mac"`
+}
+
+// TransactionResponse 查询交易返回结果
+type TransactionResponse struct {
+	TxHash     string   `json:"tx_hash"`
+	Block      *big.Int `json:"block"`
+	From       string   `json:"from"`
+	To         string   `json:"to"`
+	GasPrice   *big.Int `json:"gas_price"`
+	Value      *big.Int `json:"value"`
+	Gas        uint64   `json:"gas"`
+	Nonce      uint64   `json:"nonce"`
+	Data       []byte   `json:"data"`
+	CheckNonce bool     `json:"check_nonce"`
+	Status     uint64   `json:"status"`
 }

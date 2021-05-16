@@ -13,10 +13,12 @@ type Server struct {
 	// gorm
 	Mysql Mysql `mapstructure:"mysql" json:"mysql" yaml:"mysql"`
 	// oss
-	Local      Local      `mapstructure:"local" json:"local" yaml:"local"`
-	Qiniu      Qiniu      `mapstructure:"qiniu" json:"qiniu" yaml:"qiniu"`
-	AliyunOSS  AliyunOSS  `mapstructure:"aliyun-oss" json:"aliyunOSS" yaml:"aliyun-oss"`
-	TencentCOS TencentCOS `mapstructure:"tencent-cos" json:"tencentCOS" yaml:"tencent-cos"`
-	Excel      Excel      `mapstructure:"excel" json:"excel" yaml:"excel"`
-	Timer      Timer      `mapstructure:"timer" json:"timer" yaml:"timer"`
+	Local             Local             `mapstructure:"local" json:"local" yaml:"local"`
+	Qiniu             Qiniu             `mapstructure:"qiniu" json:"qiniu" yaml:"qiniu"`
+	AliyunOSS         AliyunOSS         `mapstructure:"aliyun-oss" json:"aliyunOSS" yaml:"aliyun-oss"`
+	TencentCOS        TencentCOS        `mapstructure:"tencent-cos" json:"tencentCOS" yaml:"tencent-cos"`
+	Excel             Excel             `mapstructure:"excel" json:"excel" yaml:"excel"`
+	Timer             Timer             `mapstructure:"timer" json:"timer" yaml:"timer"`
+	BlindBox          BlindBox          `mapstructure:"blind-box" json:"blindBox" yaml:"blind-box"`
+	CollectionAddress CollectionAddress `mapstructure:"collection-address" json:"collectionAddress" yaml:"collection-address"`
 }

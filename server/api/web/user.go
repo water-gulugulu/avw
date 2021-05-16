@@ -19,6 +19,7 @@ package web
 
 import (
 	"fmt"
+	web_tools "gin-vue-admin/api/web/tools"
 	"gin-vue-admin/global"
 	"gin-vue-admin/middleware"
 	"gin-vue-admin/model"
@@ -30,18 +31,8 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"go.uber.org/zap"
 	"log"
-	"math/big"
 	"time"
 )
-
-type LoginResponse struct {
-	Id            uint   `json:"id"`
-	Pid           string `json:"pid"`
-	Username      string `json:"username"`
-	Status        *bool  `json:"status"`
-	WalletAddress string `json:"wallet_address"`
-	Token         string `json:"token"`
-}
 
 // @Tags 前端接口
 // @Summary 登录
@@ -49,7 +40,7 @@ type LoginResponse struct {
 // @Produce application/json
 // @Param wallet_address query string  true "钱包地址"
 // @Param pid query string false "上级地址"
-// @Success 200 {string} string "{"code":0,"data":{"id":1,"username":"","status":true,"wallet_address":"","token":""},"msg":"操作成功"}"
+// @Success 200 {object} web_tools.LoginResponse
 // @Router /web/user/login [get]
 func Login(c *gin.Context) {
 	walletAddress := c.Query("wallet_address")
@@ -87,7 +78,7 @@ func Login(c *gin.Context) {
 		response.FailWithMessage("40002", c)
 		return
 	}
-	res := LoginResponse{
+	res := web_tools.LoginResponse{
 		Id:            User.ID,
 		Pid:           User.Pid,
 		Username:      User.Username,
@@ -127,17 +118,16 @@ func tokenNext(user model.AvfUser) (string, error) {
 // @accept application/json
 // @Produce application/json
 // @Param x-token header string  true "token信息"
-// @Success 200  {string} string "{"code":0,"data":{"user":{"UUID":"","ID":1,"Username":"","NickName":"","AuthorityId":"","BufferTime":86400,"exp":1621475281,"iss":"qmPlus","nbf":1620869481},"avw_balance":"9.5","ht_balance":null},"msg":"操作成功"}"
+// @Success 200  {object}  web_tools.UserInfo
 // @Router /web/user/getUserInfo [get]
 func GetUserInfo(c *gin.Context) {
-	claims, ok := c.Get("claims")
-	if !ok {
-		response.FailWithMessage("40003", c)
+	UserId, e := web_tools.GetUserId(c)
+	if e != nil {
+		response.FailWithMessage("41003", c)
 		return
 	}
-	token := claims.(*request.CustomClaims)
 	User := model.AvfUser{
-		GVA_MODEL: global.GVA_MODEL{ID: token.ID},
+		GVA_MODEL: global.GVA_MODEL{ID: UserId},
 	}
 	if err := User.FindUserID(global.GVA_DB); err != nil {
 		response.FailWithMessage("40004", c)
@@ -149,27 +139,21 @@ func GetUserInfo(c *gin.Context) {
 		response.FailWithMessage("40005", c)
 		return
 	}
-	// block, err3 := client.ReadNewHeaderBlock()
-	// fmt.Printf("block:%s,err:%e\n", block, err3)
-	// info, err4 := client.ReadBlockInfo(block)
-	// fmt.Printf("info:%s,err:%e\n", info, err4)
 
 	balance, err2 := client.SelectBalance(User.WalletAddress)
 	if err2 != nil {
 		response.FailWithMessage("40006", c)
 		return
 	}
-
-	res := UserInfo{
-		User:       token,
-		AVWBalance: balance,
+	b, _ := balance.Float64()
+	res := web_tools.UserInfo{
+		Id:            User.ID,
+		Pid:           User.Pid,
+		Username:      User.Username,
+		Status:        User.Status,
+		WalletAddress: User.WalletAddress,
+		AVWBalance:    b,
 	}
 	fmt.Printf("balance:%s", balance)
 	response.OkWithData(res, c)
-}
-
-type UserInfo struct {
-	User       *request.CustomClaims `json:"user"`
-	AVWBalance *big.Float            `json:"avw_balance"`
-	HTBalance  *big.Float            `json:"ht_balance"`
 }

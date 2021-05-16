@@ -277,5 +277,59 @@ func (c clientManage) ReadBlockInfo(blockNumber int64) (*types.Block, error) {
 func (c clientManage) ReadLogs() {
 	query := ethereum.FilterQuery{}
 	c.client.FilterLogs(context.Background(), query)
-	client.ta
+}
+
+// 测试 0x92927e603a0b31a2009d82182eca1eca343b80d049910eb4e1f3a7f2d6a2285c
+// 通过事务hash来获取交易事务内容
+func (c clientManage) QueryTransactionByTxHash(hash string) (res tools.TransactionResponse, err error) {
+	// 上下文
+	ctx := context.Background()
+	// 转hash处理
+	TxHash := common.HexToHash(hash)
+	// 通过hash查询交易事务信息
+	tx, _, e := c.client.TransactionByHash(ctx, TxHash)
+	if e != nil {
+		log.Printf("[%s]Failed to query transaction error:%e", time.Now(), e)
+		return res, e
+	}
+	// 获取最新的链ID
+	chainID, e3 := c.client.NetworkID(context.Background())
+	if e3 != nil {
+		log.Printf("[%s]Failed to query transaction error:%e", time.Now(), e3)
+		return res, e3
+	}
+	// 通过链ID来获取消息
+	msg, e4 := tx.AsMessage(types.NewEIP155Signer(chainID))
+	if e4 != nil {
+		log.Printf("[%s]Failed to query transaction error:%e", time.Now(), e4)
+		return res, e4
+	}
+	// 通过单个hash来获取状态等信息
+	receipt, e5 := c.client.TransactionReceipt(context.Background(), tx.Hash())
+	if e5 != nil {
+		log.Printf("[%s]Failed to query transaction error:%e", time.Now(), e5)
+		return res, e5
+	}
+	// 返回结果
+	res = tools.TransactionResponse{
+		TxHash:     hash,
+		Block:      receipt.BlockNumber,
+		From:       msg.From().String(),
+		To:         msg.To().String(),
+		GasPrice:   msg.GasPrice(),
+		Value:      msg.Value(),
+		Gas:        msg.Gas(),
+		Nonce:      msg.Nonce(),
+		Data:       msg.Data(),
+		CheckNonce: msg.CheckNonce(),
+		Status:     receipt.Status,
+	}
+
+	fmt.Printf("Status:%s\n", receipt.Status)
+	return
+}
+
+func (c clientManage) CloseClient() {
+	c.client.Close()
+	c.rpcConn.Close()
 }

@@ -42,6 +42,13 @@ definitions:
       webTable:
         type: string
     type: object
+  config.BlindBox:
+    properties:
+      one:
+        type: integer
+      ten:
+        type: integer
+    type: object
   config.Captcha:
     properties:
       imgHeight:
@@ -58,6 +65,12 @@ definitions:
     properties:
       modelPath:
         description: Model路径
+        type: string
+    type: object
+  config.CollectionAddress:
+    properties:
+      address:
+        description: 收款地址
         type: string
     type: object
   config.Detail:
@@ -183,10 +196,14 @@ definitions:
       autoCode:
         $ref: '#/definitions/config.Autocode'
         description: auto
+      blindBox:
+        $ref: '#/definitions/config.BlindBox'
       captcha:
         $ref: '#/definitions/config.Captcha'
       casbin:
         $ref: '#/definitions/config.Casbin'
+      collectionAddress:
+        $ref: '#/definitions/config.CollectionAddress'
       email:
         $ref: '#/definitions/config.Email'
       excel:
@@ -317,37 +334,49 @@ definitions:
   model.AvfCard:
     properties:
       author:
+        description: 作者
         type: string
       contractAddress:
+        description: 合约地址
         type: string
       createDate:
+        description: 创建时间
         type: string
       createdAt:
         description: 创建时间
         type: string
       desc:
+        description: 描述
         type: string
       id:
         description: 主键ID
         type: integer
       level:
+        description: 等级 1-N 2-R 3-SR 4-SSR
         type: integer
       money:
+        description: 价格
         type: number
       name:
+        description: 卡牌名称
         type: string
       number:
+        description: 发行数量
         type: integer
       star:
+        description: 算力值
         type: integer
       status:
+        description: 状态 true-正常 false-禁用
         type: boolean
       updateDate:
+        description: 修改时间
         type: string
       updatedAt:
         description: 更新时间
         type: string
       walletAddress:
+        description: 收款钱包地址
         type: string
     type: object
   model.AvfEventLog:
@@ -382,40 +411,139 @@ definitions:
         description: 更新时间
         type: string
     type: object
+  model.AvfOrder:
+    properties:
+      block:
+        description: 区块号
+        type: string
+      createdAt:
+        description: 创建时间
+        type: string
+      from:
+        description: 支付地址
+        type: string
+      gas:
+        description: 手续费
+        type: string
+      gasPrice:
+        description: 手续费价格
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      num:
+        description: 数量
+        type: integer
+      number:
+        description: 剩余数量
+        type: integer
+      orderSn:
+        description: 订单编号
+        type: string
+      payTime:
+        description: 支付时间
+        type: integer
+      price:
+        description: 价格
+        type: integer
+      status:
+        description: 状态 1-待支付 2-待确认 3-已完成 4-已取消5-已关闭
+        type: integer
+      to:
+        description: 收款地址
+        type: string
+      txHash:
+        description: 交易hash
+        type: string
+      uid:
+        description: 用户ID
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  model.AvfOrderCard:
+    properties:
+      cardId:
+        description: 卡牌ID
+        type: integer
+      createTime:
+        description: 创建时间
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      giveType:
+        description: 获得方式 1-抽奖 2-购买
+        type: integer
+      id:
+        description: 主键ID
+        type: integer
+      level:
+        description: 等级 1-N 2-R 3-SR 4-SSR
+        type: integer
+      orderId:
+        description: 订单ID
+        type: integer
+      star:
+        description: 算力值
+        type: integer
+      status:
+        description: 状态 1-正常 2-转让中
+        type: integer
+      uid:
+        description: 用户ID
+        type: integer
+      updateTime:
+        description: 修改时间
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
   model.AvfUser:
     properties:
       createdAt:
         description: 创建时间
         type: string
       createdTime:
+        description: 创建时间
         type: integer
       id:
         description: 主键ID
         type: integer
       loginIp:
+        description: 登录IP
         type: string
       loginTime:
+        description: 登录时间
         type: integer
       loginTimes:
-        type: integer
-      lottery:
+        description: 登录次数
         type: integer
       mobile:
+        description: 手机号
         type: string
       password:
+        description: 密码
         type: string
       payPassword:
+        description: 支付密码
         type: string
       pid:
+        description: 上级地址
         type: string
       status:
+        description: 状态
         type: boolean
       updatedAt:
         description: 更新时间
         type: string
       username:
+        description: 用户名
         type: string
       walletAddress:
+        description: 钱包地址
         type: string
     type: object
   model.ExaCustomer:
@@ -797,26 +925,34 @@ definitions:
   request.AvfCardSearch:
     properties:
       author:
+        description: 作者
         type: string
       contractAddress:
+        description: 合约地址
         type: string
       createDate:
+        description: 创建时间
         type: string
       createdAt:
         description: 创建时间
         type: string
       desc:
+        description: 描述
         type: string
       id:
         description: 主键ID
         type: integer
       level:
+        description: 等级 1-N 2-R 3-SR 4-SSR
         type: integer
       money:
+        description: 价格
         type: number
       name:
+        description: 卡牌名称
         type: string
       number:
+        description: 发行数量
         type: integer
       page:
         description: 页码
@@ -825,15 +961,19 @@ definitions:
         description: 每页大小
         type: integer
       star:
+        description: 算力值
         type: integer
       status:
+        description: 状态 true-正常 false-禁用
         type: boolean
       updateDate:
+        description: 修改时间
         type: string
       updatedAt:
         description: 更新时间
         type: string
       walletAddress:
+        description: 收款钱包地址
         type: string
     type: object
   request.AvfEventLogSearch:
@@ -874,25 +1014,130 @@ definitions:
         description: 更新时间
         type: string
     type: object
+  request.AvfOrderCardSearch:
+    properties:
+      cardId:
+        description: 卡牌ID
+        type: integer
+      createTime:
+        description: 创建时间
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      giveType:
+        description: 获得方式 1-抽奖 2-购买
+        type: integer
+      id:
+        description: 主键ID
+        type: integer
+      level:
+        description: 等级 1-N 2-R 3-SR 4-SSR
+        type: integer
+      orderId:
+        description: 订单ID
+        type: integer
+      page:
+        description: 页码
+        type: integer
+      pageSize:
+        description: 每页大小
+        type: integer
+      star:
+        description: 算力值
+        type: integer
+      status:
+        description: 状态 1-正常 2-转让中
+        type: integer
+      uid:
+        description: 用户ID
+        type: integer
+      updateTime:
+        description: 修改时间
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  request.AvfOrderSearch:
+    properties:
+      block:
+        description: 区块号
+        type: string
+      createdAt:
+        description: 创建时间
+        type: string
+      from:
+        description: 支付地址
+        type: string
+      gas:
+        description: 手续费
+        type: string
+      gasPrice:
+        description: 手续费价格
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      num:
+        description: 数量
+        type: integer
+      number:
+        description: 剩余数量
+        type: integer
+      orderSn:
+        description: 订单编号
+        type: string
+      page:
+        description: 页码
+        type: integer
+      pageSize:
+        description: 每页大小
+        type: integer
+      payTime:
+        description: 支付时间
+        type: integer
+      price:
+        description: 价格
+        type: integer
+      status:
+        description: 状态 1-待支付 2-待确认 3-已完成 4-已取消5-已关闭
+        type: integer
+      to:
+        description: 收款地址
+        type: string
+      txHash:
+        description: 交易hash
+        type: string
+      uid:
+        description: 用户ID
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
   request.AvfUserSearch:
     properties:
       createdAt:
         description: 创建时间
         type: string
       createdTime:
+        description: 创建时间
         type: integer
       id:
         description: 主键ID
         type: integer
       loginIp:
+        description: 登录IP
         type: string
       loginTime:
+        description: 登录时间
         type: integer
       loginTimes:
-        type: integer
-      lottery:
+        description: 登录次数
         type: integer
       mobile:
+        description: 手机号
         type: string
       page:
         description: 页码
@@ -901,19 +1146,25 @@ definitions:
         description: 每页大小
         type: integer
       password:
+        description: 密码
         type: string
       payPassword:
+        description: 支付密码
         type: string
       pid:
+        description: 上级地址
         type: string
       status:
+        description: 状态
         type: boolean
       updatedAt:
         description: 更新时间
         type: string
       username:
+        description: 用户名
         type: string
       walletAddress:
+        description: 钱包地址
         type: string
     type: object
   request.CasbinInReceive:
@@ -1181,6 +1432,96 @@ definitions:
         $ref: '#/definitions/model.SysAuthority'
       oldAuthorityId:
         description: 旧角色ID
+        type: string
+    type: object
+  web_tools.CardListResponse:
+    properties:
+      list:
+        description: 卡牌列表
+        items:
+          $ref: '#/definitions/model.AvfCard'
+        type: array
+      total:
+        description: 总条数
+        type: integer
+    type: object
+  web_tools.CreateOrderResponse:
+    properties:
+      order_id:
+        description: 订单ID
+        type: integer
+      order_sn:
+        description: 订单号
+        type: string
+      price:
+        description: 订单价格
+        type: integer
+    type: object
+  web_tools.LoginResponse:
+    properties:
+      id:
+        description: 用户ID
+        type: integer
+      pid:
+        description: 上级地址
+        type: string
+      status:
+        description: 状态
+        type: boolean
+      token:
+        description: token
+        type: string
+      username:
+        description: 用户名
+        type: string
+      wallet_address:
+        description: 钱包地址
+        type: string
+    type: object
+  web_tools.OrderDetailResponse:
+    properties:
+      order_card_list:
+        description: 卡牌列表
+        items:
+          $ref: '#/definitions/model.AvfOrderCard'
+        type: array
+      order_info:
+        $ref: '#/definitions/model.AvfOrder'
+        description: 订单详情
+    type: object
+  web_tools.OrderListResponse:
+    properties:
+      list:
+        description: 订单列表
+        items:
+          $ref: '#/definitions/model.AvfOrder'
+        type: array
+      total:
+        description: 总条数
+        type: integer
+    type: object
+  web_tools.UserInfo:
+    properties:
+      avw_balance:
+        description: avw余额
+        type: number
+      ht_balance:
+        description: ht余额
+        type: number
+      id:
+        description: 用户ID
+        type: integer
+      pid:
+        description: 上级地址
+        type: string
+      status:
+        description: 状态
+        type: boolean
+      username:
+        description: 用户名
+        type: string
+      wallet_address:
+        description: 钱包地址
         type: string
     type: object
 info:
@@ -1851,6 +2192,282 @@ paths:
       summary: 更新AvfEventLog
       tags:
       - AvfEventLog
+  /avfOrder/createAvfOrder:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建AvfOrder
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.AvfOrder'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建AvfOrder
+      tags:
+      - AvfOrder
+  /avfOrder/deleteAvfOrder:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除AvfOrder
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.AvfOrder'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除AvfOrder
+      tags:
+      - AvfOrder
+  /avfOrder/deleteAvfOrderByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除AvfOrder
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除AvfOrder
+      tags:
+      - AvfOrder
+  /avfOrder/findAvfOrder:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 用id查询AvfOrder
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.AvfOrder'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询AvfOrder
+      tags:
+      - AvfOrder
+  /avfOrder/getAvfOrderList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 分页获取AvfOrder列表
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.AvfOrderSearch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取AvfOrder列表
+      tags:
+      - AvfOrder
+  /avfOrder/updateAvfOrder:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新AvfOrder
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.AvfOrder'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新AvfOrder
+      tags:
+      - AvfOrder
+  /avfOrderCard/createAvfOrderCard:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建AvfOrderCard
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.AvfOrderCard'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建AvfOrderCard
+      tags:
+      - AvfOrderCard
+  /avfOrderCard/deleteAvfOrderCard:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除AvfOrderCard
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.AvfOrderCard'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除AvfOrderCard
+      tags:
+      - AvfOrderCard
+  /avfOrderCard/deleteAvfOrderCardByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除AvfOrderCard
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除AvfOrderCard
+      tags:
+      - AvfOrderCard
+  /avfOrderCard/findAvfOrderCard:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 用id查询AvfOrderCard
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.AvfOrderCard'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询AvfOrderCard
+      tags:
+      - AvfOrderCard
+  /avfOrderCard/getAvfOrderCardList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 分页获取AvfOrderCard列表
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.AvfOrderCardSearch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取AvfOrderCard列表
+      tags:
+      - AvfOrderCard
+  /avfOrderCard/updateAvfOrderCard:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新AvfOrderCard
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.AvfOrderCard'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新AvfOrderCard
+      tags:
+      - AvfOrderCard
   /avfUser/createAvfUser:
     post:
       consumes:
@@ -3257,6 +3874,171 @@ paths:
       summary: 设置用户信息
       tags:
       - SysUser
+  /web/card/list:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 页码
+        in: query
+        name: page
+        type: string
+      - description: 数量
+        in: query
+        name: size
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web_tools.CardListResponse'
+      summary: 获取卡牌列表
+      tags:
+      - 前端接口
+  /web/order/cancelOrder:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: token
+        in: header
+        name: x-token
+        required: true
+        type: string
+      - description: 订单ID
+        in: body
+        name: order_id
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: status":200,"msg":"成功"}
+          schema:
+            type: string
+      summary: 取消订单
+      tags:
+      - 前端接口
+  /web/order/createOrder:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: x-token
+        required: true
+        type: string
+      - description: 盲盒类型 1-一连抽 2-十连抽
+        in: body
+        name: type
+        required: true
+        schema:
+          type: string
+      - description: 数量 购买盲盒数量
+        in: body
+        name: num
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web_tools.CreateOrderResponse'
+      summary: 创建订单
+      tags:
+      - 前端接口
+  /web/order/list:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: x-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web_tools.OrderListResponse'
+      summary: 订单列表
+      tags:
+      - 前端接口
+  /web/order/orderDetail:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: token
+        in: header
+        name: x-token
+        required: true
+        type: string
+      - description: 订单ID
+        in: body
+        name: order_id
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web_tools.OrderDetailResponse'
+      summary: 订单详情
+      tags:
+      - 前端接口
+  /web/order/payOrder:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: x-token
+        required: true
+        type: string
+      - description: 订单ID
+        in: body
+        name: order_id
+        required: true
+        schema:
+          type: string
+      - description: 发起交易后的事务hash
+        in: body
+        name: tx_hash
+        required: true
+        schema:
+          type: string
+      - description: 发起交易的钱包地址
+        in: body
+        name: address
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200,"message":"200"}'
+          schema:
+            type: string
+      summary: 支付订单
+      tags:
+      - 前端接口
   /web/user/getUserInfo:
     get:
       consumes:
@@ -3271,9 +4053,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{"code":0,"data":{"user":{"UUID":"","ID":1,"Username":"","NickName":"","AuthorityId":"","BufferTime":86400,"exp":1621475281,"iss":"qmPlus","nbf":1620869481},"avw_balance":"9.5","ht_balance":null},"msg":"操作成功"}'
+          description: OK
           schema:
-            type: string
+            $ref: '#/definitions/web_tools.UserInfo'
       summary: 获取用户信息
       tags:
       - 前端接口
@@ -3295,9 +4077,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{"code":0,"data":{"id":1,"username":"","status":true,"wallet_address":"","token":""},"msg":"操作成功"}'
+          description: OK
           schema:
-            type: string
+            $ref: '#/definitions/web_tools.LoginResponse'
       summary: 登录
       tags:
       - 前端接口
