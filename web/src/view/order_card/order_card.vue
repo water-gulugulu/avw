@@ -1,22 +1,16 @@
 <template>
   <div>
     <div class="search-term">
-      <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
-        <el-form-item label="用户的上级地址">
-          <el-input placeholder="搜索条件" v-model="searchInfo.pid"></el-input>
-        </el-form-item>    
-        <el-form-item label="用户名">
-          <el-input placeholder="搜索条件" v-model="searchInfo.username"></el-input>
-        </el-form-item>      
-        <el-form-item label="钱包地址">
-          <el-input placeholder="搜索条件" v-model="searchInfo.walletAddress"></el-input>
-        </el-form-item>                  
+      <el-form :inline="true" :model="searchInfo" class="demo-form-inline">  
+        <el-form-item label="订单ID">
+          <el-input placeholder="搜索条件" v-model="searchInfo.orderId"></el-input>
+        </el-form-item>                
         <el-form-item>
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>
-        <!--<el-form-item>
-          <el-button @click="openDialog" type="primary">新增用户</el-button>
-        </el-form-item> -->
+        <el-form-item>
+          <el-button @click="openDialog" type="primary">新增订单卡牌表</el-button>
+        </el-form-item>
         <el-form-item>
           <el-popover placement="top" v-model="deleteVisible" width="160">
             <p>确定要删除吗？</p>
@@ -43,33 +37,25 @@
          <template slot-scope="scope">{{scope.row.CreatedAt|formatDate}}</template>
     </el-table-column>
     
-    <el-table-column label="用户的上级地址" prop="pid" width="120"></el-table-column> 
+    <el-table-column label="用户ID" prop="uid" width="120"></el-table-column> 
     
-    <el-table-column label="用户名" prop="username" width="120"></el-table-column> 
+    <el-table-column label="订单ID" prop="orderId" width="120"></el-table-column> 
     
-    <el-table-column label="帐号手机号" prop="mobile" width="120"></el-table-column> 
+    <el-table-column label="卡牌ID" prop="cardId" width="120"></el-table-column> 
     
-    <el-table-column label="钱包地址" prop="walletAddress" width="120"></el-table-column> 
+    <el-table-column label="算力值" prop="star" width="120"></el-table-column> 
     
-    <!-- <el-table-column label="密码" prop="password" width="120"></el-table-column> -->
+    <el-table-column label="卡牌状态" prop="status" width="120"></el-table-column> 
     
-    <!-- <el-table-column label="支付密码" prop="payPassword" width="120"></el-table-column> -->
+    <el-table-column label="创建时间" prop="createTime" width="120"></el-table-column> 
     
-    <el-table-column label="登录时间" prop="loginTime" width="120"></el-table-column> 
+    <el-table-column label="修改时间" prop="updateTime" width="120"></el-table-column> 
     
-    <el-table-column label="登录ip" prop="loginIp" width="120"></el-table-column> 
-    
-    <el-table-column label="登录次数" prop="loginTimes" width="120"></el-table-column> 
-    
-    <el-table-column label="创建时间" prop="createdTime" width="120"></el-table-column> 
-    
-    <el-table-column label="状态" prop="status" width="120">
-         <template slot-scope="scope">{{scope.row.status|formatBoolean}}</template>
-    </el-table-column>
+    <el-table-column label="获得方式" prop="giveType" width="120"></el-table-column> 
     
       <el-table-column label="按钮组">
         <template slot-scope="scope">
-          <el-button class="table-button" @click="updateAvfUser(scope.row)" size="small" type="primary" icon="el-icon-edit">变更</el-button>
+          <el-button class="table-button" @click="updateAvfOrderCard(scope.row)" size="small" type="primary" icon="el-icon-edit">变更</el-button>
           <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteRow(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -88,45 +74,28 @@
 
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
       <el-form :model="formData" label-position="right" label-width="80px">
-         <el-form-item label="用户的上级地址:">
-            <el-input v-model="formData.pid" clearable placeholder="请输入" ></el-input>
+         <el-form-item label="用户ID:"><el-input v-model.number="formData.uid" clearable placeholder="请输入"></el-input>
       </el-form-item>
        
-         <el-form-item label="用户名:">
-            <el-input v-model="formData.username" clearable placeholder="请输入" ></el-input>
+         <el-form-item label="订单ID:"><el-input v-model.number="formData.orderId" clearable placeholder="请输入"></el-input>
       </el-form-item>
        
-         <el-form-item label="帐号手机号:">
-            <el-input v-model="formData.mobile" clearable placeholder="请输入" ></el-input>
+         <el-form-item label="卡牌ID:"><el-input v-model.number="formData.cardId" clearable placeholder="请输入"></el-input>
       </el-form-item>
        
-         <el-form-item label="钱包地址:">
-            <el-input v-model="formData.walletAddress" clearable placeholder="请输入" ></el-input>
+         <el-form-item label="算力值:"><el-input v-model.number="formData.star" clearable placeholder="请输入"></el-input>
       </el-form-item>
        
-       <!--  <el-form-item label="密码:">
-            <el-input v-model="formData.password" clearable placeholder="请输入" ></el-input>
+         <el-form-item label="卡牌状态:"><el-input v-model.number="formData.status" clearable placeholder="请输入"></el-input>
       </el-form-item>
        
-         <el-form-item label="支付密码:">
-            <el-input v-model="formData.payPassword" clearable placeholder="请输入" ></el-input>
-      </el-form-item> -->
-       
-         <el-form-item label="登录时间:"><el-input v-model.number="formData.loginTime" clearable placeholder="请输入"></el-input>
+         <el-form-item label="创建时间:"><el-input v-model.number="formData.createTime" clearable placeholder="请输入"></el-input>
       </el-form-item>
        
-         <el-form-item label="登录ip:">
-            <el-input v-model="formData.loginIp" clearable placeholder="请输入" ></el-input>
+         <el-form-item label="修改时间:"><el-input v-model.number="formData.updateTime" clearable placeholder="请输入"></el-input>
       </el-form-item>
        
-         <el-form-item label="登录次数:"><el-input v-model.number="formData.loginTimes" clearable placeholder="请输入"></el-input>
-      </el-form-item>
-       
-         <el-form-item label="创建时间:"><el-input v-model.number="formData.createdTime" clearable placeholder="请输入"></el-input>
-      </el-form-item>
-       
-         <el-form-item label="状态:">
-            <el-switch active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" v-model="formData.status" clearable ></el-switch>
+         <el-form-item label="获得方式:"><el-input v-model.number="formData.giveType" clearable placeholder="请输入"></el-input>
       </el-form-item>
        </el-form>
       <div class="dialog-footer" slot="footer">
@@ -139,36 +108,33 @@
 
 <script>
 import {
-    createAvfUser,
-    deleteAvfUser,
-    deleteAvfUserByIds,
-    updateAvfUser,
-    findAvfUser,
-    getAvfUserList
-} from "@/api/avf_user";  //  此处请自行替换地址
+    createAvfOrderCard,
+    deleteAvfOrderCard,
+    deleteAvfOrderCardByIds,
+    updateAvfOrderCard,
+    findAvfOrderCard,
+    getAvfOrderCardList
+} from "@/api/order_ard";  //  此处请自行替换地址
 import { formatTimeToStr } from "@/utils/date";
 import infoList from "@/mixins/infoList";
 export default {
-  name: "AvfUser",
+  name: "AvfOrderCard",
   mixins: [infoList],
   data() {
     return {
-      listApi: getAvfUserList,
+      listApi: getAvfOrderCardList,
       dialogFormVisible: false,
       type: "",
       deleteVisible: false,
       multipleSelection: [],formData: {
-            pid:"",
-            username:"",
-            mobile:"",
-            walletAddress:"",
-            password:"",
-            payPassword:"",
-            loginTime:0,
-            loginIp:"",
-            loginTimes:0,
-            createdTime:0,
-            status:false,
+            uid:0,
+            orderId:0,
+            cardId:0,
+            star:0,
+            status:0,
+            createTime:0,
+            updateTime:0,
+            giveType:0,
             
       }
     };
@@ -194,10 +160,7 @@ export default {
       //条件搜索前端看此方法
       onSubmit() {
         this.page = 1
-        this.pageSize = 10                
-        if (this.searchInfo.status==""){
-          this.searchInfo.status=null
-        }      
+        this.pageSize = 10            
         this.getTableData()
       },
       handleSelectionChange(val) {
@@ -209,7 +172,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-           this.deleteAvfUser(row);
+           this.deleteAvfOrderCard(row);
         });
       },
       async onDelete() {
@@ -225,7 +188,7 @@ export default {
           this.multipleSelection.map(item => {
             ids.push(item.ID)
           })
-        const res = await deleteAvfUserByIds({ ids })
+        const res = await deleteAvfOrderCardByIds({ ids })
         if (res.code == 0) {
           this.$message({
             type: 'success',
@@ -238,33 +201,30 @@ export default {
           this.getTableData()
         }
       },
-    async updateAvfUser(row) {
-      const res = await findAvfUser({ ID: row.ID });
+    async updateAvfOrderCard(row) {
+      const res = await findAvfOrderCard({ ID: row.ID });
       this.type = "update";
       if (res.code == 0) {
-        this.formData = res.data.reavfUser;
+        this.formData = res.data.reavfOrderCard;
         this.dialogFormVisible = true;
       }
     },
     closeDialog() {
       this.dialogFormVisible = false;
       this.formData = {
-          pid:"",
-          username:"",
-          mobile:"",
-          walletAddress:"",
-          password:"",
-          payPassword:"",
-          loginTime:0,
-          loginIp:"",
-          loginTimes:0,
-          createdTime:0,
-          status:false,
+          uid:0,
+          orderId:0,
+          cardId:0,
+          star:0,
+          status:0,
+          createTime:0,
+          updateTime:0,
+          giveType:0,
           
       };
     },
-    async deleteAvfUser(row) {
-      const res = await deleteAvfUser({ ID: row.ID });
+    async deleteAvfOrderCard(row) {
+      const res = await deleteAvfOrderCard({ ID: row.ID });
       if (res.code == 0) {
         this.$message({
           type: "success",
@@ -280,13 +240,13 @@ export default {
       let res;
       switch (this.type) {
         case "create":
-          res = await createAvfUser(this.formData);
+          res = await createAvfOrderCard(this.formData);
           break;
         case "update":
-          res = await updateAvfUser(this.formData);
+          res = await updateAvfOrderCard(this.formData);
           break;
         default:
-          res = await createAvfUser(this.formData);
+          res = await createAvfOrderCard(this.formData);
           break;
       }
       if (res.code == 0) {

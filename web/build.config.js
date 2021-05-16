@@ -1,9 +1,9 @@
 'use strict'
 
 module.exports = {
-    title: 'GIN-VUE-ADMIN1',
+    title: 'AVW-管理后台',
     vueClientPort: 8080,
-    goServerPort: 8888,
+    goServerPort: 8820,
     baseCdnUrl: '//cdn.staticfile.org',
     cdns: [
         /**

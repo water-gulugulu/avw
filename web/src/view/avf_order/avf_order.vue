@@ -1,21 +1,21 @@
 <template>
   <div>
     <div class="search-term">
-      <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
-        <el-form-item label="用户的上级地址">
-          <el-input placeholder="搜索条件" v-model="searchInfo.pid"></el-input>
+      <el-form :inline="true" :model="searchInfo" class="demo-form-inline">              
+        <el-form-item label="事务哈希">
+          <el-input placeholder="搜索条件" v-model="searchInfo.txHash"></el-input>
         </el-form-item>    
-        <el-form-item label="用户名">
-          <el-input placeholder="搜索条件" v-model="searchInfo.username"></el-input>
-        </el-form-item>      
-        <el-form-item label="钱包地址">
-          <el-input placeholder="搜索条件" v-model="searchInfo.walletAddress"></el-input>
-        </el-form-item>                  
+        <el-form-item label="区块编号">
+          <el-input placeholder="搜索条件" v-model="searchInfo.block"></el-input>
+        </el-form-item>        
+        <el-form-item label="支付地址">
+          <el-input placeholder="搜索条件" v-model="searchInfo.from"></el-input>
+        </el-form-item>    
         <el-form-item>
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>
         <!--<el-form-item>
-          <el-button @click="openDialog" type="primary">新增用户</el-button>
+          <el-button @click="openDialog" type="primary">新增订单</el-button>
         </el-form-item> -->
         <el-form-item>
           <el-popover placement="top" v-model="deleteVisible" width="160">
@@ -43,33 +43,35 @@
          <template slot-scope="scope">{{scope.row.CreatedAt|formatDate}}</template>
     </el-table-column>
     
-    <el-table-column label="用户的上级地址" prop="pid" width="120"></el-table-column> 
+    <el-table-column label="用户ID" prop="uid" width="120"></el-table-column> 
     
-    <el-table-column label="用户名" prop="username" width="120"></el-table-column> 
+    <el-table-column label="订单编号" prop="orderSn" width="120"></el-table-column> 
     
-    <el-table-column label="帐号手机号" prop="mobile" width="120"></el-table-column> 
+    <el-table-column label="支付价格" prop="price" width="120"></el-table-column> 
     
-    <el-table-column label="钱包地址" prop="walletAddress" width="120"></el-table-column> 
+    <el-table-column label="购买数量" prop="num" width="120"></el-table-column> 
     
-    <!-- <el-table-column label="密码" prop="password" width="120"></el-table-column> -->
+    <el-table-column label="剩余数量" prop="number" width="120"></el-table-column> 
     
-    <!-- <el-table-column label="支付密码" prop="payPassword" width="120"></el-table-column> -->
-    
-    <el-table-column label="登录时间" prop="loginTime" width="120"></el-table-column> 
-    
-    <el-table-column label="登录ip" prop="loginIp" width="120"></el-table-column> 
-    
-    <el-table-column label="登录次数" prop="loginTimes" width="120"></el-table-column> 
-    
-    <el-table-column label="创建时间" prop="createdTime" width="120"></el-table-column> 
-    
-    <el-table-column label="状态" prop="status" width="120">
+    <el-table-column label="订单状态" prop="status" width="120">
          <template slot-scope="scope">{{scope.row.status|formatBoolean}}</template>
     </el-table-column>
     
+    <el-table-column label="支付时间" prop="payTime" width="120"></el-table-column> 
+    
+    <el-table-column label="事务哈希" prop="txHash" width="120"></el-table-column> 
+    
+    <el-table-column label="区块编号" prop="block" width="120"></el-table-column> 
+    
+    <el-table-column label="手续费" prop="gas" width="120"></el-table-column> 
+    
+    <el-table-column label="手续费价格" prop="gasPrice" width="120"></el-table-column> 
+    
+    <el-table-column label="支付地址" prop="from" width="120"></el-table-column> 
+    
       <el-table-column label="按钮组">
         <template slot-scope="scope">
-          <el-button class="table-button" @click="updateAvfUser(scope.row)" size="small" type="primary" icon="el-icon-edit">变更</el-button>
+          <el-button class="table-button" @click="updateAvfOrder(scope.row)" size="small" type="primary" icon="el-icon-edit">变更</el-button>
           <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteRow(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -88,45 +90,48 @@
 
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
       <el-form :model="formData" label-position="right" label-width="80px">
-         <el-form-item label="用户的上级地址:">
-            <el-input v-model="formData.pid" clearable placeholder="请输入" ></el-input>
+         <el-form-item label="用户ID:"><el-input v-model.number="formData.uid" clearable placeholder="请输入"></el-input>
       </el-form-item>
        
-         <el-form-item label="用户名:">
-            <el-input v-model="formData.username" clearable placeholder="请输入" ></el-input>
+         <el-form-item label="订单编号:">
+            <el-input v-model="formData.orderSn" clearable placeholder="请输入" ></el-input>
       </el-form-item>
        
-         <el-form-item label="帐号手机号:">
-            <el-input v-model="formData.mobile" clearable placeholder="请输入" ></el-input>
+         <el-form-item label="支付价格:">
+              <el-input-number v-model="formData.price" :precision="2" clearable></el-input-number>
+       </el-form-item>
+       
+         <el-form-item label="购买数量:"><el-input v-model.number="formData.num" clearable placeholder="请输入"></el-input>
       </el-form-item>
        
-         <el-form-item label="钱包地址:">
-            <el-input v-model="formData.walletAddress" clearable placeholder="请输入" ></el-input>
+         <el-form-item label="剩余数量:"><el-input v-model.number="formData.number" clearable placeholder="请输入"></el-input>
       </el-form-item>
        
-       <!--  <el-form-item label="密码:">
-            <el-input v-model="formData.password" clearable placeholder="请输入" ></el-input>
-      </el-form-item>
-       
-         <el-form-item label="支付密码:">
-            <el-input v-model="formData.payPassword" clearable placeholder="请输入" ></el-input>
-      </el-form-item> -->
-       
-         <el-form-item label="登录时间:"><el-input v-model.number="formData.loginTime" clearable placeholder="请输入"></el-input>
-      </el-form-item>
-       
-         <el-form-item label="登录ip:">
-            <el-input v-model="formData.loginIp" clearable placeholder="请输入" ></el-input>
-      </el-form-item>
-       
-         <el-form-item label="登录次数:"><el-input v-model.number="formData.loginTimes" clearable placeholder="请输入"></el-input>
-      </el-form-item>
-       
-         <el-form-item label="创建时间:"><el-input v-model.number="formData.createdTime" clearable placeholder="请输入"></el-input>
-      </el-form-item>
-       
-         <el-form-item label="状态:">
+         <el-form-item label="订单状态:">
             <el-switch active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" v-model="formData.status" clearable ></el-switch>
+      </el-form-item>
+       
+         <el-form-item label="支付时间:"><el-input v-model.number="formData.payTime" clearable placeholder="请输入"></el-input>
+      </el-form-item>
+       
+         <el-form-item label="事务哈希:">
+            <el-input v-model="formData.txHash" clearable placeholder="请输入" ></el-input>
+      </el-form-item>
+       
+         <el-form-item label="区块编号:">
+            <el-input v-model="formData.block" clearable placeholder="请输入" ></el-input>
+      </el-form-item>
+       
+         <el-form-item label="手续费:">
+            <el-input v-model="formData.gas" clearable placeholder="请输入" ></el-input>
+      </el-form-item>
+       
+         <el-form-item label="手续费价格:">
+            <el-input v-model="formData.gasPrice" clearable placeholder="请输入" ></el-input>
+      </el-form-item>
+       
+         <el-form-item label="支付地址:">
+            <el-input v-model="formData.from" clearable placeholder="请输入" ></el-input>
       </el-form-item>
        </el-form>
       <div class="dialog-footer" slot="footer">
@@ -139,36 +144,37 @@
 
 <script>
 import {
-    createAvfUser,
-    deleteAvfUser,
-    deleteAvfUserByIds,
-    updateAvfUser,
-    findAvfUser,
-    getAvfUserList
-} from "@/api/avf_user";  //  此处请自行替换地址
+    createAvfOrder,
+    deleteAvfOrder,
+    deleteAvfOrderByIds,
+    updateAvfOrder,
+    findAvfOrder,
+    getAvfOrderList
+} from "@/api/avf_order";  //  此处请自行替换地址
 import { formatTimeToStr } from "@/utils/date";
 import infoList from "@/mixins/infoList";
 export default {
-  name: "AvfUser",
+  name: "AvfOrder",
   mixins: [infoList],
   data() {
     return {
-      listApi: getAvfUserList,
+      listApi: getAvfOrderList,
       dialogFormVisible: false,
       type: "",
       deleteVisible: false,
       multipleSelection: [],formData: {
-            pid:"",
-            username:"",
-            mobile:"",
-            walletAddress:"",
-            password:"",
-            payPassword:"",
-            loginTime:0,
-            loginIp:"",
-            loginTimes:0,
-            createdTime:0,
+            uid:0,
+            orderSn:"",
+            price:0,
+            num:0,
+            number:0,
             status:false,
+            payTime:0,
+            txHash:"",
+            block:"",
+            gas:"",
+            gasPrice:"",
+            from:"",
             
       }
     };
@@ -194,10 +200,10 @@ export default {
       //条件搜索前端看此方法
       onSubmit() {
         this.page = 1
-        this.pageSize = 10                
+        this.pageSize = 10           
         if (this.searchInfo.status==""){
           this.searchInfo.status=null
-        }      
+        }            
         this.getTableData()
       },
       handleSelectionChange(val) {
@@ -209,7 +215,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-           this.deleteAvfUser(row);
+           this.deleteAvfOrder(row);
         });
       },
       async onDelete() {
@@ -225,7 +231,7 @@ export default {
           this.multipleSelection.map(item => {
             ids.push(item.ID)
           })
-        const res = await deleteAvfUserByIds({ ids })
+        const res = await deleteAvfOrderByIds({ ids })
         if (res.code == 0) {
           this.$message({
             type: 'success',
@@ -238,33 +244,34 @@ export default {
           this.getTableData()
         }
       },
-    async updateAvfUser(row) {
-      const res = await findAvfUser({ ID: row.ID });
+    async updateAvfOrder(row) {
+      const res = await findAvfOrder({ ID: row.ID });
       this.type = "update";
       if (res.code == 0) {
-        this.formData = res.data.reavfUser;
+        this.formData = res.data.reavfOrder;
         this.dialogFormVisible = true;
       }
     },
     closeDialog() {
       this.dialogFormVisible = false;
       this.formData = {
-          pid:"",
-          username:"",
-          mobile:"",
-          walletAddress:"",
-          password:"",
-          payPassword:"",
-          loginTime:0,
-          loginIp:"",
-          loginTimes:0,
-          createdTime:0,
+          uid:0,
+          orderSn:"",
+          price:0,
+          num:0,
+          number:0,
           status:false,
+          payTime:0,
+          txHash:"",
+          block:"",
+          gas:"",
+          gasPrice:"",
+          from:"",
           
       };
     },
-    async deleteAvfUser(row) {
-      const res = await deleteAvfUser({ ID: row.ID });
+    async deleteAvfOrder(row) {
+      const res = await deleteAvfOrder({ ID: row.ID });
       if (res.code == 0) {
         this.$message({
           type: "success",
@@ -280,13 +287,13 @@ export default {
       let res;
       switch (this.type) {
         case "create":
-          res = await createAvfUser(this.formData);
+          res = await createAvfOrder(this.formData);
           break;
         case "update":
-          res = await updateAvfUser(this.formData);
+          res = await updateAvfOrder(this.formData);
           break;
         default:
-          res = await createAvfUser(this.formData);
+          res = await createAvfOrder(this.formData);
           break;
       }
       if (res.code == 0) {

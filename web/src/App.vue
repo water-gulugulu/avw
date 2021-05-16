@@ -5,11 +5,11 @@
 </template>
 
 <script>
-import { checkDB } from "@/api/initdb"
+// import { checkDB } from "@/api/initdb"
 export default {
   name: 'app',
   async created(){
-    await checkDB()
+    // await checkDB()
   }  
 }
 </script>

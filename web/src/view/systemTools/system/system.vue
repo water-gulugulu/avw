@@ -2,7 +2,7 @@
   <div class="system">
     <el-form :model="config" label-width="100px" ref="form" class="system">
       <!--  System start  -->
-      <h2>系统配置</h2>
+      <!-- <h2>系统配置</h2>
       <el-form-item label="环境值">
         <el-input v-model="config.system.env"></el-input>
       </el-form-item>
@@ -33,18 +33,39 @@
       </el-form-item>
       <el-form-item label="多点登录拦截">
         <el-checkbox v-model="config.system.useMultipoint">开启</el-checkbox>
-      </el-form-item>
+      </el-form-item> -->
       <!--  System end  -->
 
       <!--  JWT start  -->
-      <h2>jwt签名</h2>
-      <el-form-item label="jwt签名">
-        <el-input v-model="config.jwt.signingKey"></el-input>
+      <!--<h2>jwt签名</h2>
+     <el-form-item label="jwt签名">
+       <el-input v-model="config.jwt.signingKey"></el-input>
+     </el-form-item> -->
+     <!--  JWT end  -->
+
+      <!--  BlindBox start  -->
+      <h2>盲盒配置</h2>
+      <el-form-item label="一连抽">
+        <el-input v-model="config.blindBox.one" show-word-limit clearable prefix-icon='el-icon-money'></el-input>
+        <template slot="prepend">价格</template>
+        <template slot="append">HT</template>
       </el-form-item>
-      <!--  JWT end  -->
+      <el-form-item label="十连抽">
+        <el-input v-model="config.blindBox.ten" show-word-limit clearable prefix-icon='el-icon-money'></el-input>
+        <template slot="prepend">价格</template>
+        <template slot="append">HT</template>
+      </el-form-item>
+      <!--  BlindBox end  -->
+      <!--  BlindBox start  -->
+      <h2>收款设置</h2>
+      <el-form-item label="收款地址">
+        <el-input v-model="config.collectionAddress.address"></el-input>
+      </el-form-item>
+      <!--  BlindBox end  -->
+
 
       <!--  Zap start  -->
-      <h2>Zap日志配置</h2>
+      <!--<h2>Zap日志配置</h2>
       <el-form-item label="级别">
         <el-input v-model.number="config.zap.level"></el-input>
       </el-form-item>
@@ -71,11 +92,11 @@
       </el-form-item>
       <el-form-item label="输出控制台">
         <el-checkbox v-model="config.zap.logInConsole"></el-checkbox>
-      </el-form-item>
+      </el-form-item> -->
       <!--  Zap end  -->
 
       <!--  Redis start  -->
-      <h2>Redis admin数据库配置</h2>
+      <!-- <h2>Redis admin数据库配置</h2>
       <el-form-item label="db">
         <el-input v-model="config.redis.db"></el-input>
       </el-form-item>
@@ -84,11 +105,11 @@
       </el-form-item>
       <el-form-item label="password">
         <el-input v-model="config.redis.password"></el-input>
-      </el-form-item>
+      </el-form-item> -->
       <!--  Redis end  -->
 
       <!--  Email start  -->
-      <h2>邮箱配置</h2>
+      <!-- <h2>邮箱配置</h2>
       <el-form-item label="接收者邮箱">
         <el-input v-model="config.email.to" placeholder="可多个，以逗号分隔"></el-input>
       </el-form-item>
@@ -109,18 +130,18 @@
       </el-form-item>
       <el-form-item label="测试邮件">
         <el-button @click="email">测试邮件</el-button>
-      </el-form-item>
+      </el-form-item> -->
       <!--  Email end  -->
 
       <!--  Casbin start  -->
-      <h2>casbin配置</h2>
+      <!-- <h2>casbin配置</h2>
       <el-form-item label="模型地址">
         <el-input v-model="config.casbin.modelPath"></el-input>
-      </el-form-item>
+      </el-form-item> -->
       <!--  Casbin end  -->
 
       <!--  Captcha start  -->
-      <h2>验证码配置</h2>
+      <!-- <h2>验证码配置</h2>
       <el-form-item label="keyLong">
         <el-input v-model.number="config.captcha.keyLong"></el-input>
       </el-form-item>
@@ -129,11 +150,11 @@
       </el-form-item>
       <el-form-item label="imgHeight">
         <el-input v-model.number="config.captcha.imgHeight"></el-input>
-      </el-form-item>
+      </el-form-item> -->
       <!--  Captcha end  -->
 
       <!--  dbType start  -->
-      <template v-if="config.system.dbType == 'mysql'">
+      <!-- <template v-if="config.system.dbType == 'mysql'">
         <h2>mysql admin数据库配置</h2>
         <el-form-item label="username">
           <el-input v-model="config.mysql.username"></el-input>
@@ -225,11 +246,11 @@
         <el-form-item label="prefer-simple-protocol">
           <el-checkbox v-model="config.mysql.preferSimpleProtocol"></el-checkbox>
         </el-form-item>
-      </template>
+      </template> -->
       <!--  dbType end  -->
 
       <!--  ossType start  -->
-      <template v-if="config.system.ossType == 'local'">
+      <!-- <template v-if="config.system.ossType == 'local'">
         <h2>本地上传配置</h2>
         <el-form-item label="本地文件路径">
           <el-input v-model="config.local.path"></el-input>
@@ -297,12 +318,11 @@
         <el-form-item label="bucketUrl">
           <el-input v-model="config.aliyunOSS.bucketUrl"></el-input>
         </el-form-item>
-      </template>
+      </template> -->
       <!--  ossType end  -->
 
       <el-form-item>
         <el-button @click="update" type="primary">立即更新</el-button>
-        <el-button @click="reload" type="primary">重启服务（开发中）</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -328,7 +348,8 @@ export default {
         captcha: {},
         zap: {},
         local: {},
-        email: {}
+        email: {},
+        blindBox: {}
       }
     };
   },

@@ -17,13 +17,13 @@
                 <el-input v-model="formData.walletAddress" clearable placeholder="请输入" ></el-input>
           </el-form-item>
            
-             <el-form-item label="密码:">
+           <!--  <el-form-item label="密码:">
                 <el-input v-model="formData.password" clearable placeholder="请输入" ></el-input>
           </el-form-item>
            
              <el-form-item label="支付密码:">
                 <el-input v-model="formData.payPassword" clearable placeholder="请输入" ></el-input>
-          </el-form-item>
+          </el-form-item> -->
            
              <el-form-item label="登录时间:"><el-input v-model.number="formData.loginTime" clearable placeholder="请输入"></el-input>
           </el-form-item>

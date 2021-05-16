@@ -102,9 +102,18 @@
        
          <el-form-item label="发行数量:"><el-input v-model.number="formData.number" clearable placeholder="请输入"></el-input>
       </el-form-item>
-       
-         <el-form-item label="等级:"><el-input v-model.number="formData.level" clearable placeholder="请输入"></el-input>
-      </el-form-item>
+
+
+          <el-form-item label="等级" prop="level">
+              <el-cascader
+                      :disabled="dialogType=='add'"
+                      :options="AuthorityOption"
+                      :props="{ checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
+                      :show-all-levels="false"
+                      filterable
+                      v-model="formData.level"
+              ></el-cascader>
+          </el-form-item>
        
          <el-form-item label="作者:">
             <el-input v-model="formData.author" clearable placeholder="请输入" ></el-input>
@@ -150,6 +159,24 @@ export default {
   mixins: [infoList],
   data() {
     return {
+        AuthorityOption: [
+            {
+                authorityId: 1,
+                authorityName: "N"
+            },
+            {
+                authorityId: 2,
+                authorityName: "R"
+            },
+            {
+                authorityId: 3,
+                authorityName: "SR"
+            },
+            {
+                authorityId: 4,
+                authorityName: "SSR"
+            },
+        ],
       listApi: getAvfCardList,
       dialogFormVisible: false,
       type: "",
