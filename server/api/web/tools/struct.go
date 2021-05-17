@@ -54,9 +54,9 @@ type CardListResponse struct {
 
 // 创建订单返回
 type CreateOrderResponse struct {
-	OrderSn string `json:"order_sn"` // 订单号
-	OrderId uint   `json:"order_id"` // 订单ID
-	Price   int64  `json:"price"`    // 订单价格
+	OrderSn string      `json:"order_sn"` // 订单号
+	OrderId uint        `json:"order_id"` // 订单ID
+	Price   interface{} `json:"price"`    // 订单价格
 }
 
 // 订单详情返回结果
@@ -67,6 +67,14 @@ type OrderDetailResponse struct {
 
 // 我的卡牌列表返回信息
 type MyCardResponse struct {
-	List  []model.AvfOrderCard `json:"list"`  // 卡牌列表
-	Total int64                `json:"total"` // 总数
+	List  []*model.AvfOrderCard `json:"list"`  // 卡牌列表
+	Total int64                 `json:"total"` // 总数
+}
+
+// 转让卡牌返回
+type TransferResponse struct {
+	TransferId    int    `json:"transfer_id"`    // 转让卡牌ID
+	Fees          int    `json:"fees"`           // 手续费
+	Price         int    `json:"price"`          // 价格
+	SystemAddress string `json:"system_address"` // 系统收款地址
 }

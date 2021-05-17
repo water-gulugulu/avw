@@ -324,7 +324,6 @@ func (c clientManage) QueryTransactionByTxHash(hash string) (res tools.Transacti
 		CheckNonce: msg.CheckNonce(),
 		Status:     receipt.Status,
 	}
-
 	// fmt.Printf("Status:%s\n", receipt.Status)
 	return
 }

@@ -21,7 +21,7 @@ const (
 
 var language string = "Chinese"
 
-func Result(code int, data interface{}, msg string, c *gin.Context) {
+func Result(code int, data interface{}, msg string, c *gin.Context, val ...interface{}) {
 	if code == ERROR {
 		lang := c.Request.Header.Get("language")
 		if len(lang) != 0 {
@@ -35,7 +35,9 @@ func Result(code int, data interface{}, msg string, c *gin.Context) {
 		if len(message) != 0 {
 			msg = message
 		}
-		fmt.Println(msg)
+		if val != nil {
+			msg = fmt.Sprintf(msg, val[0])
+		}
 	}
 	// 开始时间
 	c.JSON(http.StatusOK, Response{
@@ -67,6 +69,9 @@ func Fail(c *gin.Context) {
 
 func FailWithMessage(message string, c *gin.Context) {
 	Result(ERROR, map[string]interface{}{}, message, c)
+}
+func FailWithMessageToSprintf(message string, c *gin.Context, val ...interface{}) {
+	Result(ERROR, map[string]interface{}{}, message, c, val...)
 }
 
 func FailWithDetailed(data interface{}, message string, c *gin.Context) {

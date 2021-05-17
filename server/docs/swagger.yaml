@@ -74,6 +74,8 @@ definitions:
       address:
         description: 收款地址
         type: string
+      debug:
+        type: string
       direct:
         description: 直推奖金比例
         type: string
@@ -1584,7 +1586,7 @@ definitions:
         type: string
       price:
         description: 订单价格
-        type: integer
+        type: object
     type: object
   web_tools.LoginResponse:
     properties:
@@ -1638,6 +1640,21 @@ definitions:
         type: array
       total:
         description: 总条数
+        type: integer
+    type: object
+  web_tools.TransferResponse:
+    properties:
+      fees:
+        description: 手续费
+        type: integer
+      price:
+        description: 价格
+        type: integer
+      system_address:
+        description: 系统收款地址
+        type: string
+      transfer_id:
+        description: 转让卡牌ID
         type: integer
     type: object
   web_tools.UserInfo:
@@ -4406,6 +4423,44 @@ paths:
           schema:
             $ref: '#/definitions/web_tools.MyCardResponse'
       summary: 我的卡牌列表
+      tags:
+      - 前端接口
+  /web/order_card/transferCard:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: token
+        in: header
+        name: x-token
+        required: true
+        type: string
+      - description: 卡牌转让ID
+        in: body
+        name: transfer_id
+        required: true
+        schema:
+          type: string
+      - description: 交易事务hash
+        in: body
+        name: tx_hash
+        required: true
+        schema:
+          type: string
+      - description: 提交支付钱包地址
+        in: body
+        name: address
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web_tools.TransferResponse'
+      summary: 支付转让手续费
       tags:
       - 前端接口
   /web/user/getUserInfo:

@@ -43,6 +43,10 @@ type AvfTransactionLog struct {
 func (h *AvfTransactionLog) TableName() string {
 	return "avf_transaction_log"
 }
-func (h *AvfTransactionLog) CreateLog(DB *gorm.DB) {
-	DB.Table(h.TableName()).Create(&h)
+func (h *AvfTransactionLog) CreateLog(DB *gorm.DB) error {
+	return DB.Table(h.TableName()).Create(&h).Error
+}
+
+func (h *AvfTransactionLog) GetByHash(DB *gorm.DB) error {
+	return DB.Table(h.TableName()).Where("tx_hash = ?", h.TxHash).First(&h).Error
 }

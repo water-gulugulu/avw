@@ -33,6 +33,7 @@ collection-address:
   proportion: "80"
   exchange: "0.1"
   direct: "20"
+  debug: "1"
 email:
   to: xxx@qq.com
   port: 465

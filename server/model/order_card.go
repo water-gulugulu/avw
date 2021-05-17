@@ -37,7 +37,7 @@ func (h *AvfOrderCard) FindListByOrderId(DB *gorm.DB) (list []AvfOrderCard, err 
 
 	return
 }
-func (h *AvfOrderCard) FindListByUid(DB *gorm.DB, page, size int) (list []AvfOrderCard, total int64, err error) {
+func (h *AvfOrderCard) FindListByUid(DB *gorm.DB, page, size int) (list []*AvfOrderCard, total int64, err error) {
 	if h.Uid == 0 {
 		return nil, 0, errors.New("用户ID不能为空")
 	}
@@ -62,4 +62,8 @@ func (h *AvfOrderCard) CreateOrderCard(DB *gorm.DB) error {
 
 func (h *AvfOrderCard) GetById(DB *gorm.DB) error {
 	return DB.Table(h.TableName()).Where("id =?", h.ID).Preload("Card").First(&h).Error
+}
+
+func (h *AvfOrderCard) Update(DB *gorm.DB) error {
+	return DB.Table(h.TableName()).Where("id = ?", h.ID).Updates(&h).Error
 }

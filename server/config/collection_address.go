@@ -23,4 +23,5 @@ type CollectionAddress struct {
 	Proportion string `json:"proportion"` // 卡牌卖出原价比例
 	Exchange   string `json:"exchange"`   // 算力每日释放avw比例
 	Direct     string `json:"direct"`     // 直推奖金比例
+	Debug      string `json:"debug"`
 }

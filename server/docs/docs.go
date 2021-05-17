@@ -4520,6 +4520,64 @@ var doc = `{
                 }
             }
         },
+        "/web/order_card/transferCard": {
+            "post": {
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "前端接口"
+                ],
+                "summary": "支付转让手续费",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "x-token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "卡牌转让ID",
+                        "name": "transfer_id",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "交易事务hash",
+                        "name": "tx_hash",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "提交支付钱包地址",
+                        "name": "address",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web_tools.TransferResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/web/user/getUserInfo": {
             "get": {
                 "consumes": [
@@ -4698,6 +4756,9 @@ var doc = `{
             "properties": {
                 "address": {
                     "description": "收款地址",
+                    "type": "string"
+                },
+                "debug": {
                     "type": "string"
                 },
                 "direct": {
@@ -6798,7 +6859,7 @@ var doc = `{
                 },
                 "price": {
                     "description": "订单价格",
-                    "type": "integer"
+                    "type": "object"
                 }
             }
         },
@@ -6875,6 +6936,27 @@ var doc = `{
                 },
                 "total": {
                     "description": "总条数",
+                    "type": "integer"
+                }
+            }
+        },
+        "web_tools.TransferResponse": {
+            "type": "object",
+            "properties": {
+                "fees": {
+                    "description": "手续费",
+                    "type": "integer"
+                },
+                "price": {
+                    "description": "价格",
+                    "type": "integer"
+                },
+                "system_address": {
+                    "description": "系统收款地址",
+                    "type": "string"
+                },
+                "transfer_id": {
+                    "description": "转让卡牌ID",
                     "type": "integer"
                 }
             }

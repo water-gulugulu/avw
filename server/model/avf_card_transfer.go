@@ -3,6 +3,7 @@ package model
 
 import (
 	"gin-vue-admin/global"
+	"gorm.io/gorm"
 )
 
 // 如果含有time.Time 请自行import time包
@@ -26,4 +27,16 @@ type AvfCardTransfer struct {
 
 func (AvfCardTransfer) TableName() string {
 	return "avf_card_transfer"
+}
+
+func (h *AvfCardTransfer) Update(DB *gorm.DB) error {
+	return DB.Table(h.TableName()).Where("id = ?", h.ID).Updates(&h).Error
+}
+
+func (h *AvfCardTransfer) Create(DB *gorm.DB) error {
+	return DB.Table(h.TableName()).Create(&h).Error
+}
+
+func (h *AvfCardTransfer) GetById(DB *gorm.DB) error {
+	return DB.Table(h.TableName()).Where("id =?", h.ID).First(&h).Error
 }
