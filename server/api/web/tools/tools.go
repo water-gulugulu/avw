@@ -32,10 +32,10 @@ import (
 	"github.com/w3liu/go-common/constant/timeformat"
 	"go.uber.org/zap"
 	"log"
-	"math/big"
 	"math/rand"
 	"os"
 	"strconv"
+	"strings"
 	"sync/atomic"
 	"time"
 )
@@ -164,7 +164,7 @@ func TokenNext(user model.AvfUser) (string, error) {
 }
 
 // 循环读取哈希来改变订单状态
-func LoopOrderStatus(txHash string, OrderId, queryType int) {
+func LoopOrderStatus(txHash string, OrderId int) {
 	if len(txHash) == 0 {
 		return
 	}
@@ -193,8 +193,10 @@ func LoopOrderStatus(txHash string, OrderId, queryType int) {
 			log.Printf("[%s]Failed to status not 1\n", time.Now())
 			break
 		}
+		res.From = strings.ToUpper(res.From)
+		Order.From = strings.ToUpper(Order.From)
 		if res.From != Order.From {
-			log.Printf("[%s]Failed to form no ok\n", time.Now())
+			log.Printf("[%s]Failed to form:%s orderForm:%s\n", time.Now(), res.From, Order.From)
 			break
 		}
 		Price := Order.Price * 100000000000000000
@@ -203,14 +205,16 @@ func LoopOrderStatus(txHash string, OrderId, queryType int) {
 			P := 0.001 * 100000000000000000
 			Price = int64(P)
 		}
-
-		if big.NewInt(Price) != res.Value {
+		price := strconv.Itoa(int(Price))
+		if price != res.Value.String() {
 			log.Printf("[%s]Failed to money not same money:%v,%v \n", time.Now(), Price, res.Value)
 			break
 		}
 
-		if res.To != global.GVA_CONFIG.CollectionAddress.Address {
-			log.Printf("[%s]Failed to to no ok\n", time.Now())
+		res.To = strings.ToUpper(res.To)
+		Order.To = strings.ToUpper(global.GVA_CONFIG.CollectionAddress.Address)
+		if res.To != Order.To {
+			log.Printf("[%s]Failed to to:%s orderTo:%s\n", time.Now(), res.To, Order.To)
 			break
 		}
 

@@ -314,8 +314,8 @@ func (c clientManage) QueryTransactionByTxHash(hash string) (res tools.Transacti
 	res = tools.TransactionResponse{
 		TxHash:     hash,
 		Block:      receipt.BlockNumber,
-		From:       msg.From().String(),
-		To:         msg.To().String(),
+		From:       msg.From().Hex(),
+		To:         msg.To().Hex(),
 		GasPrice:   msg.GasPrice(),
 		Value:      msg.Value(),
 		Gas:        msg.Gas(),
