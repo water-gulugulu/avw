@@ -195,7 +195,10 @@ func TransferCard(c *gin.Context) {
 		response.FailWithMessage("41016", c)
 		return
 	}
-	if cardPrice > int(orderCard.Card.Money) {
+	proportion, _ := strconv.Atoi(global.GVA_CONFIG.CollectionAddress.Proportion)
+
+	systemPrice := int(orderCard.Card.Money) * proportion
+	if cardPrice > systemPrice {
 
 	}
 

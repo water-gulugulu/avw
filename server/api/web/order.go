@@ -97,12 +97,15 @@ func CreateOrder(c *gin.Context) {
 	}
 	blindBox := global.GVA_CONFIG.BlindBox
 	var price int64
+	var n int
 	number, _ := strconv.Atoi(num)
 	switch blindBoxType {
 	case "1":
 		price = blindBox.One * int64(number)
+		n = number
 	case "2":
 		price = blindBox.Ten * int64(number)
+		n = number * 10
 	default:
 		response.FailWithMessage("41007", c)
 		return
@@ -111,8 +114,8 @@ func CreateOrder(c *gin.Context) {
 	Order := model.AvfOrder{
 		Uid:       int(UserId),
 		OrderSn:   orderSn,
-		Num:       number,
-		Number:    number,
+		Num:       n,
+		Number:    n,
 		Price:     price,
 		Status:    1,
 		GVA_MODEL: global.GVA_MODEL{CreatedAt: time.Now(), UpdatedAt: time.Now()},
