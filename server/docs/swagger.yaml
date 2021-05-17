@@ -1574,17 +1574,6 @@ definitions:
         description: 旧角色ID
         type: string
     type: object
-  web_tools.CardListResponse:
-    properties:
-      list:
-        description: 卡牌列表
-        items:
-          $ref: '#/definitions/model.AvfCard'
-        type: array
-      total:
-        description: 总条数
-        type: integer
-    type: object
   web_tools.CreateOrderResponse:
     properties:
       order_id:
@@ -4188,13 +4177,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: 页码
+      - description: 等级 默认全部 1-N 2-R 3-SR 4-SSR
         in: query
-        name: page
-        type: string
-      - description: 数量
-        in: query
-        name: size
+        name: level
         type: string
       produces:
       - application/json
@@ -4202,7 +4187,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/web_tools.CardListResponse'
+            $ref: '#/definitions/model.AvfCard'
       summary: 获取卡牌列表
       tags:
       - 前端接口
@@ -4317,11 +4302,10 @@ paths:
         required: true
         type: string
       - description: 订单ID
-        in: body
+        in: query
         name: order_id
         required: true
-        schema:
-          type: string
+        type: string
       produces:
       - application/json
       responses:

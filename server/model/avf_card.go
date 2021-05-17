@@ -29,19 +29,19 @@ func (h *AvfCard) TableName() string {
 	return "avf_card"
 }
 
-func (h *AvfCard) GetList(DB *gorm.DB, p, size int) (list []AvfCard, total int64, err error) {
-	if p > 0 {
-		p = p * size
-	}
+func (h *AvfCard) GetList(DB *gorm.DB) (list []*AvfCard, err error) {
+	// if p > 0 {
+	// 	p = p * size
+	// }
 
 	DB = DB.Table(h.TableName()).Where("status = ?", 1)
 
-	if err := DB.Count(&total).Error; err != nil {
-		return list, 0, err
-	}
+	// if err := DB.Count(&total).Error; err != nil {
+	// 	return list, 0, err
+	// }
 
-	if err := DB.Order("id desc").Limit(size).Offset(p).Find(&list).Error; err != nil {
-		return list, 0, err
+	if err := DB.Order("id desc").Find(&list).Error; err != nil {
+		return list, err
 	}
 
 	return

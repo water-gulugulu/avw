@@ -4172,14 +4172,8 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "页码",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "数量",
-                        "name": "size",
+                        "description": "等级 默认全部 1-N 2-R 3-SR 4-SSR",
+                        "name": "level",
                         "in": "query"
                     }
                 ],
@@ -4187,7 +4181,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/web_tools.CardListResponse"
+                            "$ref": "#/definitions/model.AvfCard"
                         }
                     }
                 }
@@ -4368,13 +4362,11 @@ var doc = `{
                         "required": true
                     },
                     {
+                        "type": "string",
                         "description": "订单ID",
                         "name": "order_id",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -6790,22 +6782,6 @@ var doc = `{
                 "oldAuthorityId": {
                     "description": "旧角色ID",
                     "type": "string"
-                }
-            }
-        },
-        "web_tools.CardListResponse": {
-            "type": "object",
-            "properties": {
-                "list": {
-                    "description": "卡牌列表",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.AvfCard"
-                    }
-                },
-                "total": {
-                    "description": "总条数",
-                    "type": "integer"
                 }
             }
         },
