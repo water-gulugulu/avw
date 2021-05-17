@@ -62,6 +62,24 @@
         <el-input v-model="config.collectionAddress.address"></el-input>
       </el-form-item>
       <!--  BlindBox end  -->
+      <!--  BlindBox start  -->
+      <h2>卡牌转让设置</h2>
+      <el-form-item label="手续费百分比">
+        <el-input v-model="config.collectionAddress.fees"></el-input>
+      </el-form-item>
+      <el-form-item label="转让原价百分比">
+        <el-input v-model="config.collectionAddress.proportion"></el-input>
+      </el-form-item>
+      <!--  BlindBox end  -->
+      <!--  BlindBox start  -->
+      <h2>收益设置</h2>
+      <el-form-item label="算力比例">
+        <el-input v-model="config.collectionAddress.exchange" placeholder="此处为:1算力=(X)AVW"></el-input>
+      </el-form-item>
+      <el-form-item label="直推收益比例">
+        <el-input v-model="config.collectionAddress.direct" placeholder="直推收益比例百分比"></el-input>
+      </el-form-item>
+      <!--  BlindBox end  -->
 
 
       <!--  Zap start  -->
