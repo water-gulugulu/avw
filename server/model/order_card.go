@@ -61,5 +61,5 @@ func (h *AvfOrderCard) CreateOrderCard(DB *gorm.DB) error {
 }
 
 func (h *AvfOrderCard) GetById(DB *gorm.DB) error {
-	return DB.Table(h.TableName()).Where("id =?", h.ID).First(&h).Error
+	return DB.Table(h.TableName()).Where("id =?", h.ID).Preload("Card").First(&h).Error
 }

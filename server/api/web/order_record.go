@@ -166,11 +166,17 @@ func TransferCard(c *gin.Context) {
 		return
 	}
 	recordId := c.PostForm("record_id")
+	price := c.PostForm("price")
 	if len(recordId) == 0 || recordId == "0" {
-		response.FailWithMessage("41003", c)
+		response.FailWithMessage("41014", c)
+		return
+	}
+	if len(price) == 0 || price == "0" {
+		response.FailWithMessage("41017", c)
 		return
 	}
 	rid, _ := strconv.Atoi(recordId)
+	cardPrice, _ := strconv.Atoi(price)
 	orderCard := model.AvfOrderCard{
 		GVA_MODEL: global.GVA_MODEL{ID: uint(rid)},
 	}
@@ -182,6 +188,13 @@ func TransferCard(c *gin.Context) {
 	if orderCard.Uid != int(UserId) {
 		response.FailWithMessage("41015", c)
 		return
+	}
+	if orderCard.Status == 2 {
+		response.FailWithMessage("41016", c)
+		return
+	}
+	if cardPrice > int(orderCard.Card.Money) {
+
 	}
 
 }

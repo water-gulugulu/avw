@@ -34,6 +34,8 @@ import (
 // @accept application/json
 // @Produce application/json
 // @Param x-token header string  true "token"
+// @Param page query string  false "页码 第一页为0"
+// @Param size query string  false "数量 默认10"
 // @Success 200 {object} web_tools.OrderListResponse
 // @Router /web/order/list [get]
 func GetOrderList(c *gin.Context) {

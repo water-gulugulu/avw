@@ -892,6 +892,234 @@ var doc = `{
                 }
             }
         },
+        "/avfCardTransfer/createAvfCardTransfer": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AvfCardTransfer"
+                ],
+                "summary": "创建AvfCardTransfer",
+                "parameters": [
+                    {
+                        "description": "创建AvfCardTransfer",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.AvfCardTransfer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/avfCardTransfer/deleteAvfCardTransfer": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AvfCardTransfer"
+                ],
+                "summary": "删除AvfCardTransfer",
+                "parameters": [
+                    {
+                        "description": "删除AvfCardTransfer",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.AvfCardTransfer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"删除成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/avfCardTransfer/deleteAvfCardTransferByIds": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AvfCardTransfer"
+                ],
+                "summary": "批量删除AvfCardTransfer",
+                "parameters": [
+                    {
+                        "description": "批量删除AvfCardTransfer",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.IdsReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"批量删除成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/avfCardTransfer/findAvfCardTransfer": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AvfCardTransfer"
+                ],
+                "summary": "用id查询AvfCardTransfer",
+                "parameters": [
+                    {
+                        "description": "用id查询AvfCardTransfer",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.AvfCardTransfer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"查询成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/avfCardTransfer/getAvfCardTransferList": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AvfCardTransfer"
+                ],
+                "summary": "分页获取AvfCardTransfer列表",
+                "parameters": [
+                    {
+                        "description": "分页获取AvfCardTransfer列表",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.AvfCardTransferSearch"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/avfCardTransfer/updateAvfCardTransfer": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AvfCardTransfer"
+                ],
+                "summary": "更新AvfCardTransfer",
+                "parameters": [
+                    {
+                        "description": "更新AvfCardTransfer",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.AvfCardTransfer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"更新成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/avfEventLog/createAvfEventLog": {
             "post": {
                 "security": [
@@ -4095,6 +4323,18 @@ var doc = `{
                         "name": "x-token",
                         "in": "header",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "页码 第一页为0",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "数量 默认10",
+                        "name": "size",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -4921,6 +5161,79 @@ var doc = `{
                 },
                 "walletAddress": {
                     "description": "收款钱包地址",
+                    "type": "string"
+                }
+            }
+        },
+        "model.AvfCardTransfer": {
+            "type": "object",
+            "properties": {
+                "block": {
+                    "description": "区块号",
+                    "type": "string"
+                },
+                "buy_id": {
+                    "description": "购买人ID",
+                    "type": "integer"
+                },
+                "cardName": {
+                    "description": "卡牌名称",
+                    "type": "string"
+                },
+                "card_id": {
+                    "description": "卡牌ID",
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "fees": {
+                    "description": "手续费",
+                    "type": "integer"
+                },
+                "from": {
+                    "description": "出售人钱包地址",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "level": {
+                    "description": "卡牌等级",
+                    "type": "integer"
+                },
+                "price": {
+                    "description": "价格",
+                    "type": "integer"
+                },
+                "record_id": {
+                    "description": "卡牌记录ID",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态",
+                    "type": "integer"
+                },
+                "system": {
+                    "description": "系统手续费钱包地址",
+                    "type": "string"
+                },
+                "to": {
+                    "description": "购买人钱包地址",
+                    "type": "string"
+                },
+                "txHash": {
+                    "description": "交易hash",
+                    "type": "string"
+                },
+                "uid": {
+                    "description": "出售人ID",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
                     "type": "string"
                 }
             }
@@ -5755,6 +6068,87 @@ var doc = `{
                 },
                 "walletAddress": {
                     "description": "收款钱包地址",
+                    "type": "string"
+                }
+            }
+        },
+        "request.AvfCardTransferSearch": {
+            "type": "object",
+            "properties": {
+                "block": {
+                    "description": "区块号",
+                    "type": "string"
+                },
+                "buy_id": {
+                    "description": "购买人ID",
+                    "type": "integer"
+                },
+                "cardName": {
+                    "description": "卡牌名称",
+                    "type": "string"
+                },
+                "card_id": {
+                    "description": "卡牌ID",
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "fees": {
+                    "description": "手续费",
+                    "type": "integer"
+                },
+                "from": {
+                    "description": "出售人钱包地址",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "level": {
+                    "description": "卡牌等级",
+                    "type": "integer"
+                },
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "description": "每页大小",
+                    "type": "integer"
+                },
+                "price": {
+                    "description": "价格",
+                    "type": "integer"
+                },
+                "record_id": {
+                    "description": "卡牌记录ID",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态",
+                    "type": "integer"
+                },
+                "system": {
+                    "description": "系统手续费钱包地址",
+                    "type": "string"
+                },
+                "to": {
+                    "description": "购买人钱包地址",
+                    "type": "string"
+                },
+                "txHash": {
+                    "description": "交易hash",
+                    "type": "string"
+                },
+                "uid": {
+                    "description": "出售人ID",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
                     "type": "string"
                 }
             }
