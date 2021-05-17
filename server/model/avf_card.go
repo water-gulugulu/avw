@@ -49,7 +49,7 @@ func (h *AvfCard) GetList(DB *gorm.DB) (list []*AvfCard, err error) {
 	return
 }
 func (h *AvfCard) RandGetByLevel(DB *gorm.DB) error {
-	return DB.Table(h.TableName()).Where("level = ?", h.Level).First(&h).Error
+	return DB.Table(h.TableName()).Where("level = ?", h.Level).Order("RAND()").First(&h).Error
 }
 func (h *AvfCard) GetById(DB *gorm.DB) error {
 	return DB.Table(h.TableName()).Where("id = ?", h.ID).First(&h).Error
