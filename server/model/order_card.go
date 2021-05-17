@@ -59,3 +59,7 @@ func (h *AvfOrderCard) FindListByUid(DB *gorm.DB, page, size int) (list []AvfOrd
 func (h *AvfOrderCard) CreateOrderCard(DB *gorm.DB) error {
 	return DB.Table(h.TableName()).Create(&h).Error
 }
+
+func (h *AvfOrderCard) GetById(DB *gorm.DB) error {
+	return DB.Table(h.TableName()).Where("id =?", h.ID).First(&h).Error
+}

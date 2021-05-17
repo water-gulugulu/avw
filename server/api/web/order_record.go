@@ -158,3 +158,30 @@ func MyCard(c *gin.Context) {
 	response.OkWithData(res, c)
 	return
 }
+
+func TransferCard(c *gin.Context) {
+	UserId, err := web_tools.GetUserId(c)
+	if err != nil {
+		response.FailWithMessage("41003", c)
+		return
+	}
+	recordId := c.PostForm("record_id")
+	if len(recordId) == 0 || recordId == "0" {
+		response.FailWithMessage("41003", c)
+		return
+	}
+	rid, _ := strconv.Atoi(recordId)
+	orderCard := model.AvfOrderCard{
+		GVA_MODEL: global.GVA_MODEL{ID: uint(rid)},
+	}
+	DB := global.GVA_DB
+	if err := orderCard.GetById(DB); err != nil {
+		response.FailWithMessage("60006", c)
+		return
+	}
+	if orderCard.Uid != int(UserId) {
+		response.FailWithMessage("41015", c)
+		return
+	}
+
+}
