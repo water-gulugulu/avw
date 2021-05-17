@@ -33,7 +33,7 @@ import (
 // @Success 200  {object} model.AvfCard
 // @Router /web/card/list [get]
 func GetCardList(c *gin.Context) {
-	// page := c.Query("page")
+	level := c.Query("level")
 	// size := c.Query("size")
 
 	// if len(size) == 0 {
@@ -44,7 +44,10 @@ func GetCardList(c *gin.Context) {
 	// }
 
 	Card := model.AvfCard{}
-	// p, _ := strconv.Atoi(page)
+	if len(level) != 0 && level != "0" {
+		l, _ := strconv.Atoi(level)
+		Card.Level = l
+	}
 	// s, _ := strconv.Atoi(size)
 
 	res := map[int][]*model.AvfCard{}

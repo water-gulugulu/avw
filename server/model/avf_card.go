@@ -35,7 +35,9 @@ func (h *AvfCard) GetList(DB *gorm.DB) (list []*AvfCard, err error) {
 	// }
 
 	DB = DB.Table(h.TableName()).Where("status = ?", 1)
-
+	if h.Level != 0 {
+		DB.Where("level = ?", h.Level)
+	}
 	// if err := DB.Count(&total).Error; err != nil {
 	// 	return list, 0, err
 	// }
