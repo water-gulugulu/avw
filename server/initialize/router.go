@@ -27,9 +27,10 @@ func Routers() *gin.Engine {
 
 	WebGroup := Router.Group("/web")
 	{
-		router.InitApiUserRouter(WebGroup)     // 用户接口
-		router.InitApiAvfCardRouter(WebGroup)  // 卡牌接口
-		router.InitApiAvfOrderRouter(WebGroup) // 订单接口
+		router.InitApiUserRouter(WebGroup)         // 用户接口
+		router.InitApiAvfCardRouter(WebGroup)      // 卡牌接口
+		router.InitApiAvfOrderRouter(WebGroup)     // 订单接口
+		router.InitApiAvfOrderCardRouter(WebGroup) // 订单卡牌接口
 	}
 
 	// 方便统一添加路由组前缀 多服务器上线使用

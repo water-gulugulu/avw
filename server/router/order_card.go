@@ -2,6 +2,7 @@ package router
 
 import (
 	"gin-vue-admin/api/v1"
+	"gin-vue-admin/api/web"
 	"gin-vue-admin/middleware"
 	"github.com/gin-gonic/gin"
 )
@@ -15,5 +16,16 @@ func InitAvfOrderCardRouter(Router *gin.RouterGroup) {
 		AvfOrderCardRouter.PUT("updateAvfOrderCard", v1.UpdateAvfOrderCard)              // 更新AvfOrderCard
 		AvfOrderCardRouter.GET("findAvfOrderCard", v1.FindAvfOrderCard)                  // 根据ID获取AvfOrderCard
 		AvfOrderCardRouter.GET("getAvfOrderCardList", v1.GetAvfOrderCardList)            // 获取AvfOrderCard列表
+	}
+}
+
+func InitApiAvfOrderCardRouter(Router *gin.RouterGroup) {
+	ApiOrderCardRouter := Router.Group("order_card")
+	{
+		ApiOrderCardRouter.Use(middleware.APiJWTAuth())
+		{
+			ApiOrderCardRouter.POST("/luckyDraw", web.LuckyDraw)
+			ApiOrderCardRouter.GET("/myCard", web.MyCard)
+		}
 	}
 }

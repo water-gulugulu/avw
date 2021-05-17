@@ -3898,6 +3898,37 @@ var doc = `{
                 }
             }
         },
+        "/web/card/detail": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "前端接口"
+                ],
+                "summary": "获取卡牌详情",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "卡牌ID",
+                        "name": "card_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.AvfCard"
+                        }
+                    }
+                }
+            }
+        },
         "/web/card/list": {
             "get": {
                 "consumes": [
@@ -3977,7 +4008,7 @@ var doc = `{
         "/web/order/createOrder": {
             "post": {
                 "consumes": [
-                    "application/json"
+                    "application/x-www-form-urlencoded"
                 ],
                 "produces": [
                     "application/json"
@@ -4023,6 +4054,28 @@ var doc = `{
                 }
             }
         },
+        "/web/order/getPrice": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "前端接口"
+                ],
+                "summary": "获取盲盒价格",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/config.BlindBox"
+                        }
+                    }
+                }
+            }
+        },
         "/web/order/list": {
             "get": {
                 "consumes": [
@@ -4057,7 +4110,7 @@ var doc = `{
         "/web/order/orderDetail": {
             "get": {
                 "consumes": [
-                    "application/x-www-form-urlencoded"
+                    "application/json"
                 ],
                 "produces": [
                     "application/json"
@@ -4097,7 +4150,7 @@ var doc = `{
         "/web/order/payOrder": {
             "post": {
                 "consumes": [
-                    "application/json"
+                    "application/x-www-form-urlencoded"
                 ],
                 "produces": [
                     "application/json"
@@ -4147,6 +4200,89 @@ var doc = `{
                         "description": "{\"status\":200,\"message\":\"200\"}",
                         "schema": {
                             "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/web/order_card/luckyDraw": {
+            "post": {
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "前端接口"
+                ],
+                "summary": "抽奖",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "x-token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "订单ID",
+                        "name": "order_id",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.AvfCard"
+                        }
+                    }
+                }
+            }
+        },
+        "/web/order_card/myCard": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "前端接口"
+                ],
+                "summary": "我的卡牌列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "x-token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "数量 默认10",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web_tools.MyCardResponse"
                         }
                     }
                 }
@@ -4290,9 +4426,11 @@ var doc = `{
             "type": "object",
             "properties": {
                 "one": {
+                    "description": "一连抽",
                     "type": "integer"
                 },
                 "ten": {
+                    "description": "十连抽",
                     "type": "integer"
                 }
             }
@@ -4328,6 +4466,22 @@ var doc = `{
             "properties": {
                 "address": {
                     "description": "收款地址",
+                    "type": "string"
+                },
+                "direct": {
+                    "description": "直推奖金比例",
+                    "type": "string"
+                },
+                "exchange": {
+                    "description": "算力每日释放avw比例",
+                    "type": "string"
+                },
+                "fees": {
+                    "description": "转卡手续费百分比",
+                    "type": "string"
+                },
+                "proportion": {
+                    "description": "卡牌卖出原价比例",
                     "type": "string"
                 }
             }
@@ -4729,6 +4883,10 @@ var doc = `{
                     "description": "主键ID",
                     "type": "integer"
                 },
+                "image": {
+                    "description": "修改时间",
+                    "type": "string"
+                },
                 "level": {
                     "description": "等级 1-N 2-R 3-SR 4-SSR",
                     "type": "integer"
@@ -4886,6 +5044,10 @@ var doc = `{
         "model.AvfOrderCard": {
             "type": "object",
             "properties": {
+                "card": {
+                    "description": "卡牌信息",
+                    "$ref": "#/definitions/model.AvfCard"
+                },
                 "cardId": {
                     "description": "卡牌ID",
                     "type": "integer"
@@ -5547,6 +5709,10 @@ var doc = `{
                     "description": "主键ID",
                     "type": "integer"
                 },
+                "image": {
+                    "description": "修改时间",
+                    "type": "string"
+                },
                 "level": {
                     "description": "等级 1-N 2-R 3-SR 4-SSR",
                     "type": "integer"
@@ -5651,6 +5817,10 @@ var doc = `{
         "request.AvfOrderCardSearch": {
             "type": "object",
             "properties": {
+                "card": {
+                    "description": "卡牌信息",
+                    "$ref": "#/definitions/model.AvfCard"
+                },
                 "cardId": {
                     "description": "卡牌ID",
                     "type": "integer"
@@ -6288,6 +6458,22 @@ var doc = `{
                 "wallet_address": {
                     "description": "钱包地址",
                     "type": "string"
+                }
+            }
+        },
+        "web_tools.MyCardResponse": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "description": "卡牌列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.AvfOrderCard"
+                    }
+                },
+                "total": {
+                    "description": "总数",
+                    "type": "integer"
                 }
             }
         },

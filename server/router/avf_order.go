@@ -20,12 +20,16 @@ func InitAvfOrderRouter(Router *gin.RouterGroup) {
 }
 
 func InitApiAvfOrderRouter(Router *gin.RouterGroup) {
-	ApiOrderRouter := Router.Group("order").Use(middleware.APiJWTAuth())
+	ApiOrderRouter := Router.Group("order")
 	{
-		ApiOrderRouter.GET("/list", web.GetOrderList)
-		ApiOrderRouter.POST("/createOrder", web.CreateOrder)
-		ApiOrderRouter.POST("/payOrder", web.PayOrder)
-		ApiOrderRouter.POST("/orderDetail", web.OrderDetail)
-		ApiOrderRouter.POST("/cancelOrder", web.CancelOrder)
+		ApiOrderRouter.GET("/getPrice", web.GetPrice)
+		ApiOrderRouter.Use(middleware.APiJWTAuth())
+		{
+			ApiOrderRouter.GET("/list", web.GetOrderList)
+			ApiOrderRouter.POST("/createOrder", web.CreateOrder)
+			ApiOrderRouter.POST("/payOrder", web.PayOrder)
+			ApiOrderRouter.POST("/orderDetail", web.OrderDetail)
+			ApiOrderRouter.POST("/cancelOrder", web.CancelOrder)
+		}
 	}
 }

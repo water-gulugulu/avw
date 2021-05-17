@@ -40,9 +40,9 @@ type AvfTransactionLog struct {
 	CreateDate time.Time `gorm:"column:create_date" json:"create_date" form:"create_date"` // 创建时间
 }
 
-func (h AvfTransactionLog) TableName() string {
+func (h *AvfTransactionLog) TableName() string {
 	return "avf_transaction_log"
 }
-func (h AvfTransactionLog) CreateLog(DB *gorm.DB) {
+func (h *AvfTransactionLog) CreateLog(DB *gorm.DB) {
 	DB.Table(h.TableName()).Create(&h)
 }

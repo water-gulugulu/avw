@@ -19,9 +19,9 @@ package web
 
 import (
 	web_tools "gin-vue-admin/api/web/tools"
+	"gin-vue-admin/api/web/tools/response"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
-	"gin-vue-admin/model/response"
 	"gin-vue-admin/utils/blockchian"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -73,7 +73,7 @@ func GetOrderList(c *gin.Context) {
 
 // @Tags 前端接口
 // @Summary 创建订单
-// @accept application/json
+// @accept application/x-www-form-urlencoded
 // @Produce application/json
 // @Param x-token header string  true "token"
 // @Param type body string  true "盲盒类型 1-一连抽 2-十连抽"
@@ -89,7 +89,7 @@ func CreateOrder(c *gin.Context) {
 	blindBoxType := c.PostForm("type")
 	num := c.PostForm("num")
 	if len(num) == 0 {
-		response.FailWithMessage("40008", c)
+		response.FailWithMessage("41008", c)
 		return
 	}
 	blindBox := global.GVA_CONFIG.BlindBox
@@ -101,7 +101,7 @@ func CreateOrder(c *gin.Context) {
 	case "2":
 		price = blindBox.Ten * int64(number)
 	default:
-		response.FailWithMessage("40007", c)
+		response.FailWithMessage("41007", c)
 		return
 	}
 	orderSn := web_tools.CreateSn(time.Now())
@@ -131,7 +131,7 @@ func CreateOrder(c *gin.Context) {
 
 // @Tags 前端接口
 // @Summary 支付订单
-// @accept application/json
+// @accept application/x-www-form-urlencoded
 // @Produce application/json
 // @Param x-token header string  true "token"
 // @Param order_id body string  true "订单ID"
@@ -147,7 +147,7 @@ func PayOrder(c *gin.Context) {
 	}
 	orderID := c.PostForm("order_id")
 	TxHash := c.PostForm("tx_hash")
-	address := c.PostForm("pay_address")
+	address := c.PostForm("address")
 	if len(orderID) == 0 {
 		response.FailWithMessage("41009", c)
 		return
@@ -162,6 +162,14 @@ func PayOrder(c *gin.Context) {
 	}
 	oid, _ := strconv.Atoi(orderID)
 	Order := model.AvfOrder{
+		TxHash: TxHash,
+	}
+
+	if err := Order.FindByHash(global.GVA_DB); err == nil || Order.ID != 0 {
+		response.FailWithMessage("41013", c)
+		return
+	}
+	Order = model.AvfOrder{
 		GVA_MODEL: global.GVA_MODEL{ID: uint(oid)},
 		Uid:       int(UserId),
 	}
@@ -196,7 +204,7 @@ func PayOrder(c *gin.Context) {
 
 // @Tags 前端接口
 // @Summary 订单详情
-// @accept application/x-www-form-urlencoded
+// @accept application/json
 // @Produce application/json
 // @Param x-token header string  true "token"
 // @Param order_id body string  true "订单ID"
@@ -260,15 +268,19 @@ func LoopOrderStatus(txHash string, OrderId int) {
 	for {
 		res, err2 := client.QueryTransactionByTxHash(txHash)
 		if err2 != nil {
+			log.Printf("[%s]Failed to query transaction error:%e", time.Now(), err)
 			continue
 		}
 		if res.Status != 1 {
+			log.Printf("[%s]Failed to status not 1", time.Now())
 			continue
 		}
 		if res.From != Order.From {
+			log.Printf("[%s]Failed to form no ok", time.Now())
 			continue
 		}
-		if res.To != Order.To {
+		if res.To != global.GVA_CONFIG.CollectionAddress.Address {
+			log.Printf("[%s]Failed to to no ok", time.Now())
 			continue
 		}
 		Order := model.AvfOrder{
@@ -296,7 +308,7 @@ func LoopOrderStatus(txHash string, OrderId int) {
 			TxHash:   txHash,
 			Form:     res.From,
 			To:       res.To,
-			Gas:      string(res.Gas),
+			Gas:      strconv.Itoa(int(res.Gas)),
 			GasPrice: res.GasPrice.String(),
 			Value:    res.Value.String(),
 			Nonce:    string(res.Nonce),
@@ -345,5 +357,16 @@ func CancelOrder(c *gin.Context) {
 	}
 
 	response.Ok(c)
+	return
+}
+
+// @Tags 前端接口
+// @Summary 获取盲盒价格
+// @accept application/json
+// @Produce application/json
+// @Success 200 {object} config.BlindBox
+// @Router /web/order/getPrice [get]
+func GetPrice(c *gin.Context) {
+	response.OkWithData(global.GVA_CONFIG.BlindBox, c)
 	return
 }

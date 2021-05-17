@@ -64,3 +64,9 @@ type OrderDetailResponse struct {
 	OrderInfo     model.AvfOrder       `json:"order_info"`      // 订单详情
 	OrderCardList []model.AvfOrderCard `json:"order_card_list"` // 卡牌列表
 }
+
+// 我的卡牌列表返回信息
+type MyCardResponse struct {
+	List  []model.AvfOrderCard `json:"list"`  // 卡牌列表
+	Total int64                `json:"total"` // 总数
+}

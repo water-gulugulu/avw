@@ -19,18 +19,18 @@ type AvfOrder struct {
 	PayTime  int    `json:"payTime" form:"payTime" gorm:"column:pay_time;comment:支付时间;type:int;size:10;"`                // 支付时间
 	TxHash   string `json:"txHash" form:"txHash" gorm:"column:tx_hash;comment:事务哈希;type:varchar(255);size:255;"`         // 交易hash
 	Block    string `json:"block" form:"block" gorm:"column:block;comment:区块编号;type:varchar(30);size:30;"`               // 区块号
-	Gas      string `json:"gas" form:"gas" gorm:"column:gas;comment:手续费;type:varchar(10);size:10;"`                      // 手续费
-	GasPrice string `json:"gasPrice" form:"gasPrice" gorm:"column:gas_price;comment:手续费价格;type:varchar(10);size:10;"`    // 手续费价格
+	Gas      string `json:"gas" form:"gas" gorm:"column:gas;comment:手续费;type:varchar(50);size:50;"`                      // 手续费
+	GasPrice string `json:"gasPrice" form:"gasPrice" gorm:"column:gas_price;comment:手续费价格;type:varchar(50);size:50;"`    // 手续费价格
 	From     string `json:"from" form:"from" gorm:"column:from;comment:支付地址;type:varchar(255);size:255;"`                // 支付地址
 	To       string `json:"to" form:"to" gorm:"column:to;comment:收款地址;type:varchar(255);size:255;"`                      // 收款地址
 }
 
-func (AvfOrder) TableName() string {
+func (h *AvfOrder) TableName() string {
 	return "avf_order"
 }
 
-func (h AvfOrder) FindList(DB *gorm.DB, p, size int) (list []AvfOrder, total int64, err error) {
-	DB = DB.Table(h.TableName()).Where("uid = ?", h.Uid)
+func (h *AvfOrder) FindList(DB *gorm.DB, p, size int) (list []AvfOrder, total int64, err error) {
+	DB = DB.Table(h.TableName()).Where("uid = ? AND status in(?))", h.Uid, []int{2, 3})
 
 	if p != 0 {
 		p = p * size
@@ -44,18 +44,18 @@ func (h AvfOrder) FindList(DB *gorm.DB, p, size int) (list []AvfOrder, total int
 	return
 }
 
-func (h AvfOrder) CreateOrder(DB *gorm.DB) error {
+func (h *AvfOrder) CreateOrder(DB *gorm.DB) error {
 	return DB.Table(h.TableName()).Create(&h).Error
 }
 
-func (h AvfOrder) FindById(DB *gorm.DB) error {
+func (h *AvfOrder) FindById(DB *gorm.DB) error {
 	if h.ID == 0 {
 		return errors.New("ID不能为空")
 	}
 
 	return DB.Table(h.TableName()).Where("id = ?", h.ID).First(&h).Error
 }
-func (h AvfOrder) FindByIdAndUserId(DB *gorm.DB) error {
+func (h *AvfOrder) FindByIdAndUserId(DB *gorm.DB) error {
 	if h.ID == 0 {
 		return errors.New("ID不能为空")
 	}
@@ -66,15 +66,15 @@ func (h AvfOrder) FindByIdAndUserId(DB *gorm.DB) error {
 	return DB.Table(h.TableName()).Where("id = ? and uid = ?", h.ID, h.Uid).First(&h).Error
 }
 
-func (h AvfOrder) UpdateOrder(DB *gorm.DB) error {
+func (h *AvfOrder) UpdateOrder(DB *gorm.DB) error {
 	return DB.Table(h.TableName()).Where("id = ?", h.ID).Updates(&h).Error
 }
 
-func (h AvfOrder) FindListByStatus(DB *gorm.DB) (list []AvfOrder, err error) {
+func (h *AvfOrder) FindListByStatus(DB *gorm.DB) (list []AvfOrder, err error) {
 
 	return
 }
 
-func (h AvfOrder) FindByHash(DB *gorm.DB) error {
+func (h *AvfOrder) FindByHash(DB *gorm.DB) error {
 	return DB.Table(h.TableName()).Where("tx_hash = ?", h.TxHash).First(&h).Error
 }

@@ -325,7 +325,7 @@ func (c clientManage) QueryTransactionByTxHash(hash string) (res tools.Transacti
 		Status:     receipt.Status,
 	}
 
-	fmt.Printf("Status:%s\n", receipt.Status)
+	// fmt.Printf("Status:%s\n", receipt.Status)
 	return
 }
 

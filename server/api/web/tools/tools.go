@@ -21,9 +21,15 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"gin-vue-admin/global"
+	"gin-vue-admin/middleware"
+	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	uuid "github.com/satori/go.uuid"
 	"github.com/w3liu/go-common/constant/timeformat"
+	"go.uber.org/zap"
 	"math/rand"
 	"os"
 	"sync/atomic"
@@ -108,7 +114,47 @@ func sup(i int64, n int) string {
 	return m
 }
 
-func Lottery() {
-	// list := []int{1, 2}
+// 抽奖算法
+func Lottery(noSSR bool) int {
+	start := 0
+	var end, level int
+	var list = make([]int, 0)
+	if noSSR {
+		list = []int{9000, 800, 200}
+	} else {
+		list = []int{9000, 800, 190, 10}
+	}
+	randNumber := rand.Intn(10000)
+	for k, probability := range list {
+		end += probability
+		if start <= randNumber && end > randNumber {
+			level = k
+		}
+		start = end
+	}
+	return level + 1
+}
 
+// 登录以后签发jwt
+func TokenNext(user model.AvfUser) (string, error) {
+	j := &middleware.JWT{SigningKey: []byte(global.GVA_CONFIG.JWT.SigningKey)} // 唯一签名
+	claims := request.CustomClaims{
+		UUID:        uuid.NewV4(),
+		ID:          user.ID,
+		NickName:    user.Username,
+		Username:    user.Username,
+		AuthorityId: "",
+		BufferTime:  global.GVA_CONFIG.JWT.BufferTime, // 缓冲时间1天 缓冲时间内会获得新的token刷新令牌 此时一个用户会存在两个有效令牌 但是前端只留一个 另一个会丢失
+		StandardClaims: jwt.StandardClaims{
+			NotBefore: time.Now().Unix() - 1000,                              // 签名生效时间
+			ExpiresAt: time.Now().Unix() + global.GVA_CONFIG.JWT.ExpiresTime, // 过期时间 7天  配置文件
+			Issuer:    "qmPlus",                                              // 签名的发行者
+		},
+	}
+	token, err := j.CreateToken(claims)
+	if err != nil {
+		global.GVA_LOG.Error("获取token失败", zap.Any("err", err))
+		return "", err
+	}
+	return token, nil
 }

@@ -23,5 +23,6 @@ func InitApiAvfCardRouter(Router *gin.RouterGroup) {
 	ApiCardRouter := Router.Group("card")
 	{
 		ApiCardRouter.GET("/list", web.GetCardList)
+		ApiCardRouter.GET("/detail", web.GetCardDetail)
 	}
 }

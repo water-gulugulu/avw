@@ -19,9 +19,9 @@ package web
 
 import (
 	web_tools "gin-vue-admin/api/web/tools"
+	"gin-vue-admin/api/web/tools/response"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
-	"gin-vue-admin/model/response"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )
@@ -52,10 +52,38 @@ func GetCardList(c *gin.Context) {
 	list, total, err := Card.GetList(global.GVA_DB, p, s)
 	if err != nil {
 		response.OkWithDetailed("", "获取成功", c)
+		return
 	}
 	res := web_tools.CardListResponse{
 		List:  list,
 		Total: total,
 	}
 	response.OkWithDetailed(res, "获取成功", c)
+	return
+}
+
+// @Tags 前端接口
+// @Summary 获取卡牌详情
+// @accept application/json
+// @Produce application/json
+// @Param card_id query string  true "卡牌ID"
+// @Success 200  {object} model.AvfCard
+// @Router /web/card/detail [get]
+func GetCardDetail(c *gin.Context) {
+	cardId := c.Query("card_id")
+	if len(cardId) == 0 {
+		response.FailWithMessage("41012", c)
+		return
+	}
+	cid, _ := strconv.Atoi(cardId)
+
+	Card := model.AvfCard{
+		GVA_MODEL: global.GVA_MODEL{ID: uint(cid)},
+	}
+	if err := Card.GetById(global.GVA_DB); err != nil {
+		response.FailWithMessage("60005", c)
+		return
+	}
+	response.OkWithData(Card, c)
+	return
 }

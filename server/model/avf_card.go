@@ -22,13 +22,14 @@ type AvfCard struct {
 	Status          *bool     `json:"status" form:"status" gorm:"column:status;comment:1-正常 0-禁用;type:tinyint;"`                                      // 状态 true-正常 false-禁用
 	CreateDate      time.Time `json:"createDate" form:"createDate" gorm:"column:create_date;comment:创建时间;type:datetime;"`                             // 创建时间
 	UpdateDate      time.Time `json:"updateDate" form:"updateDate" gorm:"column:update_date;comment:修改时间;type:datetime;"`                             // 修改时间
+	Image           string    `json:"image" form:"image" gorm:"column:image;comment:图片地址;type:varchar(255);size:255;"`                                // 修改时间
 }
 
-func (AvfCard) TableName() string {
+func (h *AvfCard) TableName() string {
 	return "avf_card"
 }
 
-func (h AvfCard) GetList(DB *gorm.DB, p, size int) (list []AvfCard, total int64, err error) {
+func (h *AvfCard) GetList(DB *gorm.DB, p, size int) (list []AvfCard, total int64, err error) {
 	if p > 0 {
 		p = p * size
 	}
@@ -44,4 +45,10 @@ func (h AvfCard) GetList(DB *gorm.DB, p, size int) (list []AvfCard, total int64,
 	}
 
 	return
+}
+func (h *AvfCard) RandGetByLevel(DB *gorm.DB) error {
+	return DB.Table(h.TableName()).Where("level = ?", h.Level).First(&h).Error
+}
+func (h *AvfCard) GetById(DB *gorm.DB) error {
+	return DB.Table(h.TableName()).Where("id = ?", h.ID).First(&h).Error
 }

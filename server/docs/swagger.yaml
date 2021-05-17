@@ -45,8 +45,10 @@ definitions:
   config.BlindBox:
     properties:
       one:
+        description: 一连抽
         type: integer
       ten:
+        description: 十连抽
         type: integer
     type: object
   config.Captcha:
@@ -71,6 +73,18 @@ definitions:
     properties:
       address:
         description: 收款地址
+        type: string
+      direct:
+        description: 直推奖金比例
+        type: string
+      exchange:
+        description: 算力每日释放avw比例
+        type: string
+      fees:
+        description: 转卡手续费百分比
+        type: string
+      proportion:
+        description: 卡牌卖出原价比例
         type: string
     type: object
   config.Detail:
@@ -351,6 +365,9 @@ definitions:
       id:
         description: 主键ID
         type: integer
+      image:
+        description: 修改时间
+        type: string
       level:
         description: 等级 1-N 2-R 3-SR 4-SSR
         type: integer
@@ -464,6 +481,9 @@ definitions:
     type: object
   model.AvfOrderCard:
     properties:
+      card:
+        $ref: '#/definitions/model.AvfCard'
+        description: 卡牌信息
       cardId:
         description: 卡牌ID
         type: integer
@@ -942,6 +962,9 @@ definitions:
       id:
         description: 主键ID
         type: integer
+      image:
+        description: 修改时间
+        type: string
       level:
         description: 等级 1-N 2-R 3-SR 4-SSR
         type: integer
@@ -1016,6 +1039,9 @@ definitions:
     type: object
   request.AvfOrderCardSearch:
     properties:
+      card:
+        $ref: '#/definitions/model.AvfCard'
+        description: 卡牌信息
       cardId:
         description: 卡牌ID
         type: integer
@@ -1477,6 +1503,17 @@ definitions:
       wallet_address:
         description: 钱包地址
         type: string
+    type: object
+  web_tools.MyCardResponse:
+    properties:
+      list:
+        description: 卡牌列表
+        items:
+          $ref: '#/definitions/model.AvfOrderCard'
+        type: array
+      total:
+        description: 总数
+        type: integer
     type: object
   web_tools.OrderDetailResponse:
     properties:
@@ -3874,6 +3911,26 @@ paths:
       summary: 设置用户信息
       tags:
       - SysUser
+  /web/card/detail:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 卡牌ID
+        in: query
+        name: card_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.AvfCard'
+      summary: 获取卡牌详情
+      tags:
+      - 前端接口
   /web/card/list:
     get:
       consumes:
@@ -3926,7 +3983,7 @@ paths:
   /web/order/createOrder:
     post:
       consumes:
-      - application/json
+      - application/x-www-form-urlencoded
       parameters:
       - description: token
         in: header
@@ -3955,6 +4012,20 @@ paths:
       summary: 创建订单
       tags:
       - 前端接口
+  /web/order/getPrice:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/config.BlindBox'
+      summary: 获取盲盒价格
+      tags:
+      - 前端接口
   /web/order/list:
     get:
       consumes:
@@ -3978,7 +4049,7 @@ paths:
   /web/order/orderDetail:
     get:
       consumes:
-      - application/x-www-form-urlencoded
+      - application/json
       parameters:
       - description: token
         in: header
@@ -4004,7 +4075,7 @@ paths:
   /web/order/payOrder:
     post:
       consumes:
-      - application/json
+      - application/x-www-form-urlencoded
       parameters:
       - description: token
         in: header
@@ -4037,6 +4108,60 @@ paths:
           schema:
             type: string
       summary: 支付订单
+      tags:
+      - 前端接口
+  /web/order_card/luckyDraw:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: token
+        in: header
+        name: x-token
+        required: true
+        type: string
+      - description: 订单ID
+        in: body
+        name: order_id
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.AvfCard'
+      summary: 抽奖
+      tags:
+      - 前端接口
+  /web/order_card/myCard:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: x-token
+        required: true
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: string
+      - description: 数量 默认10
+        in: query
+        name: size
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web_tools.MyCardResponse'
+      summary: 我的卡牌列表
       tags:
       - 前端接口
   /web/user/getUserInfo:

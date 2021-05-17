@@ -1,6 +1,6 @@
-// @File  : blind_box.go
+// @File  : card.go
 // @Author: JunLong.Liao&此处不应有BUG!
-// @Date  : 2021/5/15
+// @Date  : 2021/5/16
 // @slogan: 又是不想写代码的一天，神兽保佑，代码无BUG！
 //         ┏┓      ┏┓
 //        ┏┛┻━━━━━━┛┻┓
@@ -17,7 +17,9 @@
 
 package config
 
-type BlindBox struct {
-	One int64 `mapstructure:"one" json:"one" yaml:"one"` // 一连抽
-	Ten int64 `mapstructure:"ten" json:"ten" yaml:"ten"` // 十连抽
+type Card struct {
+	N   int `json:"n"`
+	R   int `json:"r"`
+	SR  int `json:"sr"`
+	SSR int `json:"ssr"`
 }
