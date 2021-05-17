@@ -28,7 +28,7 @@ func InitApiAvfOrderRouter(Router *gin.RouterGroup) {
 			ApiOrderRouter.GET("/list", web.GetOrderList)
 			ApiOrderRouter.POST("/createOrder", web.CreateOrder)
 			ApiOrderRouter.POST("/payOrder", web.PayOrder)
-			ApiOrderRouter.POST("/orderDetail", web.OrderDetail)
+			ApiOrderRouter.GET("/orderDetail", web.OrderDetail)
 			ApiOrderRouter.POST("/cancelOrder", web.CancelOrder)
 		}
 	}
