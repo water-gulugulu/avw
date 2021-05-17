@@ -97,7 +97,7 @@ func CreateOrder(c *gin.Context) {
 	}
 	blindBox := global.GVA_CONFIG.BlindBox
 	var price int64
-	var n int
+	var n int = 1
 	number, _ := strconv.Atoi(num)
 	switch blindBoxType {
 	case "1":
