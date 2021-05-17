@@ -18,7 +18,6 @@
 package web
 
 import (
-	"fmt"
 	web_tools "gin-vue-admin/api/web/tools"
 	"gin-vue-admin/api/web/tools/response"
 	"gin-vue-admin/global"
@@ -102,7 +101,7 @@ func LuckyDraw(c *gin.Context) {
 			return err
 		}
 
-		fmt.Printf("%s", OrderCard)
+		// fmt.Printf("%s", OrderCard)
 		return nil
 	})
 	if err != nil {
@@ -272,7 +271,7 @@ func TransferCard(c *gin.Context) {
 // @Param tx_hash body string  true "交易事务hash"
 // @Param address body string  true "提交支付钱包地址"
 // @Success 200 {object} web_tools.TransferResponse
-// @Router /web/order_card/transferCard [post]
+// @Router /web/order_card/payFees [post]
 func PayFees(c *gin.Context) {
 	UserId, err := web_tools.GetUserId(c)
 	if err != nil {
@@ -294,12 +293,28 @@ func PayFees(c *gin.Context) {
 		response.FailWithMessage("41011", c)
 		return
 	}
+
 	tid, _ := strconv.Atoi(transferId)
 	cardTransfer := model.AvfCardTransfer{
-		GVA_MODEL: global.GVA_MODEL{ID: uint(tid)},
+		TxHash: TxHash,
 	}
 	DB := global.GVA_DB
 
+	if err := cardTransfer.GetByHash(DB); err == nil || cardTransfer.ID != 0 {
+		response.FailWithMessage("41013", c)
+		return
+	}
+	Log := model.AvfTransactionLog{
+		TxHash: TxHash,
+	}
+	if err := Log.GetByHash(DB); err == nil || Log.ID != 0 {
+		response.FailWithMessage("41013", c)
+		return
+	}
+
+	cardTransfer = model.AvfCardTransfer{
+		GVA_MODEL: global.GVA_MODEL{ID: uint(tid)},
+	}
 	if err := cardTransfer.GetById(DB); err != nil {
 		response.FailWithMessage("60006", c)
 		return

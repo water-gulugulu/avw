@@ -38,6 +38,7 @@ type AvfTransactionLog struct {
 	Status     int64     `gorm:"column:status" json:"status" form:"status"`                // 状态 1-成功 2-失败
 	CreateTime int64     `gorm:"column:create_time" json:"create_time" form:"create_time"` // 创建时间
 	CreateDate time.Time `gorm:"column:create_date" json:"create_date" form:"create_date"` // 创建时间
+	Type       int64     `gorm:"column:type" json:"type" form:"type"`                      // 状态 1-订单 2-转让卡牌
 }
 
 func (h *AvfTransactionLog) TableName() string {

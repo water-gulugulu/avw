@@ -19,7 +19,7 @@ type AvfOrderCard struct {
 	UpdateTime int     `json:"updateTime" form:"updateTime" gorm:"column:update_time;comment:修改时间;type:int;size:10;"`     // 修改时间
 	GiveType   int     `json:"giveType" form:"giveType" gorm:"column:give_type;comment:获得方式 1-抽奖 2-购买;type:int;size:10;"` // 获得方式 1-抽奖 2-购买
 	Level      int     `json:"level" form:"level" gorm:"column:level;comment:1-N 2-R 3-SR 4-SSR;type:int;size:10;"`       // 等级 1-N 2-R 3-SR 4-SSR
-	Card       AvfCard `json:"card"`                                                                                      // 卡牌信息
+	Card       AvfCard `gorm:"ForeignKey:CardId;References:ID"`                                                           // 卡牌信息
 }
 
 func (h *AvfOrderCard) TableName() string {
