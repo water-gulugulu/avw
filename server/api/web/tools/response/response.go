@@ -14,8 +14,9 @@ type Response struct {
 }
 
 const (
-	ERROR   = 7
-	SUCCESS = 0
+	ERROR       = 7
+	TOKEN_ERROR = 8
+	SUCCESS     = 0
 )
 
 var language string = "Chinese"
@@ -70,4 +71,7 @@ func FailWithMessage(message string, c *gin.Context) {
 
 func FailWithDetailed(data interface{}, message string, c *gin.Context) {
 	Result(ERROR, data, message, c)
+}
+func FailWithDetailedByToken(data interface{}, message string, c *gin.Context) {
+	Result(TOKEN_ERROR, data, message, c)
 }

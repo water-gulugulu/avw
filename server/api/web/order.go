@@ -213,7 +213,7 @@ func PayOrder(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param x-token header string  true "token"
-// @Param order_id body string  true "订单ID"
+// @Param order_id query string  true "订单ID"
 // @Success 200 {object} web_tools.OrderDetailResponse
 // @Router /web/order/orderDetail [get]
 func OrderDetail(c *gin.Context) {
@@ -222,7 +222,7 @@ func OrderDetail(c *gin.Context) {
 		response.FailWithMessage("41003", c)
 		return
 	}
-	orderID := c.PostForm("order_id")
+	orderID := c.Query("order_id")
 	if len(orderID) == 0 {
 		response.FailWithMessage("41009", c)
 		return
