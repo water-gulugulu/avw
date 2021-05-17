@@ -32,7 +32,7 @@ func (h *AvfOrderCard) FindListByOrderId(DB *gorm.DB) (list []AvfOrderCard, err 
 	}
 
 	if err = DB.Table(h.TableName()).Where("order_id = ?", h.OrderId).Find(&list).Error; err != nil {
-		return nil, err
+		return list, err
 	}
 
 	return
@@ -46,11 +46,11 @@ func (h *AvfOrderCard) FindListByUid(DB *gorm.DB, page, size int) (list []AvfOrd
 	}
 	DB = DB.Table(h.TableName()).Where("uid = ?", h.Uid)
 	if err = DB.Count(&total).Error; err != nil {
-		return nil, 0, err
+		return list, 0, err
 	}
 
 	if err = DB.Order("id desc").Preload("Card").Limit(size).Offset(page).Find(&list).Error; err != nil {
-		return nil, 0, err
+		return list, 0, err
 	}
 
 	return

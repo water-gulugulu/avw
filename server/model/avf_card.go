@@ -37,11 +37,11 @@ func (h *AvfCard) GetList(DB *gorm.DB, p, size int) (list []AvfCard, total int64
 	DB = DB.Table(h.TableName()).Where("status = ?", 1)
 
 	if err := DB.Count(&total).Error; err != nil {
-		return nil, 0, err
+		return list, 0, err
 	}
 
 	if err := DB.Order("id desc").Limit(size).Offset(p).Find(&list).Error; err != nil {
-		return nil, 0, err
+		return list, 0, err
 	}
 
 	return
