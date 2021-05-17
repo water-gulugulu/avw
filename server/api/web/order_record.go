@@ -18,6 +18,7 @@
 package web
 
 import (
+	"fmt"
 	web_tools "gin-vue-admin/api/web/tools"
 	"gin-vue-admin/api/web/tools/response"
 	"gin-vue-admin/global"
@@ -62,7 +63,6 @@ func LuckyDraw(c *gin.Context) {
 		response.FailWithMessage("60002", c)
 		return
 	}
-
 	if Order.Number < 1 {
 		response.FailWithMessage("60004", c)
 		return
@@ -81,7 +81,7 @@ func LuckyDraw(c *gin.Context) {
 		Order.Number = Order.Number - 1
 		Order.UpdatedAt = time.Now()
 
-		if err := Order.UpdateOrder(tx); err != nil {
+		if err := Order.UpdateOrderByNumber(tx); err != nil {
 			return err
 		}
 
@@ -105,6 +105,7 @@ func LuckyDraw(c *gin.Context) {
 		return nil
 	})
 	if err != nil {
+		fmt.Printf("%s", err)
 		response.FailWithMessage("60004", c)
 		return
 	}

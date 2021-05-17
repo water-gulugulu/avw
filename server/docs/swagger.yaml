@@ -1576,6 +1576,42 @@ definitions:
         description: 旧角色ID
         type: string
     type: object
+  web_tools.AvfOrderCard:
+    properties:
+      cardId:
+        description: 卡牌ID
+        type: integer
+      created_at:
+        description: 创建时间
+        type: string
+      giveType:
+        description: 获得方式 1-抽奖 2-购买
+        type: integer
+      id:
+        description: 主键ID
+        type: integer
+      image:
+        description: 卡牌图
+        type: string
+      level:
+        description: 等级 1-N 2-R 3-SR 4-SSR
+        type: integer
+      orderId:
+        description: 订单ID
+        type: integer
+      star:
+        description: 算力值
+        type: integer
+      status:
+        description: 状态 1-正常 2-转让中
+        type: integer
+      uid:
+        description: 用户ID
+        type: integer
+      updated_at:
+        description: 更新时间
+        type: string
+    type: object
   web_tools.CreateOrderResponse:
     properties:
       order_id:
@@ -1625,7 +1661,7 @@ definitions:
       order_card_list:
         description: 卡牌列表
         items:
-          $ref: '#/definitions/model.AvfOrderCard'
+          $ref: '#/definitions/web_tools.AvfOrderCard'
         type: array
       order_info:
         $ref: '#/definitions/model.AvfOrder'
@@ -4425,7 +4461,7 @@ paths:
       summary: 我的卡牌列表
       tags:
       - 前端接口
-  /web/order_card/transferCard:
+  /web/order_card/payFees:
     post:
       consumes:
       - application/x-www-form-urlencoded
@@ -4461,6 +4497,38 @@ paths:
           schema:
             $ref: '#/definitions/web_tools.TransferResponse'
       summary: 支付转让手续费
+      tags:
+      - 前端接口
+  /web/order_card/transferCard:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: token
+        in: header
+        name: x-token
+        required: true
+        type: string
+      - description: 卡牌记录ID
+        in: body
+        name: record_id
+        required: true
+        schema:
+          type: string
+      - description: 转让价格
+        in: body
+        name: price
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web_tools.TransferResponse'
+      summary: 卡牌转让
       tags:
       - 前端接口
   /web/user/getUserInfo:

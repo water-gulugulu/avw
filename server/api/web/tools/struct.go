@@ -17,7 +17,10 @@
 
 package web_tools
 
-import "gin-vue-admin/model"
+import (
+	"gin-vue-admin/model"
+	"time"
+)
 
 // 订单列表返回
 type OrderListResponse struct {
@@ -61,8 +64,21 @@ type CreateOrderResponse struct {
 
 // 订单详情返回结果
 type OrderDetailResponse struct {
-	OrderInfo     model.AvfOrder       `json:"order_info"`      // 订单详情
-	OrderCardList []model.AvfOrderCard `json:"order_card_list"` // 卡牌列表
+	OrderInfo     model.AvfOrder `json:"order_info"`      // 订单详情
+	OrderCardList []AvfOrderCard `json:"order_card_list"` // 卡牌列表
+}
+type AvfOrderCard struct {
+	ID        uint      `json:"id"`         // 主键ID
+	CreatedAt time.Time `json:"created_at"` // 创建时间
+	UpdatedAt time.Time `json:"updated_at"` // 更新时间
+	Uid       int       `json:"uid"`        // 用户ID
+	OrderId   int       `json:"orderId"`    // 订单ID
+	CardId    int       `json:"cardId"`     // 卡牌ID
+	Star      int       `json:"star"`       // 算力值
+	Status    int       `json:"status"`     // 状态 1-正常 2-转让中
+	GiveType  int       `json:"giveType"`   // 获得方式 1-抽奖 2-购买
+	Level     int       `json:"level"`      // 等级 1-N 2-R 3-SR 4-SSR
+	Image     string    `json:"image"`      // 卡牌图
 }
 
 // 我的卡牌列表返回信息

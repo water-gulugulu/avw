@@ -31,7 +31,7 @@ func (h *AvfOrderCard) FindListByOrderId(DB *gorm.DB) (list []AvfOrderCard, err 
 		return nil, errors.New("订单ID不能为空")
 	}
 
-	if err = DB.Table(h.TableName()).Where("order_id = ?", h.OrderId).Find(&list).Error; err != nil {
+	if err = DB.Table(h.TableName()).Where("order_id = ?", h.OrderId).Preload("Card").Find(&list).Error; err != nil {
 		return list, err
 	}
 

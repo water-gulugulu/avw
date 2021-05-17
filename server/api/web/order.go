@@ -252,9 +252,26 @@ func OrderDetail(c *gin.Context) {
 	}
 	list, _ := OrderCard.FindListByOrderId(global.GVA_DB)
 
+	l := make([]web_tools.AvfOrderCard, 0)
+	for _, item := range list {
+		l = append(l, web_tools.AvfOrderCard{
+			ID:        item.ID,
+			CreatedAt: item.CreatedAt,
+			UpdatedAt: item.CreatedAt,
+			Uid:       item.Uid,
+			OrderId:   item.OrderId,
+			CardId:    item.CardId,
+			Star:      item.Star,
+			Status:    item.Status,
+			GiveType:  item.GiveType,
+			Level:     item.Level,
+			Image:     item.Card.Image,
+		})
+	}
+
 	res := web_tools.OrderDetailResponse{
 		OrderInfo:     Order,
-		OrderCardList: list,
+		OrderCardList: l,
 	}
 
 	response.OkWithData(res, c)

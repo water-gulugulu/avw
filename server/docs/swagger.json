@@ -4504,7 +4504,7 @@
                 }
             }
         },
-        "/web/order_card/transferCard": {
+        "/web/order_card/payFees": {
             "post": {
                 "consumes": [
                     "application/x-www-form-urlencoded"
@@ -4545,6 +4545,55 @@
                     {
                         "description": "提交支付钱包地址",
                         "name": "address",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web_tools.TransferResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/web/order_card/transferCard": {
+            "post": {
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "前端接口"
+                ],
+                "summary": "卡牌转让",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "x-token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "卡牌记录ID",
+                        "name": "record_id",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "转让价格",
+                        "name": "price",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -6830,6 +6879,55 @@
                 }
             }
         },
+        "web_tools.AvfOrderCard": {
+            "type": "object",
+            "properties": {
+                "cardId": {
+                    "description": "卡牌ID",
+                    "type": "integer"
+                },
+                "created_at": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "giveType": {
+                    "description": "获得方式 1-抽奖 2-购买",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "image": {
+                    "description": "卡牌图",
+                    "type": "string"
+                },
+                "level": {
+                    "description": "等级 1-N 2-R 3-SR 4-SSR",
+                    "type": "integer"
+                },
+                "orderId": {
+                    "description": "订单ID",
+                    "type": "integer"
+                },
+                "star": {
+                    "description": "算力值",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态 1-正常 2-转让中",
+                    "type": "integer"
+                },
+                "uid": {
+                    "description": "用户ID",
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
         "web_tools.CreateOrderResponse": {
             "type": "object",
             "properties": {
@@ -6899,7 +6997,7 @@
                     "description": "卡牌列表",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/model.AvfOrderCard"
+                        "$ref": "#/definitions/web_tools.AvfOrderCard"
                     }
                 },
                 "order_info": {
