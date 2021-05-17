@@ -163,18 +163,24 @@ func TokenNext(user model.AvfUser) (string, error) {
 	return token, nil
 }
 
+var client *blockchian.ClientManage
+
 // 循环读取哈希来改变订单状态
 func LoopOrderStatus(txHash string, OrderId int) {
 	if len(txHash) == 0 {
 		return
 	}
-	client, err := blockchian.NewClient()
-
-	if err != nil {
-		log.Printf("[%s]Failed to client RPC by Hash:%s error:%e\n", time.Now(), txHash, err)
-		return
+	var err error
+	if client == nil {
+		client, err = blockchian.NewClient()
+		if err != nil {
+			log.Printf("[%s]Failed to client RPC by Hash:%s error:%e\n", time.Now(), txHash, err)
+			return
+		}
 	}
+
 	defer client.CloseClient()
+
 	Order := model.AvfOrder{
 		TxHash: txHash,
 	}

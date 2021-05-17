@@ -53,14 +53,14 @@ const (
 	RawUrl = "https://http-mainnet-node.huobichain.com"
 )
 
-type clientManage struct {
+type ClientManage struct {
 	rpcConn *rpc.Client
 	client  *ethclient.Client
 	token   *Token.Token
 	auth    *bind.TransactOpts
 }
 
-func NewClient() (*clientManage, error) {
+func NewClient() (*ClientManage, error) {
 	rpcDial, err := rpc.Dial(RawUrl)
 	if err != nil {
 		log.Fatalf("[%s]Failed to init rpc client error:%v\n", time.Now(), err)
@@ -73,14 +73,14 @@ func NewClient() (*clientManage, error) {
 		return nil, e
 	}
 
-	return &clientManage{
+	return &ClientManage{
 		rpcConn: rpcDial,
 		client:  client,
 		token:   token,
 	}, nil
 }
 
-func (c clientManage) CreateAccount(password string) (account string, err error) {
+func (c *ClientManage) CreateAccount(password string) (account string, err error) {
 	ks := keystore.NewKeyStore("./wallets/", keystore.StandardScryptN, keystore.StandardScryptP)
 	addressJson, _ := ks.NewAccount(password)
 	a, e := ks.Export(addressJson, password, password)
@@ -99,7 +99,7 @@ func (c clientManage) CreateAccount(password string) (account string, err error)
 
 // 测试地址 0x5029C7e715cB5FAA4c17E6f503f6a1ea8b3870A5
 // 查询钱包余额
-func (c clientManage) SelectBalance(address string) (balance *big.Float, err error) {
+func (c *ClientManage) SelectBalance(address string) (balance *big.Float, err error) {
 	b, e := c.token.BalanceOf(nil, common.HexToAddress(address))
 	if e != nil {
 		log.Fatalf("[%s]Failed to select wallet balance error:%v\n", time.Now(), e)
@@ -113,7 +113,7 @@ func (c clientManage) SelectBalance(address string) (balance *big.Float, err err
 }
 
 // 初始化链
-func (c clientManage) NewTransactorChainID() error {
+func (c *ClientManage) NewTransactorChainID() error {
 	data, err := ioutil.ReadFile(key)
 	if err != nil {
 		log.Fatalf("[%s]Read file error:%v\n", time.Now(), err)
@@ -131,7 +131,7 @@ func (c clientManage) NewTransactorChainID() error {
 
 // 转账到地址
 // Address 收款地址
-func (c clientManage) TransferToAddress(Address string, Number float64) error {
+func (c *ClientManage) TransferToAddress(Address string, Number float64) error {
 	toAddress := common.HexToAddress(Address)
 	// val, err := c.SelectBalance(Address)
 	// if err != nil {
@@ -184,7 +184,7 @@ func (c clientManage) TransferToAddress(Address string, Number float64) error {
 }
 
 // 读取事件日志
-func (c clientManage) ReadTransferInfo(FromBlock, ToBlock *big.Int) error {
+func (c *ClientManage) ReadTransferInfo(FromBlock, ToBlock *big.Int) error {
 	// 操作的合约
 	contractAddress := common.HexToAddress(contract)
 	// 查询条件
@@ -249,7 +249,7 @@ func (c clientManage) ReadTransferInfo(FromBlock, ToBlock *big.Int) error {
 }
 
 // 读取最新的头部区块数
-func (c clientManage) ReadNewHeaderBlock() (int64, error) {
+func (c *ClientManage) ReadNewHeaderBlock() (int64, error) {
 	header, err := c.client.HeaderByNumber(context.Background(), nil)
 
 	if err != nil {
@@ -263,7 +263,7 @@ func (c clientManage) ReadNewHeaderBlock() (int64, error) {
 }
 
 // 读取指定区块的信息
-func (c clientManage) ReadBlockInfo(blockNumber int64) (*types.Block, error) {
+func (c *ClientManage) ReadBlockInfo(blockNumber int64) (*types.Block, error) {
 	number := big.NewInt(blockNumber)
 	block, err := c.client.BlockByNumber(context.Background(), number)
 
@@ -274,14 +274,14 @@ func (c clientManage) ReadBlockInfo(blockNumber int64) (*types.Block, error) {
 
 	return block, nil
 }
-func (c clientManage) ReadLogs() {
+func (c *ClientManage) ReadLogs() {
 	query := ethereum.FilterQuery{}
 	c.client.FilterLogs(context.Background(), query)
 }
 
 // 测试 0x92927e603a0b31a2009d82182eca1eca343b80d049910eb4e1f3a7f2d6a2285c
 // 通过事务hash来获取交易事务内容
-func (c clientManage) QueryTransactionByTxHash(hash string) (res tools.TransactionResponse, err error) {
+func (c *ClientManage) QueryTransactionByTxHash(hash string) (res tools.TransactionResponse, err error) {
 	// 上下文
 	ctx := context.Background()
 	// 转hash处理
@@ -328,7 +328,7 @@ func (c clientManage) QueryTransactionByTxHash(hash string) (res tools.Transacti
 	return
 }
 
-func (c clientManage) CloseClient() {
+func (c *ClientManage) CloseClient() {
 	c.client.Close()
 	c.rpcConn.Close()
 }

@@ -227,8 +227,8 @@ func PayOrder(c *gin.Context) {
 // @Success 200 {object} web_tools.OrderDetailResponse
 // @Router /web/order/orderDetail [get]
 func OrderDetail(c *gin.Context) {
-	web_tools.LoopOrderStatus("0x7c25d5d470b508dd00ede1a57b766aba104ac4fac9ea1617bf2b45e5d783c971", 5)
-	return
+	// web_tools.LoopOrderStatus("0x1a7ff0c8ee89b28273da4288a77aedd830bd5279c49155630297ec97da0037d6", 7)
+	// return
 	UserId, err := web_tools.GetUserId(c)
 	if err != nil {
 		response.FailWithMessage("41003", c)
