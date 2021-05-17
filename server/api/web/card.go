@@ -49,12 +49,14 @@ func GetCardList(c *gin.Context) {
 	p, _ := strconv.Atoi(page)
 	s, _ := strconv.Atoi(size)
 
+	res := web_tools.CardListResponse{}
 	list, total, err := Card.GetList(global.GVA_DB, p, s)
 	if err != nil {
-		response.OkWithDetailed("", "获取成功", c)
+		res.List = make([]model.AvfCard, 0)
+		response.OkWithDetailed(res, "获取成功", c)
 		return
 	}
-	res := web_tools.CardListResponse{
+	res = web_tools.CardListResponse{
 		List:  list,
 		Total: total,
 	}

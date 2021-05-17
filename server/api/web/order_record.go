@@ -145,12 +145,14 @@ func MyCard(c *gin.Context) {
 	OrderCard := model.AvfOrderCard{
 		Uid: int(UserId),
 	}
-	list, total, err := OrderCard.FindListByUid(global.GVA_DB, p, s)
-	if err != nil {
-		response.FailWithMessage("41003", c)
+	res := web_tools.MyCardResponse{}
+	list, total, err2 := OrderCard.FindListByUid(global.GVA_DB, p, s)
+	if err2 != nil {
+		res.List = make([]model.AvfOrderCard, 0)
+		response.OkWithData(res, c)
 		return
 	}
-	res := web_tools.MyCardResponse{
+	res = web_tools.MyCardResponse{
 		List:  list,
 		Total: total,
 	}

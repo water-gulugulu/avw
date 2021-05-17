@@ -30,7 +30,7 @@ func (h *AvfOrder) TableName() string {
 }
 
 func (h *AvfOrder) FindList(DB *gorm.DB, p, size int) (list []AvfOrder, total int64, err error) {
-	DB = DB.Table(h.TableName()).Where("uid = ? AND status in(2,3))", h.Uid)
+	DB = DB.Table(h.TableName()).Where("uid = ? AND status in(2,3)", h.Uid)
 
 	if p != 0 {
 		p = p * size

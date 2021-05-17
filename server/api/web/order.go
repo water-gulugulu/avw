@@ -59,13 +59,14 @@ func GetOrderList(c *gin.Context) {
 	}
 	p, _ := strconv.Atoi(page)
 	s, _ := strconv.Atoi(size)
-
+	res := web_tools.OrderListResponse{}
 	list, total, err := Order.FindList(global.GVA_DB, p, s)
 	if err != nil {
-		response.OkWithData(nil, c)
+		res.List = make([]model.AvfOrder, 0)
+		response.OkWithData(res, c)
 		return
 	}
-	res := web_tools.OrderListResponse{
+	res = web_tools.OrderListResponse{
 		List:  list,
 		Total: total,
 	}
