@@ -1,6 +1,7 @@
 package initialize
 
 import (
+	web_tools "gin-vue-admin/api/web/tools"
 	_ "gin-vue-admin/docs"
 	"gin-vue-admin/global"
 	"gin-vue-admin/middleware"
@@ -27,6 +28,8 @@ func Routers() *gin.Engine {
 
 	WebGroup := Router.Group("/web")
 	{
+		Init := web_tools.Init()
+		go Init.LoopOrderStatus()
 		router.InitApiUserRouter(WebGroup)         // 用户接口
 		router.InitApiAvfCardRouter(WebGroup)      // 卡牌接口
 		router.InitApiAvfOrderRouter(WebGroup)     // 订单接口

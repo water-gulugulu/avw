@@ -79,6 +79,13 @@ func (h *AvfOrder) UpdateOrderByNumber(DB *gorm.DB) error {
 }
 
 func (h *AvfOrder) FindListByStatus(DB *gorm.DB) (list []AvfOrder, err error) {
+	if h.Status == 0 {
+		return nil, errors.New("状态不能为空")
+	}
+
+	if err = DB.Table(h.TableName()).Where("status = ?", h.Status).Find(&list).Error; err != nil {
+		return nil, err
+	}
 
 	return
 }

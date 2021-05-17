@@ -212,7 +212,7 @@ func PayOrder(c *gin.Context) {
 		response.FailWithMessage("60003", c)
 		return
 	}
-	go web_tools.LoopOrderStatus(TxHash, oid)
+	// go web_tools.LoopOrderStatus(TxHash, oid)
 
 	response.OkWithMessage("200", c)
 	return

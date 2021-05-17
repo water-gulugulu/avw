@@ -25,17 +25,13 @@ import (
 	"gin-vue-admin/middleware"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
-	"gin-vue-admin/utils/blockchian"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	uuid "github.com/satori/go.uuid"
 	"github.com/w3liu/go-common/constant/timeformat"
 	"go.uber.org/zap"
-	"log"
 	"math/rand"
 	"os"
-	"strconv"
-	"strings"
 	"sync/atomic"
 	"time"
 )
@@ -161,107 +157,4 @@ func TokenNext(user model.AvfUser) (string, error) {
 		return "", err
 	}
 	return token, nil
-}
-
-var client *blockchian.ClientManage
-
-// 循环读取哈希来改变订单状态
-func LoopOrderStatus(txHash string, OrderId int) {
-	if len(txHash) == 0 {
-		return
-	}
-	var err error
-	if client == nil {
-		client, err = blockchian.NewClient()
-		if err != nil {
-			log.Printf("[%s]Failed to client RPC by Hash:%s error:%e\n", time.Now(), txHash, err)
-			return
-		}
-	}
-
-	defer client.CloseClient()
-
-	Order := model.AvfOrder{
-		TxHash: txHash,
-	}
-	if err := Order.FindByHash(global.GVA_DB); err != nil {
-		log.Printf("[%s]Failed to Hash:%s query Order error:%e\n", time.Now(), txHash, err)
-		return
-	}
-
-	for {
-		res, err2 := client.QueryTransactionByTxHash(txHash)
-		if err2 != nil {
-			log.Printf("[%s]Failed to query transaction error:%e\n", time.Now(), err)
-			continue
-		}
-		if res.Status != 1 {
-			log.Printf("[%s]Failed to status not 1\n", time.Now())
-			break
-		}
-		res.From = strings.ToUpper(res.From)
-		Order.From = strings.ToUpper(Order.From)
-		if res.From != Order.From {
-			log.Printf("[%s]Failed to form:%s orderForm:%s\n", time.Now(), res.From, Order.From)
-			break
-		}
-		Price := Order.Price * 100000000000000000
-
-		if global.GVA_CONFIG.CollectionAddress.Debug == "1" {
-			P := 0.001 * 100000000000000000
-			Price = int64(P)
-		}
-		price := strconv.Itoa(int(Price))
-		if price != res.Value.String() {
-			log.Printf("[%s]Failed to money not same money:%v,%v \n", time.Now(), Price, res.Value)
-			break
-		}
-
-		res.To = strings.ToUpper(res.To)
-		Order.To = strings.ToUpper(global.GVA_CONFIG.CollectionAddress.Address)
-		if res.To != Order.To {
-			log.Printf("[%s]Failed to to:%s orderTo:%s\n", time.Now(), res.To, Order.To)
-			break
-		}
-
-		Order = model.AvfOrder{
-			GVA_MODEL: global.GVA_MODEL{
-				ID:        uint(OrderId),
-				UpdatedAt: time.Now(),
-			},
-			TxHash:   txHash,
-			Status:   3,
-			PayTime:  int(time.Now().Unix()),
-			Block:    res.Block.String(),
-			Gas:      string(res.Gas),
-			GasPrice: res.GasPrice.String(),
-			From:     res.From,
-			To:       res.To,
-		}
-		if err := Order.UpdateOrder(global.GVA_DB); err != nil {
-			log.Printf("[%s]Failed to update Order error:%e\n", time.Now(), err)
-			break
-		}
-
-		Log := model.AvfTransactionLog{
-			OrderId:    OrderId,
-			Block:      res.Block.String(),
-			TxHash:     txHash,
-			Form:       res.From,
-			To:         res.To,
-			Gas:        strconv.Itoa(int(res.Gas)),
-			GasPrice:   res.GasPrice.String(),
-			Value:      res.Value.String(),
-			Nonce:      string(res.Nonce),
-			Data:       string(res.Data),
-			Status:     int64(res.Status),
-			CreateDate: time.Now(),
-			CreateTime: time.Now().Unix(),
-			Type:       1,
-		}
-		if err := Log.CreateLog(global.GVA_DB); err != nil {
-			log.Printf("[%s]Failed to update Order error:%e,Log:%s\n", time.Now(), err, Log)
-		}
-		break
-	}
 }
