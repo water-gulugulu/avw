@@ -30,9 +30,9 @@ import (
 
 type Manager struct {
 	client        *blockchian.ClientManage
-	OrderList     []model.AvfOrder
-	OrderCardList []model.AvfOrderCard
-	OrderFeesList []model.AvfOrderCard
+	OrderList     []*model.AvfOrder
+	OrderPayList  []*model.AvfCardTransfer
+	OrderFeesList []*model.AvfCardTransfer
 	timer         *time.Timer
 	second        time.Duration
 }
@@ -57,15 +57,34 @@ func (c *Manager) getOrder() {
 	Order := model.AvfOrder{
 		Status: 2,
 	}
-
-	list, err := Order.FindListByStatus(global.GVA_DB)
+	DB := global.GVA_DB
+	list, err := Order.FindListByStatus(DB)
 	if err != nil {
 		fmt.Printf("[%s]Query Order Failed! error:%e\n", time.Now(), err)
 		return
 	}
-	// FeesOrder := model.AvfCardTransfer{}
+	FeesOrder := model.AvfCardTransfer{
+		Status: 2,
+	}
+	PayOrder := model.AvfCardTransfer{
+		Status: 5,
+	}
 
+	feesList, err2 := FeesOrder.GetByStatus(DB)
+
+	if err2 != nil {
+		fmt.Printf("[%s]Query fees_order Failed! error:%e\n", time.Now(), err2)
+		return
+	}
+	payList, err3 := PayOrder.GetByStatus(DB)
+
+	if err3 != nil {
+		fmt.Printf("[%s]Query pay_order Failed! error:%e\n", time.Now(), err3)
+		return
+	}
 	c.OrderList = list
+	c.OrderFeesList = feesList
+	c.OrderPayList = payList
 
 	return
 }
@@ -79,20 +98,101 @@ func Init() *Manager {
 	data := Manager{
 		client:        client,
 		timer:         time.NewTimer(set),
-		OrderList:     make([]model.AvfOrder, 0),
-		OrderCardList: make([]model.AvfOrderCard, 0),
-		OrderFeesList: make([]model.AvfOrderCard, 0),
+		OrderList:     make([]*model.AvfOrder, 0),
+		OrderPayList:  make([]*model.AvfCardTransfer, 0),
+		OrderFeesList: make([]*model.AvfCardTransfer, 0),
 		second:        set,
 	}
 	go data.getOrder()
 	go data.timeOut()
+
 	fmt.Printf("[%s]Init Manager success\n", time.Now())
 	return &data
 }
 
 // 循环读取哈希来改变订单状态
 func (c *Manager) LoopOrderStatus() {
-	fmt.Printf("order:%s\n", c.OrderList)
+	for {
+		for _, item := range c.OrderList {
+			res, err2 := c.client.QueryTransactionByTxHash(item.TxHash)
+			if err2 != nil {
+				log.Printf("[%s]Failed to query transaction error:%e\n", time.Now(), err2)
+				continue
+			}
+			if res.Status != 1 {
+				log.Printf("[%s]Failed to status not 1\n", time.Now())
+				continue
+			}
+			res.From = strings.ToUpper(res.From)
+			item.From = strings.ToUpper(item.From)
+			if res.From != item.From {
+				log.Printf("[%s]Failed to form:%s orderForm:%s\n", time.Now(), res.From, item.From)
+				continue
+			}
+			Price := item.Price * 100000000000000000
+
+			if global.GVA_CONFIG.CollectionAddress.Debug == "1" {
+				P := 0.001 * 100000000000000000
+				Price = int64(P)
+			}
+			price := strconv.Itoa(int(Price))
+			if price != res.Value.String() {
+				log.Printf("[%s]Failed to money not same money:%v,%v \n", time.Now(), Price, res.Value)
+				continue
+			}
+
+			res.To = strings.ToUpper(res.To)
+			item.To = strings.ToUpper(global.GVA_CONFIG.CollectionAddress.Address)
+			if res.To != item.To {
+				log.Printf("[%s]Failed to to:%s orderTo:%s\n", time.Now(), res.To, item.To)
+				continue
+			}
+
+			Order := model.AvfOrder{
+				GVA_MODEL: global.GVA_MODEL{
+					ID:        item.ID,
+					UpdatedAt: time.Now(),
+				},
+				TxHash:   item.TxHash,
+				Status:   3,
+				PayTime:  int(time.Now().Unix()),
+				Block:    res.Block.String(),
+				Gas:      strconv.Itoa(int(res.Gas)),
+				GasPrice: res.GasPrice.String(),
+				From:     res.From,
+				To:       res.To,
+			}
+			if err := Order.UpdateOrder(global.GVA_DB); err != nil {
+				log.Printf("[%s]Failed to update Order error:%e\n", time.Now(), err)
+				continue
+			}
+
+			Log := model.AvfTransactionLog{
+				OrderId:    int(item.ID),
+				Block:      res.Block.String(),
+				TxHash:     item.TxHash,
+				Form:       res.From,
+				To:         res.To,
+				Gas:        strconv.Itoa(int(res.Gas)),
+				GasPrice:   res.GasPrice.String(),
+				Value:      res.Value.String(),
+				Nonce:      string(res.Nonce),
+				Data:       string(res.Data),
+				Status:     int64(res.Status),
+				CreateDate: time.Now(),
+				CreateTime: time.Now().Unix(),
+				Type:       1,
+			}
+			if err := Log.CreateLog(global.GVA_DB); err != nil {
+				log.Printf("[%s]Failed to update Order error:%e,Log:%s\n", time.Now(), err, Log)
+			}
+		}
+
+		time.Sleep(2)
+	}
+}
+
+func (c *Manager) LoopFeesOrder() {
 	for {
 		for _, item := range c.OrderList {
 			res, err2 := c.client.QueryTransactionByTxHash(item.TxHash)
