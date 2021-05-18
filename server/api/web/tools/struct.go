@@ -97,11 +97,11 @@ type TransferResponse struct {
 
 // 我的卡牌详情返回信息
 type MyCardDetailResponse struct {
-	OrderCard model.AvfOrderCard    `json:"order_card"` // 订单卡牌记录
-	Order     model.AvfCardTransfer `json:"order"`      // 卡牌转让订单
-	All       int                   `json:"all"`        // 全部收益
-	Today     int                   `json:"today"`      // 今日收益
-	Yesterday int                   `json:"yesterday"`  // 昨日收益
-	Fees      int                   `json:"fees"`       // 手续费
-	Price     int                   `json:"price"`      // 最低价格
+	OrderCard model.AvfOrderCard     `json:"order_card"` // 订单卡牌记录
+	Order     *model.AvfCardTransfer `json:"order"`      // 卡牌转让订单
+	All       int                    `json:"all"`        // 全部收益
+	Today     int                    `json:"today"`      // 今日收益
+	Yesterday int                    `json:"yesterday"`  // 昨日收益
+	Fees      int                    `json:"fees"`       // 手续费
+	Price     int                    `json:"price"`      // 最低价格
 }

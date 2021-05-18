@@ -227,8 +227,6 @@ func MyCardDetail(c *gin.Context) {
 		Status: 5,
 	}
 
-	_ = Order.GetByIdAndUserIdAndNotCancel(DB)
-
 	Fees := global.GVA_CONFIG.CollectionAddress.Fees
 	Proportion := global.GVA_CONFIG.CollectionAddress.Proportion
 	fees, _ := strconv.Atoi(Fees)
@@ -236,10 +234,15 @@ func MyCardDetail(c *gin.Context) {
 
 	res := web_tools.MyCardDetailResponse{
 		OrderCard: OrderCard,
-		Order:     Order,
 		All:       all,
 		Today:     today,
 		Yesterday: yesterday,
+	}
+
+	if err := Order.GetByIdAndUserIdAndNotCancel(DB); err != nil {
+		res.Order = nil
+	} else {
+		res.Order = &Order
 	}
 
 	res.Fees = int(OrderCard.Card.Money) * fees / 100
@@ -295,7 +298,7 @@ func TransferCard(c *gin.Context) {
 	proportion, _ := strconv.Atoi(global.GVA_CONFIG.CollectionAddress.Proportion)
 
 	systemPrice := int(orderCard.Card.Money) * proportion / 100
-	if cardPrice > systemPrice {
+	if cardPrice < systemPrice {
 		response.FailWithMessageToSprintf("41018", c, proportion)
 		return
 	}
@@ -310,14 +313,9 @@ func TransferCard(c *gin.Context) {
 		CardId:    orderCard.CardId,
 		Price:     cardPrice,
 		Fees:      fees,
-		BuyId:     0,
 		Status:    1,
 		CardName:  orderCard.Card.Name,
 		Level:     orderCard.Level,
-		TxHash:    "",
-		From:      "",
-		To:        "",
-		Block:     "",
 		System:    systemAddress,
 	}
 
