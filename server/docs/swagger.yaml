@@ -1754,7 +1754,7 @@ definitions:
         type: integer
       fees:
         description: 手续费
-        type: object
+        type: integer
       fees_percentage:
         description: 最低价格百分比
         type: integer
@@ -1766,7 +1766,7 @@ definitions:
         description: 订单卡牌记录
       price:
         description: 最低价格
-        type: object
+        type: integer
       price_percentage:
         description: 手续费百分比
         type: integer

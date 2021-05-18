@@ -7403,7 +7403,7 @@ var doc = `{
                 },
                 "fees": {
                     "description": "手续费",
-                    "type": "object"
+                    "type": "integer"
                 },
                 "fees_percentage": {
                     "description": "最低价格百分比",
@@ -7419,7 +7419,7 @@ var doc = `{
                 },
                 "price": {
                     "description": "最低价格",
-                    "type": "object"
+                    "type": "integer"
                 },
                 "price_percentage": {
                     "description": "手续费百分比",
