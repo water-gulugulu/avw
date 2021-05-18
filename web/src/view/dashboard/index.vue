@@ -16,7 +16,7 @@
                     <h4>早安，管理员， 请开始您一天的工作吧！</h4>
                     <p class="tips-text">
                       <i class="el-icon-sunny el-icon"></i>
-                      <span>今日晴，0℃ - 10℃，天气寒冷，注意添加衣物。</span>
+                      <span>今日也是美好的一天</span>
                     </p>
                   </div>
                 </el-col>
@@ -56,18 +56,6 @@
           </div>
         </el-col>
       </div>
-    </el-row>
-    <el-row>
-      <el-card shadow="hover">
-          <h2>
-            使用教学：<a style="color:#409EFF"  target="view_window" href="https://www.bilibili.com/video/BV1fV411y7dT/">https://www.bilibili.com/video/BV1fV411y7dT/</a>
-          </h2>
-          <br>
-          <h2>
-            工作流教学：<a style="color:#409EFF"  target="view_window" href="https://www.bilibili.com/video/BV1Ka411F7Ji/">https://www.bilibili.com/video/BV1Ka411F7Ji/</a>
-          </h2>
-          <div></div>
-      </el-card>
     </el-row>
     <div class="shadow">
       <el-row :gutter="20">
@@ -123,24 +111,24 @@ export default {
           name: "authority",
           color: "#69c0ff",
         },
-        {
-          label: "菜单管理",
-          icon: "el-icon el-icon-menu",
-          name: "menu",
-          color: "#b37feb",
-        },
-        {
-          label: "代码生成器",
-          icon: "el-icon el-icon-cpu",
-          name: "autoCode",
-          color: "#ffd666",
-        },
-        {
-          label: "表单生成器",
-          icon: "el-icon el-icon-document-checked",
-          name: "formCreate",
-          color: "#ff85c0",
-        },
+        // {
+        //   label: "菜单管理",
+        //   icon: "el-icon el-icon-menu",
+        //   name: "menu",
+        //   color: "#b37feb",
+        // },
+        // {
+        //   label: "代码生成器",
+        //   icon: "el-icon el-icon-cpu",
+        //   name: "autoCode",
+        //   color: "#ffd666",
+        // },
+        // {
+        //   label: "表单生成器",
+        //   icon: "el-icon el-icon-document-checked",
+        //   name: "formCreate",
+        //   color: "#ff85c0",
+        // },
         {
           label: "关于我们",
           icon: "el-icon el-icon-user",
@@ -155,7 +143,7 @@ export default {
   },
   components: {
     musicPlayer, //音乐播放器
-    TodoList, //TodoList
+    // TodoList, //TodoList
     // RaddarChart, //雷达图
     // stackMap, //堆叠图
     // Sunburst, //旭日图

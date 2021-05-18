@@ -7,7 +7,7 @@
         </div>
         <div class="header">
           <a href="/">
-            <span class="title">Gin-Vue-Admin</span>
+            <span class="title">Admin</span>
           </a>
         </div>
       </div>
