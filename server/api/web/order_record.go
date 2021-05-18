@@ -343,6 +343,11 @@ func TransferCard(c *gin.Context) {
 
 		return nil
 	})
+	if err != nil {
+		response.FailWithMessage("60003", c)
+		return
+	}
+
 	res := web_tools.TransferResponse{
 		TransferId:    int(cardTransfer.ID),
 		Fees:          fees,
