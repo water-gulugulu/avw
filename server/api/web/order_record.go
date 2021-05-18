@@ -25,6 +25,7 @@ import (
 	"gin-vue-admin/model"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"log"
 	"strconv"
 	"time"
 )
@@ -335,9 +336,11 @@ func TransferCard(c *gin.Context) {
 
 	err = DB.Transaction(func(tx *gorm.DB) error {
 		if err := orderCard.Update(tx); err != nil {
+			log.Printf("[%s]Failed to order_card update error:%e\n", time.Now(), err)
 			return err
 		}
 		if err := cardTransfer.Create(tx); err != nil {
+			log.Printf("[%s]Failed to create card_transfer error:%e\n", time.Now(), err)
 			return err
 		}
 
