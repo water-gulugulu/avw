@@ -447,3 +447,79 @@ func PayFees(c *gin.Context) {
 	response.Ok(c)
 	return
 }
+
+// @Tags 前端接口
+// @Summary 取消转让卡牌
+// @accept application/x-www-form-urlencoded
+// @Produce application/json
+// @Param x-token header string  true "token"
+// @Param transfer_id body string  true "卡牌转让ID"
+// @Success 200 {string} string "{"code":0}"
+// @Router /web/order_card/cancelTransfer [post]
+func CancelTransfer(c *gin.Context) {
+	UserId, err := web_tools.GetUserId(c)
+	if err != nil {
+		response.FailWithMessage("41003", c)
+		return
+	}
+	transferId := c.PostForm("transfer_id")
+
+	if len(transferId) == 0 {
+		response.FailWithMessage("41019", c)
+		return
+	}
+
+	tid, _ := strconv.Atoi(transferId)
+
+	CardTransfer := model.AvfCardTransfer{
+		GVA_MODEL: global.GVA_MODEL{ID: uint(tid)},
+	}
+	DB := global.GVA_DB
+	if err2 := CardTransfer.GetById(DB); err2 != nil {
+		response.FailWithMessage("60001", c)
+		return
+	}
+	if CardTransfer.Uid != int(UserId) {
+		response.FailWithMessage("41015", c)
+		return
+	}
+	if CardTransfer.Status > 3 {
+		response.FailWithMessage("60002", c)
+		return
+	}
+
+	OrderCard := model.AvfOrderCard{
+		GVA_MODEL: global.GVA_MODEL{ID: uint(CardTransfer.RecordId), UpdatedAt: time.Now()},
+	}
+	if err := OrderCard.GetById(DB); err != nil {
+		response.FailWithMessage("60001", c)
+		return
+	}
+	OrderCard = model.AvfOrderCard{
+		GVA_MODEL: global.GVA_MODEL{ID: uint(CardTransfer.RecordId), UpdatedAt: time.Now()},
+		Status:    1,
+	}
+	CardTransfer = model.AvfCardTransfer{
+		GVA_MODEL: global.GVA_MODEL{ID: uint(tid)},
+		Status:    7,
+	}
+	err = DB.Transaction(func(tx *gorm.DB) error {
+
+		if err := OrderCard.Update(tx); err != nil {
+			return err
+		}
+
+		if err := CardTransfer.Update(tx); err != nil {
+			return err
+		}
+		return nil
+	})
+
+	if err != nil {
+		response.FailWithMessage("60003", c)
+		return
+	}
+
+	response.Ok(c)
+	return
+}

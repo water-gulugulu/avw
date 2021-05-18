@@ -4677,6 +4677,32 @@ paths:
       summary: 支付订单
       tags:
       - 前端接口
+  /web/order_card/cancelTransfer:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: token
+        in: header
+        name: x-token
+        required: true
+        type: string
+      - description: 卡牌转让ID
+        in: body
+        name: transfer_id
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0}'
+          schema:
+            type: string
+      summary: 取消转让卡牌
+      tags:
+      - 前端接口
   /web/order_card/luckyDraw:
     post:
       consumes:
