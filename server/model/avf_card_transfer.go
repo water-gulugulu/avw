@@ -51,6 +51,6 @@ func (h *AvfCardTransfer) GetByFeesHash(DB *gorm.DB) error {
 	return DB.Table(h.TableName()).Where("fees_hash = ?", h.FeesHash).First(&h).Error
 }
 
-func (h *AvfCardTransfer) GetByIdAndUserIdAndNotCancel(DB *gorm.DB) error {
-	return DB.Table(h.TableName()).Where("id = ? and uid = ? and status != ?", h.ID, h.Uid, h.Status).First(&h).Error
+func (h *AvfCardTransfer) GetByCardIdAndUserIdAndNotCancel(DB *gorm.DB) error {
+	return DB.Table(h.TableName()).Where("card_id = ? and uid = ? and status != ?", h.CardId, h.Uid, h.Status).Order("id desc").First(&h).Error
 }

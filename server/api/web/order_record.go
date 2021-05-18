@@ -222,11 +222,6 @@ func MyCardDetail(c *gin.Context) {
 			yesterday = yesterday + item.Money
 		}
 	}
-	Order := model.AvfCardTransfer{
-		CardId: OrderCard.CardId,
-		Uid:    int(UserId),
-		Status: 5,
-	}
 
 	Fees := global.GVA_CONFIG.CollectionAddress.Fees
 	Proportion := global.GVA_CONFIG.CollectionAddress.Proportion
@@ -240,7 +235,13 @@ func MyCardDetail(c *gin.Context) {
 		Yesterday: yesterday,
 	}
 
-	if err := Order.GetByIdAndUserIdAndNotCancel(DB); err != nil {
+	Order := model.AvfCardTransfer{
+		CardId: OrderCard.CardId,
+		Uid:    int(UserId),
+		Status: 5,
+	}
+	if err := Order.GetByCardIdAndUserIdAndNotCancel(DB); err != nil {
+		fmt.Printf("err:%s", err)
 		res.Order = nil
 	} else {
 		res.Order = &Order
