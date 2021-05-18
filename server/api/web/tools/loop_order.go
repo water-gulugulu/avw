@@ -63,6 +63,7 @@ func (c *Manager) getOrder() {
 		fmt.Printf("[%s]Query Order Failed! error:%e\n", time.Now(), err)
 		return
 	}
+	// FeesOrder := model.AvfCardTransfer{}
 
 	c.OrderList = list
 

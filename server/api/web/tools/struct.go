@@ -102,8 +102,8 @@ type MyCardDetailResponse struct {
 	All             int                    `json:"all"`              // 全部收益
 	Today           int                    `json:"today"`            // 今日收益
 	Yesterday       int                    `json:"yesterday"`        // 昨日收益
-	Fees            int                    `json:"fees"`             // 手续费
-	Price           int                    `json:"price"`            // 最低价格
+	Fees            interface{}            `json:"fees"`             // 手续费
+	Price           interface{}            `json:"price"`            // 最低价格
 	PricePercentage int                    `json:"price_percentage"` // 手续费百分比
 	FeesPercentage  int                    `json:"fees_percentage"`  // 最低价格百分比
 }
