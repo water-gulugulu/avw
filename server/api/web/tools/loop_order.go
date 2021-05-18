@@ -82,6 +82,7 @@ func Init() *Manager {
 		second:        set,
 	}
 	go data.getOrder()
+	go data.timeOut()
 	fmt.Printf("[%s]Init Manager success\n", time.Now())
 	return &data
 }
