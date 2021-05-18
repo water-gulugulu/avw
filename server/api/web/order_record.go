@@ -238,7 +238,7 @@ func MyCardDetail(c *gin.Context) {
 	Order := model.AvfCardTransfer{
 		CardId: OrderCard.CardId,
 		Uid:    int(UserId),
-		Status: 5,
+		Status: 7,
 	}
 	if err := Order.GetByCardIdAndUserIdAndNotCancel(DB); err != nil {
 		fmt.Printf("err:%s", err)
@@ -435,6 +435,7 @@ func PayFees(c *gin.Context) {
 			UpdatedAt: time.Now(),
 		},
 		FeesHash: TxHash,
+		Status:   2,
 		From:     Address,
 		System:   global.GVA_CONFIG.CollectionAddress.Address,
 	}

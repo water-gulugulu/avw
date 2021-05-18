@@ -78,7 +78,7 @@ func (h *AvfOrder) UpdateOrderByNumber(DB *gorm.DB) error {
 	return DB.Table(h.TableName()).Where("id = ?", h.ID).Updates(update).Error
 }
 
-func (h *AvfOrder) FindListByStatus(DB *gorm.DB) (list []AvfOrder, err error) {
+func (h *AvfOrder) FindListByStatus(DB *gorm.DB) (list []*AvfOrder, err error) {
 	if h.Status == 0 {
 		return nil, errors.New("状态不能为空")
 	}
