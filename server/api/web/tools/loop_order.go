@@ -32,6 +32,7 @@ type Manager struct {
 	client        *blockchian.ClientManage
 	OrderList     []model.AvfOrder
 	OrderCardList []model.AvfOrderCard
+	OrderFeesList []model.AvfOrderCard
 	timer         *time.Timer
 	second        time.Duration
 }
@@ -79,6 +80,7 @@ func Init() *Manager {
 		timer:         time.NewTimer(set),
 		OrderList:     make([]model.AvfOrder, 0),
 		OrderCardList: make([]model.AvfOrderCard, 0),
+		OrderFeesList: make([]model.AvfOrderCard, 0),
 		second:        set,
 	}
 	go data.getOrder()

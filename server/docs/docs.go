@@ -7405,6 +7405,10 @@ var doc = `{
                     "description": "手续费",
                     "type": "object"
                 },
+                "fees_percentage": {
+                    "description": "最低价格百分比",
+                    "type": "string"
+                },
                 "order": {
                     "description": "卡牌转让订单",
                     "$ref": "#/definitions/model.AvfCardTransfer"
@@ -7414,8 +7418,12 @@ var doc = `{
                     "$ref": "#/definitions/model.AvfOrderCard"
                 },
                 "price": {
-                    "description": "最低价格百分比",
+                    "description": "最低价格",
                     "type": "object"
+                },
+                "price_percentage": {
+                    "description": "手续费百分比",
+                    "type": "string"
                 },
                 "today": {
                     "description": "今日收益",
