@@ -247,7 +247,10 @@ func MyCardDetail(c *gin.Context) {
 
 	res.Fees = int(OrderCard.Card.Money) * fees / 100
 	res.Price = int(OrderCard.Card.Money) * proportion / 100
-
+	if global.GVA_CONFIG.CollectionAddress.Debug == "1" {
+		res.Fees = 0.001
+		res.Price = 0.001
+	}
 	response.OkWithData(res, c)
 	return
 }
