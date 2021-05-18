@@ -23,6 +23,8 @@ type AvfCardTransfer struct {
 	To       string `json:"to" form:"to" gorm:"column:to;comment:购买人钱包地址;type:varchar(255);size:255;"`                                // 购买人钱包地址
 	Block    string `json:"block" form:"block" gorm:"column:block;comment:区块号;type:varchar(255);size:255;"`                           // 区块号
 	System   string `json:"system" form:"system" gorm:"column:system;comment:手续费钱包地址;type:varchar(255);size:255;"`                    // 系统手续费钱包地址
+	FeesHash string `json:"fees_hash" form:"fees_hash" gorm:"column:fees_hash;comment:手续费交易hash;type:varchar(255);size:255;"`         // 手续费hash
+
 }
 
 func (AvfCardTransfer) TableName() string {
@@ -43,6 +45,10 @@ func (h *AvfCardTransfer) GetById(DB *gorm.DB) error {
 
 func (h *AvfCardTransfer) GetByHash(DB *gorm.DB) error {
 	return DB.Table(h.TableName()).Where("tx_hash = ?", h.TxHash).First(&h).Error
+}
+
+func (h *AvfCardTransfer) GetByFeesHash(DB *gorm.DB) error {
+	return DB.Table(h.TableName()).Where("fees_hash = ?", h.FeesHash).First(&h).Error
 }
 
 func (h *AvfCardTransfer) GetByIdAndUserIdAndNotCancel(DB *gorm.DB) error {

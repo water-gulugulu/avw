@@ -4836,9 +4836,9 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "{\"code\":0}",
                         "schema": {
-                            "$ref": "#/definitions/web_tools.TransferResponse"
+                            "type": "string"
                         }
                     }
                 }
@@ -5559,6 +5559,10 @@ var doc = `{
                 "fees": {
                     "description": "手续费",
                     "type": "integer"
+                },
+                "fees_hash": {
+                    "description": "手续费hash",
+                    "type": "string"
                 },
                 "from": {
                     "description": "出售人钱包地址",
@@ -6528,6 +6532,10 @@ var doc = `{
                     "description": "手续费",
                     "type": "integer"
                 },
+                "fees_hash": {
+                    "description": "手续费hash",
+                    "type": "string"
+                },
                 "from": {
                     "description": "出售人钱包地址",
                     "type": "string"
@@ -7395,7 +7403,7 @@ var doc = `{
                 },
                 "fees": {
                     "description": "手续费",
-                    "type": "integer"
+                    "type": "object"
                 },
                 "order": {
                     "description": "卡牌转让订单",
@@ -7406,8 +7414,8 @@ var doc = `{
                     "$ref": "#/definitions/model.AvfOrderCard"
                 },
                 "price": {
-                    "description": "最低价格",
-                    "type": "integer"
+                    "description": "最低价格百分比",
+                    "type": "object"
                 },
                 "today": {
                     "description": "今日收益",

@@ -251,6 +251,8 @@ func MyCardDetail(c *gin.Context) {
 		res.Fees = 0.001
 		res.Price = 0.001
 	}
+	res.FeesPercentage = fees
+	res.PricePercentage = proportion
 	response.OkWithData(res, c)
 	return
 }
@@ -360,7 +362,7 @@ func TransferCard(c *gin.Context) {
 // @Param transfer_id body string  true "卡牌转让ID"
 // @Param tx_hash body string  true "交易事务hash"
 // @Param address body string  true "提交支付钱包地址"
-// @Success 200 {object} web_tools.TransferResponse
+// @Success 200 {string} string "{"code":0}"
 // @Router /web/order_card/payFees [post]
 func PayFees(c *gin.Context) {
 	UserId, err := web_tools.GetUserId(c)
@@ -386,11 +388,11 @@ func PayFees(c *gin.Context) {
 
 	tid, _ := strconv.Atoi(transferId)
 	cardTransfer := model.AvfCardTransfer{
-		TxHash: TxHash,
+		FeesHash: TxHash,
 	}
 	DB := global.GVA_DB
 
-	if err := cardTransfer.GetByHash(DB); err == nil || cardTransfer.ID != 0 {
+	if err := cardTransfer.GetByFeesHash(DB); err == nil || cardTransfer.ID != 0 {
 		response.FailWithMessage("41013", c)
 		return
 	}
@@ -418,5 +420,20 @@ func PayFees(c *gin.Context) {
 		response.FailWithMessage("60007", c)
 		return
 	}
+	cardTransfer = model.AvfCardTransfer{
+		GVA_MODEL: global.GVA_MODEL{
+			ID:        uint(tid),
+			UpdatedAt: time.Now(),
+		},
+		FeesHash: TxHash,
+		From:     Address,
+		System:   global.GVA_CONFIG.CollectionAddress.Address,
+	}
 
+	if err := cardTransfer.Update(DB); err != nil {
+		response.FailWithMessage("60007", c)
+		return
+	}
+	response.Ok(c)
+	return
 }

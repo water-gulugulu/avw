@@ -418,6 +418,9 @@ definitions:
       fees:
         description: 手续费
         type: integer
+      fees_hash:
+        description: 手续费hash
+        type: string
       from:
         description: 出售人钱包地址
         type: string
@@ -1120,6 +1123,9 @@ definitions:
       fees:
         description: 手续费
         type: integer
+      fees_hash:
+        description: 手续费hash
+        type: string
       from:
         description: 出售人钱包地址
         type: string
@@ -1748,7 +1754,7 @@ definitions:
         type: integer
       fees:
         description: 手续费
-        type: integer
+        type: object
       order:
         $ref: '#/definitions/model.AvfCardTransfer'
         description: 卡牌转让订单
@@ -1756,8 +1762,8 @@ definitions:
         $ref: '#/definitions/model.AvfOrderCard'
         description: 订单卡牌记录
       price:
-        description: 最低价格
-        type: integer
+        description: 最低价格百分比
+        type: object
       today:
         description: 今日收益
         type: integer
@@ -4776,9 +4782,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: '{"code":0}'
           schema:
-            $ref: '#/definitions/web_tools.TransferResponse'
+            type: string
       summary: 支付转让手续费
       tags:
       - 前端接口
