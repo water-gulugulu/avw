@@ -96,3 +96,14 @@ func GetCardDetail(c *gin.Context) {
 	response.OkWithData(Card, c)
 	return
 }
+
+func CardMarket(c *gin.Context) {
+	// size := c.Query("size")
+
+	// if len(size) == 0 {
+	// 	size = "10"
+	// }
+	// if len(page) == 0 {
+	// 	page = "0"
+	// }
+}
