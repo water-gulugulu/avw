@@ -44,3 +44,7 @@ func (h *AvfCardTransfer) GetById(DB *gorm.DB) error {
 func (h *AvfCardTransfer) GetByHash(DB *gorm.DB) error {
 	return DB.Table(h.TableName()).Where("tx_hash = ?", h.TxHash).First(&h).Error
 }
+
+func (h *AvfCardTransfer) GetByIdAndUserIdAndNotCancel(DB *gorm.DB) error {
+	return DB.Table(h.TableName()).Where("id = ? and uid = ? and status != ?", h.ID, h.Uid, h.Status).First(&h).Error
+}

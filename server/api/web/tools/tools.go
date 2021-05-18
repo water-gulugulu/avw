@@ -158,3 +158,12 @@ func TokenNext(user model.AvfUser) (string, error) {
 	}
 	return token, nil
 }
+
+// 获取当天零点时间
+func GetTodayZeroTimeStamp() int {
+	timeStr := time.Now().Format("2006-01-02")
+	// fmt.Println("timeStr:", timeStr)
+	t, _ := time.Parse("2006-01-02", timeStr)
+	timeNumber := t.Unix()
+	return int(timeNumber)
+}

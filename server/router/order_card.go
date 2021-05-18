@@ -26,6 +26,7 @@ func InitApiAvfOrderCardRouter(Router *gin.RouterGroup) {
 		{
 			ApiOrderCardRouter.POST("/luckyDraw", web.LuckyDraw)
 			ApiOrderCardRouter.GET("/myCard", web.MyCard)
+			ApiOrderCardRouter.GET("/myCardDetail", web.MyCardDetail)
 			ApiOrderCardRouter.POST("/transferCard", web.TransferCard)
 			ApiOrderCardRouter.POST("/payFees", web.PayFees)
 		}

@@ -162,6 +162,94 @@ func MyCard(c *gin.Context) {
 }
 
 // @Tags 前端接口
+// @Summary 我的卡牌详情
+// @accept application/json
+// @Produce application/json
+// @Param x-token header string  true "token"
+// @Param record_id query string  true "卡牌记录ID"
+// @Success 200 {object} web_tools.MyCardDetailResponse
+// @Router /web/order_card/myCardDetail [get]
+func MyCardDetail(c *gin.Context) {
+	UserId, err := web_tools.GetUserId(c)
+	if err != nil {
+		response.FailWithMessage("41003", c)
+		return
+	}
+	orderId := c.Query("record_id")
+
+	if len(orderId) == 0 {
+		response.FailWithMessage("41014", c)
+		return
+	}
+
+	oid, _ := strconv.Atoi(orderId)
+
+	OrderCard := model.AvfOrderCard{
+		GVA_MODEL: global.GVA_MODEL{ID: uint(oid)},
+		Uid:       int(UserId),
+	}
+	DB := global.GVA_DB
+	if err2 := OrderCard.GetById(DB); err2 != nil {
+		response.FailWithMessage("60001", c)
+		return
+	}
+	if OrderCard.Uid != int(UserId) {
+		response.FailWithMessage("41015", c)
+		return
+	}
+	// 用户账单
+	UserBill := model.AvfUserBill{
+		Uid:    int(UserId),
+		CardId: OrderCard.CardId,
+		Type:   1,
+	}
+	var yesterday, today, all int
+
+	list, err3 := UserBill.GetByUidAndCardId(DB)
+	if err3 != nil {
+		yesterday, today, all = 0, 0, 0
+	}
+	todayTime := web_tools.GetTodayZeroTimeStamp()
+	yesterdayTime := today - 86400
+	// 统计昨日，今日，全部收益
+	for _, item := range list {
+		all = all + item.Money
+		if item.CreateTime > todayTime && item.CreateTime < todayTime+86399 {
+			today = today + item.Money
+		}
+		if item.CreateTime > yesterdayTime && item.CreateTime < yesterdayTime+86399 {
+			yesterday = yesterday + item.Money
+		}
+	}
+	Order := model.AvfCardTransfer{
+		CardId: OrderCard.CardId,
+		Uid:    int(UserId),
+		Status: 5,
+	}
+
+	_ = Order.GetByIdAndUserIdAndNotCancel(DB)
+
+	Fees := global.GVA_CONFIG.CollectionAddress.Fees
+	Proportion := global.GVA_CONFIG.CollectionAddress.Proportion
+	fees, _ := strconv.Atoi(Fees)
+	proportion, _ := strconv.Atoi(Proportion)
+
+	res := web_tools.MyCardDetailResponse{
+		OrderCard: OrderCard,
+		Order:     Order,
+		All:       all,
+		Today:     today,
+		Yesterday: yesterday,
+	}
+
+	res.Fees = int(OrderCard.Card.Money) * fees / 100
+	res.Price = int(OrderCard.Card.Money) * proportion / 100
+
+	response.OkWithData(res, c)
+	return
+}
+
+// @Tags 前端接口
 // @Summary 卡牌转让
 // @accept application/x-www-form-urlencoded
 // @Produce application/json
@@ -329,4 +417,5 @@ func PayFees(c *gin.Context) {
 		response.FailWithMessage("60007", c)
 		return
 	}
+
 }

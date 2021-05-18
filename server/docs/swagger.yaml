@@ -622,6 +622,51 @@ definitions:
         description: 钱包地址
         type: string
     type: object
+  model.AvfUserBill:
+    properties:
+      address:
+        description: 钱包地址
+        type: string
+      balance:
+        description: 余额
+        type: integer
+      cardId:
+        description: 卡牌ID
+        type: integer
+      createTime:
+        description: 创建时间
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      detail:
+        description: 详情
+        type: string
+      fees:
+        description: 手续费
+        type: integer
+      id:
+        description: 主键ID
+        type: integer
+      money:
+        description: 金额
+        type: integer
+      payType:
+        description: 支付方式 1-avw 2-ht
+        type: integer
+      payment:
+        description: 收入支出
+        type: integer
+      type:
+        description: 类型 1-发放收益 2-转账 3-购买卡牌 4-提现 -支付手续费
+        type: integer
+      uid:
+        description: 用户ID
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
   model.ExaCustomer:
     properties:
       createdAt:
@@ -1258,6 +1303,57 @@ definitions:
         description: 更新时间
         type: string
     type: object
+  request.AvfUserBillSearch:
+    properties:
+      address:
+        description: 钱包地址
+        type: string
+      balance:
+        description: 余额
+        type: integer
+      cardId:
+        description: 卡牌ID
+        type: integer
+      createTime:
+        description: 创建时间
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      detail:
+        description: 详情
+        type: string
+      fees:
+        description: 手续费
+        type: integer
+      id:
+        description: 主键ID
+        type: integer
+      money:
+        description: 金额
+        type: integer
+      page:
+        description: 页码
+        type: integer
+      pageSize:
+        description: 每页大小
+        type: integer
+      payType:
+        description: 支付方式 1-avw 2-ht
+        type: integer
+      payment:
+        description: 收入支出
+        type: integer
+      type:
+        description: 类型 1-发放收益 2-转账 3-购买卡牌 4-提现 -支付手续费
+        type: integer
+      uid:
+        description: 用户ID
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
   request.AvfUserSearch:
     properties:
       createdAt:
@@ -1644,6 +1740,30 @@ definitions:
       wallet_address:
         description: 钱包地址
         type: string
+    type: object
+  web_tools.MyCardDetailResponse:
+    properties:
+      all:
+        description: 全部收益
+        type: integer
+      fees:
+        description: 手续费
+        type: integer
+      order:
+        $ref: '#/definitions/model.AvfCardTransfer'
+        description: 卡牌转让订单
+      order_card:
+        $ref: '#/definitions/model.AvfOrderCard'
+        description: 订单卡牌记录
+      price:
+        description: 最低价格
+        type: integer
+      today:
+        description: 今日收益
+        type: integer
+      yesterday:
+        description: 昨日收益
+        type: integer
     type: object
   web_tools.MyCardResponse:
     properties:
@@ -2937,6 +3057,144 @@ paths:
       summary: 更新AvfUser
       tags:
       - AvfUser
+  /avfUserBill/createAvfUserBill:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建AvfUserBill
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.AvfUserBill'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建AvfUserBill
+      tags:
+      - AvfUserBill
+  /avfUserBill/deleteAvfUserBill:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除AvfUserBill
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.AvfUserBill'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除AvfUserBill
+      tags:
+      - AvfUserBill
+  /avfUserBill/deleteAvfUserBillByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除AvfUserBill
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除AvfUserBill
+      tags:
+      - AvfUserBill
+  /avfUserBill/findAvfUserBill:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 用id查询AvfUserBill
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.AvfUserBill'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询AvfUserBill
+      tags:
+      - AvfUserBill
+  /avfUserBill/getAvfUserBillList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 分页获取AvfUserBill列表
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.AvfUserBillSearch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取AvfUserBill列表
+      tags:
+      - AvfUserBill
+  /avfUserBill/updateAvfUserBill:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新AvfUserBill
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.AvfUserBill'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新AvfUserBill
+      tags:
+      - AvfUserBill
   /base/captcha:
     post:
       consumes:
@@ -4459,6 +4717,31 @@ paths:
           schema:
             $ref: '#/definitions/web_tools.MyCardResponse'
       summary: 我的卡牌列表
+      tags:
+      - 前端接口
+  /web/order_card/myCardDetail:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: x-token
+        required: true
+        type: string
+      - description: 卡牌记录ID
+        in: query
+        name: record_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web_tools.MyCardDetailResponse'
+      summary: 我的卡牌详情
       tags:
       - 前端接口
   /web/order_card/payFees:
