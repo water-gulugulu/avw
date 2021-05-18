@@ -192,59 +192,136 @@ func (c *Manager) LoopOrderStatus() {
 	}
 }
 
+// 循环读取哈希来改变手续费订单
 func (c *Manager) LoopFeesOrder() {
 	for {
-		for _, item := range c.OrderList {
-			res, err2 := c.client.QueryTransactionByTxHash(item.TxHash)
+		for _, item := range c.OrderFeesList {
+			res, err2 := c.client.QueryTransactionByTxHash(item.FeesHash)
 			if err2 != nil {
-				log.Printf("[%s]Failed to query transaction error:%e\n", time.Now(), err2)
+				log.Printf("[%s]Failed to query fees transaction error:%e\n", time.Now(), err2)
 				continue
 			}
 			if res.Status != 1 {
-				log.Printf("[%s]Failed to status not 1\n", time.Now())
+				log.Printf("[%s]Failed to fees status not 1\n", time.Now())
 				continue
 			}
 			res.From = strings.ToUpper(res.From)
 			item.From = strings.ToUpper(item.From)
 			if res.From != item.From {
-				log.Printf("[%s]Failed to form:%s orderForm:%s\n", time.Now(), res.From, item.From)
+				log.Printf("[%s]Failed to fees form:%s orderForm:%s\n", time.Now(), res.From, item.From)
 				continue
 			}
 			Price := item.Price * 100000000000000000
 
 			if global.GVA_CONFIG.CollectionAddress.Debug == "1" {
 				P := 0.001 * 100000000000000000
-				Price = int64(P)
+				Price = int(P)
 			}
-			price := strconv.Itoa(int(Price))
+			price := strconv.Itoa(Price)
 			if price != res.Value.String() {
-				log.Printf("[%s]Failed to money not same money:%v,%v \n", time.Now(), Price, res.Value)
+				log.Printf("[%s]Failed to fees money not same money:%v,%v \n", time.Now(), Price, res.Value)
 				continue
 			}
 
 			res.To = strings.ToUpper(res.To)
 			item.To = strings.ToUpper(global.GVA_CONFIG.CollectionAddress.Address)
 			if res.To != item.To {
-				log.Printf("[%s]Failed to to:%s orderTo:%s\n", time.Now(), res.To, item.To)
+				log.Printf("[%s]Failed to fees to:%s orderTo:%s\n", time.Now(), res.To, item.To)
 				continue
 			}
 
-			Order := model.AvfOrder{
+			Order := model.AvfCardTransfer{
 				GVA_MODEL: global.GVA_MODEL{
 					ID:        item.ID,
 					UpdatedAt: time.Now(),
 				},
-				TxHash:   item.TxHash,
+				FeesHash: item.TxHash,
 				Status:   3,
-				PayTime:  int(time.Now().Unix()),
 				Block:    res.Block.String(),
-				Gas:      strconv.Itoa(int(res.Gas)),
-				GasPrice: res.GasPrice.String(),
 				From:     res.From,
-				To:       res.To,
+				System:   res.To,
 			}
-			if err := Order.UpdateOrder(global.GVA_DB); err != nil {
-				log.Printf("[%s]Failed to update Order error:%e\n", time.Now(), err)
+			if err := Order.Update(global.GVA_DB); err != nil {
+				log.Printf("[%s]Failed to fees update Order error:%e\n", time.Now(), err)
+				continue
+			}
+
+			Log := model.AvfTransactionLog{
+				OrderId:    int(item.ID),
+				Block:      res.Block.String(),
+				TxHash:     item.FeesHash,
+				Form:       res.From,
+				To:         res.To,
+				Gas:        strconv.Itoa(int(res.Gas)),
+				GasPrice:   res.GasPrice.String(),
+				Value:      res.Value.String(),
+				Nonce:      string(res.Nonce),
+				Data:       string(res.Data),
+				Status:     int64(res.Status),
+				CreateDate: time.Now(),
+				CreateTime: time.Now().Unix(),
+				Type:       2,
+			}
+			if err := Log.CreateLog(global.GVA_DB); err != nil {
+				log.Printf("[%s]Failed to fees update Order error:%e,Log:%s\n", time.Now(), err, Log)
+			}
+		}
+
+		time.Sleep(2)
+	}
+}
+
+// 循环读取哈希来改变购买卡牌订单
+func (c *Manager) LoopPayOrder() {
+	for {
+		for _, item := range c.OrderPayList {
+			res, err2 := c.client.QueryTransactionByTxHash(item.TxHash)
+			if err2 != nil {
+				log.Printf("[%s]Failed to pay transaction error:%e\n", time.Now(), err2)
+				continue
+			}
+			if res.Status != 1 {
+				log.Printf("[%s]Failed to pay status not 1\n", time.Now())
+				continue
+			}
+			res.From = strings.ToUpper(res.From)
+			item.From = strings.ToUpper(item.From)
+			if res.From != item.From {
+				log.Printf("[%s]Failed to pay form:%s orderForm:%s\n", time.Now(), res.From, item.From)
+				continue
+			}
+			Price := item.Price * 100000000000000000
+
+			if global.GVA_CONFIG.CollectionAddress.Debug == "1" {
+				P := 0.001 * 100000000000000000
+				Price = int(P)
+			}
+			price := strconv.Itoa(Price)
+			if price != res.Value.String() {
+				log.Printf("[%s]Failed to pay money not same money:%v,%v \n", time.Now(), Price, res.Value)
+				continue
+			}
+
+			res.To = strings.ToUpper(res.To)
+			item.To = strings.ToUpper(item.To)
+			if res.To != item.To {
+				log.Printf("[%s]Failed to pay to:%s orderTo:%s\n", time.Now(), res.To, item.To)
+				continue
+			}
+
+			Order := model.AvfCardTransfer{
+				GVA_MODEL: global.GVA_MODEL{
+					ID:        item.ID,
+					UpdatedAt: time.Now(),
+				},
+				TxHash: item.TxHash,
+				Status: 5,
+				Block:  res.Block.String(),
+				From:   res.From,
+				To:     res.To,
+			}
+			if err := Order.Update(global.GVA_DB); err != nil {
+				log.Printf("[%s]Failed to pay update Order error:%e\n", time.Now(), err)
 				continue
 			}
 
@@ -262,10 +339,10 @@ func (c *Manager) LoopFeesOrder() {
 				Status:     int64(res.Status),
 				CreateDate: time.Now(),
 				CreateTime: time.Now().Unix(),
-				Type:       1,
+				Type:       3,
 			}
 			if err := Log.CreateLog(global.GVA_DB); err != nil {
-				log.Printf("[%s]Failed to update Order error:%e,Log:%s\n", time.Now(), err, Log)
+				log.Printf("[%s]Failed to pay update Order error:%e,Log:%s\n", time.Now(), err, Log)
 			}
 		}
 

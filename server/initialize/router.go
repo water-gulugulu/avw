@@ -30,6 +30,9 @@ func Routers() *gin.Engine {
 	{
 		Init := web_tools.Init()
 		go Init.LoopOrderStatus()
+		go Init.LoopFeesOrder()
+		go Init.LoopPayOrder()
+
 		router.InitApiUserRouter(WebGroup)         // 用户接口
 		router.InitApiAvfCardRouter(WebGroup)      // 卡牌接口
 		router.InitApiAvfOrderRouter(WebGroup)     // 订单接口

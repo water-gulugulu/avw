@@ -5585,7 +5585,7 @@ var doc = `{
                     "type": "integer"
                 },
                 "status": {
-                    "description": "状态",
+                    "description": "状态 1-手续费待支付 2-确认手续费 3-出售中 4-待支付 5-支付确认中 6-已完成 7-已撤销",
                     "type": "integer"
                 },
                 "system": {
@@ -6565,7 +6565,7 @@ var doc = `{
                     "type": "integer"
                 },
                 "status": {
-                    "description": "状态",
+                    "description": "状态 1-手续费待支付 2-确认手续费 3-出售中 4-待支付 5-支付确认中 6-已完成 7-已撤销",
                     "type": "integer"
                 },
                 "system": {
