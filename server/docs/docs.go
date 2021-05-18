@@ -7407,7 +7407,7 @@ var doc = `{
                 },
                 "fees_percentage": {
                     "description": "最低价格百分比",
-                    "type": "string"
+                    "type": "integer"
                 },
                 "order": {
                     "description": "卡牌转让订单",
@@ -7423,7 +7423,7 @@ var doc = `{
                 },
                 "price_percentage": {
                     "description": "手续费百分比",
-                    "type": "string"
+                    "type": "integer"
                 },
                 "today": {
                     "description": "今日收益",

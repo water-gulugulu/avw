@@ -1757,7 +1757,7 @@ definitions:
         type: object
       fees_percentage:
         description: 最低价格百分比
-        type: string
+        type: integer
       order:
         $ref: '#/definitions/model.AvfCardTransfer'
         description: 卡牌转让订单
@@ -1769,7 +1769,7 @@ definitions:
         type: object
       price_percentage:
         description: 手续费百分比
-        type: string
+        type: integer
       today:
         description: 今日收益
         type: integer

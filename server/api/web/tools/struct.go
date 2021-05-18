@@ -104,6 +104,6 @@ type MyCardDetailResponse struct {
 	Yesterday       int                    `json:"yesterday"`        // 昨日收益
 	Fees            interface{}            `json:"fees"`             // 手续费
 	Price           interface{}            `json:"price"`            // 最低价格
-	PricePercentage string                 `json:"price_percentage"` // 手续费百分比
-	FeesPercentage  string                 `json:"fees_percentage"`  // 最低价格百分比
+	PricePercentage int                    `json:"price_percentage"` // 手续费百分比
+	FeesPercentage  int                    `json:"fees_percentage"`  // 最低价格百分比
 }
