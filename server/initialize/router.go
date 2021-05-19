@@ -26,13 +26,13 @@ func Routers() *gin.Engine {
 	Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	global.GVA_LOG.Info("register swagger handler")
 
+	Init := web_tools.Init()
+	go Init.LoopOrderStatus()
+	go Init.LoopFeesOrder()
+	go Init.LoopPayOrder()
+
 	WebGroup := Router.Group("/web")
 	{
-		Init := web_tools.Init()
-		go Init.LoopOrderStatus()
-		go Init.LoopFeesOrder()
-		go Init.LoopPayOrder()
-
 		router.InitApiUserRouter(WebGroup)         // 用户接口
 		router.InitApiAvfCardRouter(WebGroup)      // 卡牌接口
 		router.InitApiAvfOrderRouter(WebGroup)     // 订单接口

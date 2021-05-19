@@ -90,7 +90,7 @@ func (c *Manager) getOrder() {
 	return
 }
 func Init() *Manager {
-	set := time.Second * 30
+	set := time.Second * 60
 	client, err := blockchian.NewClient()
 	if err != nil {
 		log.Printf("[%s]Failed to client RPC error:%e\n", time.Now(), err)
@@ -189,7 +189,7 @@ func (c *Manager) LoopOrderStatus() {
 			}
 		}
 
-		time.Sleep(2)
+		time.Sleep(0.5)
 	}
 }
 
@@ -267,8 +267,7 @@ func (c *Manager) LoopFeesOrder() {
 				log.Printf("[%s]Failed to fees update Order error:%e,Log:%s\n", time.Now(), err, Log)
 			}
 		}
-
-		time.Sleep(2)
+		time.Sleep(0.5)
 	}
 }
 
@@ -362,6 +361,6 @@ func (c *Manager) LoopPayOrder() {
 			})
 		}
 
-		time.Sleep(2)
+		time.Sleep(0.5)
 	}
 }
