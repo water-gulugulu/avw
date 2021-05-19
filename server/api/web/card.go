@@ -23,6 +23,7 @@ import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"github.com/gin-gonic/gin"
+	"log"
 	"strconv"
 	"time"
 )
@@ -227,6 +228,7 @@ func BuyCard(c *gin.Context) {
 		Status:     4,
 	}
 	if err := CardTransfer.Update(DB); err != nil {
+		log.Printf("buy update error:%e\n", err)
 		response.FailWithMessage("60009", c)
 		return
 	}
@@ -299,6 +301,7 @@ func PayCard(c *gin.Context) {
 	}
 
 	if err := CardTransfer.Update(DB); err != nil {
+		log.Printf("pay update error:%e\n", err)
 		response.FailWithMessage("60003", c)
 		return
 	}
