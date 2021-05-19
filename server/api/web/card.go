@@ -278,7 +278,7 @@ func PayCard(c *gin.Context) {
 		response.FailWithMessage("60006", c)
 		return
 	}
-	if CardTransfer.Uid != int(UserId) {
+	if CardTransfer.BuyId != int(UserId) {
 		response.FailWithMessage("41023", c)
 		return
 	}
