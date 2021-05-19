@@ -408,6 +408,7 @@ definitions:
         type: integer
       card:
         $ref: '#/definitions/model.AvfCard'
+        description: 卡牌
       card_id:
         description: 卡牌ID
         type: integer
@@ -417,6 +418,9 @@ definitions:
       createdAt:
         description: 创建时间
         type: string
+      expire_time:
+        description: 支付过期时间
+        type: integer
       fees:
         description: 手续费
         type: integer
@@ -1115,6 +1119,7 @@ definitions:
         type: integer
       card:
         $ref: '#/definitions/model.AvfCard'
+        description: 卡牌
       card_id:
         description: 卡牌ID
         type: integer
@@ -1124,6 +1129,9 @@ definitions:
       createdAt:
         description: 创建时间
         type: string
+      expire_time:
+        description: 支付过期时间
+        type: integer
       fees:
         description: 手续费
         type: integer
@@ -1726,6 +1734,9 @@ definitions:
       card_id:
         description: 卡牌ID
         type: integer
+      contract_address:
+        description: 合约地址
+        type: string
       desc:
         description: 描述
         type: string
@@ -4532,6 +4543,32 @@ paths:
       summary: 设置用户信息
       tags:
       - SysUser
+  /web/card/buyCard:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: token
+        in: header
+        name: x-token
+        required: true
+        type: string
+      - description: 出售卡牌记录ID
+        in: body
+        name: record_id
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0}'
+          schema:
+            type: string
+      summary: 购买卡牌
+      tags:
+      - 前端接口
   /web/card/cardMarket:
     get:
       consumes:
@@ -4616,6 +4653,44 @@ paths:
           schema:
             $ref: '#/definitions/model.AvfCard'
       summary: 获取卡牌列表
+      tags:
+      - 前端接口
+  /web/card/payCard:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: token
+        in: header
+        name: x-token
+        required: true
+        type: string
+      - description: 出售卡牌记录ID
+        in: body
+        name: record_id
+        required: true
+        schema:
+          type: string
+      - description: 交易hash
+        in: body
+        name: tx_hash
+        required: true
+        schema:
+          type: string
+      - description: 支付地址
+        in: body
+        name: address
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0}'
+          schema:
+            type: string
+      summary: 支付卡牌
       tags:
       - 前端接口
   /web/order/cancelOrder:

@@ -26,5 +26,7 @@ func InitApiAvfCardRouter(Router *gin.RouterGroup) {
 		ApiCardRouter.GET("/detail", web.GetCardDetail)
 		ApiCardRouter.GET("/cardMarket", web.CardMarket)
 		ApiCardRouter.GET("/cardMarketDetail", web.CardMarketDetail)
+		ApiCardRouter.POST("/buyCard", web.BuyCard)
+		ApiCardRouter.POST("/payCard", web.PayCard)
 	}
 }

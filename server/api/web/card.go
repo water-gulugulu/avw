@@ -24,6 +24,7 @@ import (
 	"gin-vue-admin/model"
 	"github.com/gin-gonic/gin"
 	"strconv"
+	"time"
 )
 
 // @Tags 前端接口
@@ -167,21 +168,141 @@ func CardMarketDetail(c *gin.Context) {
 	}
 
 	res := web_tools.CardMarketDetailResponse{
-		CardId:        Card.CardId,
-		Name:          Card.Card.Name,
-		Author:        Card.Card.Author,
-		Desc:          Card.Card.Desc,
-		Star:          Card.Card.Star,
-		Image:         Card.Card.Image,
-		SellId:        Card.Uid,
-		Price:         Card.Price,
-		Fees:          Card.Fees,
-		Status:        Card.Status,
-		Level:         Card.Level,
-		OriginalPrice: int(Card.Card.Money),
-		From:          Card.From,
+		CardId:          Card.CardId,
+		Name:            Card.Card.Name,
+		ContractAddress: Card.Card.ContractAddress,
+		Author:          Card.Card.Author,
+		Desc:            Card.Card.Desc,
+		Star:            Card.Card.Star,
+		Image:           Card.Card.Image,
+		SellId:          Card.Uid,
+		Price:           Card.Price,
+		Fees:            Card.Fees,
+		Status:          Card.Status,
+		Level:           Card.Level,
+		OriginalPrice:   int(Card.Card.Money),
+		From:            Card.From,
 	}
 
 	response.OkWithData(res, c)
+	return
+}
+
+// @Tags 前端接口
+// @Summary 购买卡牌
+// @accept application/x-www-form-urlencoded
+// @Produce application/json
+// @Param x-token header string  true "token"
+// @Param record_id body string  true "出售卡牌记录ID"
+// @Success 200  {string} string "{"code":0}"
+// @Router /web/card/buyCard [post]
+func BuyCard(c *gin.Context) {
+	UserId, err := web_tools.GetUserId(c)
+	if err != nil {
+		response.FailWithMessage("41003", c)
+		return
+	}
+	recordId := c.PostForm("record_id")
+	if len(recordId) == 0 || recordId == "0" {
+		response.FailWithMessage("41019", c)
+		return
+	}
+	rid, _ := strconv.Atoi(recordId)
+	CardTransfer := model.AvfCardTransfer{
+		GVA_MODEL: global.GVA_MODEL{ID: uint(rid)},
+	}
+	DB := global.GVA_DB
+	if err := CardTransfer.GetById(DB); err != nil {
+		response.FailWithMessage("60006", c)
+		return
+	}
+	if CardTransfer.Status != 3 {
+		response.FailWithMessage("41021", c)
+		return
+	}
+	CardTransfer = model.AvfCardTransfer{
+		GVA_MODEL:  global.GVA_MODEL{ID: uint(rid), UpdatedAt: time.Now()},
+		Uid:        int(UserId),
+		ExpireTime: int(time.Now().Unix()) + 1800,
+		Status:     4,
+	}
+	if err := CardTransfer.Update(DB); err != nil {
+		response.FailWithMessage("60009", c)
+		return
+	}
+
+	response.Ok(c)
+	return
+}
+
+// @Tags 前端接口
+// @Summary 支付卡牌
+// @accept application/x-www-form-urlencoded
+// @Produce application/json
+// @Param x-token header string  true "token"
+// @Param record_id body string  true "出售卡牌记录ID"
+// @Param tx_hash body string  true "交易hash"
+// @Param address body string  true "支付地址"
+// @Success 200  {string} string "{"code":0}"
+// @Router /web/card/payCard [post]
+func PayCard(c *gin.Context) {
+	UserId, err := web_tools.GetUserId(c)
+	if err != nil {
+		response.FailWithMessage("41003", c)
+		return
+	}
+	recordId := c.PostForm("record_id")
+	TxHash := c.PostForm("tx_hash")
+	Address := c.PostForm("address")
+	if len(recordId) == 0 || recordId == "0" {
+		response.FailWithMessage("41019", c)
+		return
+	}
+	if len(TxHash) == 0 {
+		response.FailWithMessage("41010", c)
+		return
+	}
+	if len(Address) == 0 {
+		response.FailWithMessage("41011", c)
+		return
+	}
+
+	rid, _ := strconv.Atoi(recordId)
+	CardTransfer := model.AvfCardTransfer{
+		GVA_MODEL: global.GVA_MODEL{ID: uint(rid)},
+	}
+	DB := global.GVA_DB
+	if err := CardTransfer.GetById(DB); err != nil {
+		response.FailWithMessage("60006", c)
+		return
+	}
+	if CardTransfer.Uid != int(UserId) {
+		response.FailWithMessage("41023", c)
+		return
+	}
+	if CardTransfer.ExpireTime < int(time.Now().Unix()) {
+		CardTransfer.Status = 3
+		_ = CardTransfer.Update(DB)
+		response.FailWithMessage("41022", c)
+		return
+	}
+	if CardTransfer.Status != 4 {
+		response.FailWithMessage("41021", c)
+		return
+	}
+
+	CardTransfer = model.AvfCardTransfer{
+		GVA_MODEL: global.GVA_MODEL{ID: uint(rid), UpdatedAt: time.Now()},
+		Status:    5,
+		TxHash:    TxHash,
+		To:        Address,
+	}
+
+	if err := CardTransfer.Update(DB); err != nil {
+		response.FailWithMessage("60003", c)
+		return
+	}
+
+	response.Ok(c)
 	return
 }

@@ -22,6 +22,7 @@ import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/utils/blockchian"
+	"gorm.io/gorm"
 	"log"
 	"strconv"
 	"strings"
@@ -308,42 +309,57 @@ func (c *Manager) LoopPayOrder() {
 				log.Printf("[%s]Failed to pay to:%s orderTo:%s\n", time.Now(), res.To, item.To)
 				continue
 			}
+			_ = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+				Order := model.AvfCardTransfer{
+					GVA_MODEL: global.GVA_MODEL{
+						ID:        item.ID,
+						UpdatedAt: time.Now(),
+					},
+					TxHash: item.TxHash,
+					Status: 6,
+					Block:  res.Block.String(),
+					From:   res.To,
+					To:     res.From,
+				}
+				if err := Order.Update(tx); err != nil {
+					log.Printf("[%s]Failed to pay update Order error:%e\n", time.Now(), err)
+					return err
+				}
+				OrderRecord := model.AvfOrderCard{
+					GVA_MODEL: global.GVA_MODEL{
+						ID:        uint(item.RecordId),
+						UpdatedAt: time.Now(),
+					},
+					Status:     1,
+					GiveType:   2,
+					UpdateTime: int(time.Now().Unix()),
+				}
+				if err := OrderRecord.Update(tx); err != nil {
+					return err
+				}
 
-			Order := model.AvfCardTransfer{
-				GVA_MODEL: global.GVA_MODEL{
-					ID:        item.ID,
-					UpdatedAt: time.Now(),
-				},
-				TxHash: item.TxHash,
-				Status: 5,
-				Block:  res.Block.String(),
-				From:   res.To,
-				To:     res.From,
-			}
-			if err := Order.Update(global.GVA_DB); err != nil {
-				log.Printf("[%s]Failed to pay update Order error:%e\n", time.Now(), err)
-				continue
-			}
-
-			Log := model.AvfTransactionLog{
-				OrderId:    int(item.ID),
-				Block:      res.Block.String(),
-				TxHash:     item.TxHash,
-				Form:       res.From,
-				To:         res.To,
-				Gas:        strconv.Itoa(int(res.Gas)),
-				GasPrice:   res.GasPrice.String(),
-				Value:      res.Value.String(),
-				Nonce:      string(res.Nonce),
-				Data:       string(res.Data),
-				Status:     int64(res.Status),
-				CreateDate: time.Now(),
-				CreateTime: time.Now().Unix(),
-				Type:       3,
-			}
-			if err := Log.CreateLog(global.GVA_DB); err != nil {
-				log.Printf("[%s]Failed to pay update Order error:%e,Log:%s\n", time.Now(), err, Log)
-			}
+				Log := model.AvfTransactionLog{
+					OrderId:    int(item.ID),
+					Block:      res.Block.String(),
+					TxHash:     item.TxHash,
+					Form:       res.From,
+					To:         res.To,
+					Gas:        strconv.Itoa(int(res.Gas)),
+					GasPrice:   res.GasPrice.String(),
+					Value:      res.Value.String(),
+					Nonce:      string(res.Nonce),
+					Data:       string(res.Data),
+					Status:     int64(res.Status),
+					CreateDate: time.Now(),
+					CreateTime: time.Now().Unix(),
+					Type:       3,
+				}
+				if err := Log.CreateLog(tx); err != nil {
+					log.Printf("[%s]Failed to pay update Order error:%e,Log:%s\n", time.Now(), err, Log)
+					return err
+				}
+				return nil
+			})
 		}
 
 		time.Sleep(2)

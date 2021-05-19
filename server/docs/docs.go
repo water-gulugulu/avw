@@ -4354,6 +4354,46 @@ var doc = `{
                 }
             }
         },
+        "/web/card/buyCard": {
+            "post": {
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "前端接口"
+                ],
+                "summary": "购买卡牌",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "x-token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "出售卡牌记录ID",
+                        "name": "record_id",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":0}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/web/card/cardMarket": {
             "get": {
                 "consumes": [
@@ -4483,6 +4523,64 @@ var doc = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/model.AvfCard"
+                        }
+                    }
+                }
+            }
+        },
+        "/web/card/payCard": {
+            "post": {
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "前端接口"
+                ],
+                "summary": "支付卡牌",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "x-token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "出售卡牌记录ID",
+                        "name": "record_id",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "交易hash",
+                        "name": "tx_hash",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "支付地址",
+                        "name": "address",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":0}",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -5658,6 +5756,7 @@ var doc = `{
                     "type": "integer"
                 },
                 "card": {
+                    "description": "卡牌",
                     "$ref": "#/definitions/model.AvfCard"
                 },
                 "cardName": {
@@ -5671,6 +5770,10 @@ var doc = `{
                 "createdAt": {
                     "description": "创建时间",
                     "type": "string"
+                },
+                "expire_time": {
+                    "description": "支付过期时间",
+                    "type": "integer"
                 },
                 "fees": {
                     "description": "手续费",
@@ -6633,6 +6736,7 @@ var doc = `{
                     "type": "integer"
                 },
                 "card": {
+                    "description": "卡牌",
                     "$ref": "#/definitions/model.AvfCard"
                 },
                 "cardName": {
@@ -6646,6 +6750,10 @@ var doc = `{
                 "createdAt": {
                     "description": "创建时间",
                     "type": "string"
+                },
+                "expire_time": {
+                    "description": "支付过期时间",
+                    "type": "integer"
                 },
                 "fees": {
                     "description": "手续费",
@@ -7477,6 +7585,10 @@ var doc = `{
                 "card_id": {
                     "description": "卡牌ID",
                     "type": "integer"
+                },
+                "contract_address": {
+                    "description": "合约地址",
+                    "type": "string"
                 },
                 "desc": {
                     "description": "描述",
