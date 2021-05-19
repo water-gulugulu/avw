@@ -30,6 +30,7 @@ func InitApiAvfCardRouter(Router *gin.RouterGroup) {
 		{
 			ApiCardRouter.POST("/buyCard", web.BuyCard)
 			ApiCardRouter.POST("/payCard", web.PayCard)
+			ApiCardRouter.GET("/myBuyCard", web.MyBuyCard)
 		}
 	}
 }

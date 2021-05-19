@@ -4528,6 +4528,42 @@ var doc = `{
                 }
             }
         },
+        "/web/card/myBuyCard": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "前端接口"
+                ],
+                "summary": "卡牌市场",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "数量默认10",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web_tools.CardMarketResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/web/card/payCard": {
             "post": {
                 "consumes": [

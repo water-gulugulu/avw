@@ -309,3 +309,47 @@ func PayCard(c *gin.Context) {
 	response.Ok(c)
 	return
 }
+
+// @Tags 前端接口
+// @Summary 卡牌市场
+// @accept application/json
+// @Produce application/json
+// @Param page query string  false "页码"
+// @Param size query string  false "数量默认10"
+// @Success 200  {object} web_tools.CardMarketResponse
+// @Router /web/card/myBuyCard [get]
+func MyBuyCard(c *gin.Context) {
+	size := c.Query("size")
+	page := c.Query("page")
+
+	if len(size) == 0 {
+		size = "10"
+	}
+	if len(page) == 0 {
+		page = "0"
+	}
+	s, _ := strconv.Atoi(size)
+	p, _ := strconv.Atoi(page)
+	UserId, err := web_tools.GetUserId(c)
+	if err != nil {
+		response.FailWithMessage("41003", c)
+		return
+	}
+
+	CardTransfer := model.AvfCardTransfer{
+		BuyId: int(UserId),
+	}
+	list, total, err := CardTransfer.GetListByBuyId(global.GVA_DB, p, s)
+
+	res := web_tools.CardMarketResponse{
+		List:  list,
+		Total: total,
+	}
+	if err != nil {
+		response.OkWithDetailed(res, "获取成功", c)
+		return
+	}
+
+	response.OkWithDetailed(res, "获取成功", c)
+	return
+}

@@ -4655,6 +4655,29 @@ paths:
       summary: 获取卡牌列表
       tags:
       - 前端接口
+  /web/card/myBuyCard:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 页码
+        in: query
+        name: page
+        type: string
+      - description: 数量默认10
+        in: query
+        name: size
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web_tools.CardMarketResponse'
+      summary: 卡牌市场
+      tags:
+      - 前端接口
   /web/card/payCard:
     post:
       consumes:

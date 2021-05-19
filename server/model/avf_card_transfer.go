@@ -67,9 +67,34 @@ func (h *AvfCardTransfer) GetByStatus(DB *gorm.DB) (list []*AvfCardTransfer, err
 	return
 }
 func (h *AvfCardTransfer) GetList(DB *gorm.DB, page, size int) (list []*AvfCardTransfer, total int64, err error) {
-	DB = DB.Table(h.TableName()).Where("status = ?", h.Status)
+	DB = DB.Table(h.TableName())
+	if h.Status != 0 {
+		DB = DB.Where("status = ?", h.Status)
+	}
 	if h.Level != 0 {
 		DB = DB.Where("level = ?", h.Level)
+	}
+	if page != 0 {
+		page = page * size
+	}
+	if err = DB.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	if err = DB.Order("id desc").Limit(size).Offset(page).Preload("Card").Find(&list).Error; err != nil {
+		return nil, 0, err
+	}
+
+	return
+}
+
+func (h *AvfCardTransfer) GetListByBuyId(DB *gorm.DB, page, size int) (list []*AvfCardTransfer, total int64, err error) {
+	DB = DB.Table(h.TableName())
+	if h.Level != 0 {
+		DB = DB.Where("level = ?", h.Level)
+	}
+	if h.Level != 0 {
+		DB = DB.Where("status = ?", h.Status)
 	}
 	if page != 0 {
 		page = page * size
