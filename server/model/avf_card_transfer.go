@@ -89,7 +89,7 @@ func (h *AvfCardTransfer) GetList(DB *gorm.DB, page, size int) (list []*AvfCardT
 }
 
 func (h *AvfCardTransfer) GetListByBuyId(DB *gorm.DB, page, size int) (list []*AvfCardTransfer, total int64, err error) {
-	DB = DB.Table(h.TableName())
+	DB = DB.Table(h.TableName()).Where("buy_id = ?", h.BuyId)
 	if h.Level != 0 {
 		DB = DB.Where("level = ?", h.Level)
 	}

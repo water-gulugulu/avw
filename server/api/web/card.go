@@ -353,3 +353,7 @@ func MyBuyCard(c *gin.Context) {
 	response.OkWithDetailed(res, "获取成功", c)
 	return
 }
+
+func DailyEarnings(c *gin.Context) {
+
+}
