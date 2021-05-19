@@ -142,3 +142,7 @@ func CardMarket(c *gin.Context) {
 	response.OkWithDetailed(res, "获取成功", c)
 	return
 }
+
+func CardMarketDetail() {
+
+}
