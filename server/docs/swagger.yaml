@@ -4675,7 +4675,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/web_tools.CardMarketResponse'
-      summary: 卡牌市场
+      summary: 我购买的卡牌列表
       tags:
       - 前端接口
   /web/card/payCard:

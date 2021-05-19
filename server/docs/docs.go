@@ -4539,7 +4539,7 @@ var doc = `{
                 "tags": [
                     "前端接口"
                 ],
-                "summary": "卡牌市场",
+                "summary": "我购买的卡牌列表",
                 "parameters": [
                     {
                         "type": "string",
