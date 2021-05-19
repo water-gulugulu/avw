@@ -90,7 +90,7 @@ func (c *Manager) getOrder() {
 	return
 }
 func Init() *Manager {
-	set := time.Second * 60
+	set := time.Second * 30
 	client, err := blockchian.NewClient()
 	if err != nil {
 		log.Printf("[%s]Failed to client RPC error:%e\n", time.Now(), err)
@@ -326,6 +326,7 @@ func (c *Manager) LoopPayOrder() {
 						ID:        uint(item.RecordId),
 						UpdatedAt: time.Now(),
 					},
+					Uid:        item.BuyId,
 					Status:     1,
 					GiveType:   2,
 					UpdateTime: int(time.Now().Unix()),

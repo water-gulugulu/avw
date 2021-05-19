@@ -355,5 +355,5 @@ func MyBuyCard(c *gin.Context) {
 }
 
 func DailyEarnings(c *gin.Context) {
-
+	// User := model.AvfUser{}
 }

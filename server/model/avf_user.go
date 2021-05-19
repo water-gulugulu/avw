@@ -43,3 +43,11 @@ func (h *AvfUser) FindUserByPid(DB *gorm.DB) (list []AvfUser, err error) {
 
 	return
 }
+
+func (h *AvfUser) GetListAll(DB *gorm.DB) (list []*AvfUser, err error) {
+
+	if err = DB.Table(h.TableName()).Order("id asc").Find(&list).Error; err != nil {
+		return nil, err
+	}
+	return
+}
