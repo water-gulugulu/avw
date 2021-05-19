@@ -188,8 +188,6 @@ func (c *Manager) LoopOrderStatus() {
 				log.Printf("[%s]Failed to update Order error:%e,Log:%s\n", time.Now(), err, Log)
 			}
 		}
-
-		time.Sleep(0.5)
 	}
 }
 
@@ -267,7 +265,6 @@ func (c *Manager) LoopFeesOrder() {
 				log.Printf("[%s]Failed to fees update Order error:%e,Log:%s\n", time.Now(), err, Log)
 			}
 		}
-		time.Sleep(0.5)
 	}
 }
 
@@ -360,7 +357,5 @@ func (c *Manager) LoopPayOrder() {
 				return nil
 			})
 		}
-
-		time.Sleep(0.5)
 	}
 }
