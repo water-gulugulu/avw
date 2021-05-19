@@ -143,6 +143,45 @@ func CardMarket(c *gin.Context) {
 	return
 }
 
-func CardMarketDetail() {
+// @Tags 前端接口
+// @Summary 卡牌市场卡牌详情
+// @accept application/json
+// @Produce application/json
+// @Param id query string  true "出售卡牌记录ID"
+// @Success 200  {object} web_tools.CardMarketDetailResponse
+// @Router /web/card/cardMarketDetail [get]
+func CardMarketDetail(c *gin.Context) {
+	Id := c.Query("id")
+	if len(Id) == 0 || Id == "0" {
+		response.FailWithMessage("41019", c)
+		return
+	}
+	tid, _ := strconv.Atoi(Id)
+	Card := model.AvfCardTransfer{
+		GVA_MODEL: global.GVA_MODEL{ID: uint(tid)},
+	}
 
+	if err := Card.GetById2(global.GVA_DB); err != nil {
+		response.FailWithMessage("60008", c)
+		return
+	}
+
+	res := web_tools.CardMarketDetailResponse{
+		CardId:        Card.CardId,
+		Name:          Card.Card.Name,
+		Author:        Card.Card.Author,
+		Desc:          Card.Card.Desc,
+		Star:          Card.Card.Star,
+		Image:         Card.Card.Image,
+		SellId:        Card.Uid,
+		Price:         Card.Price,
+		Fees:          Card.Fees,
+		Status:        Card.Status,
+		Level:         Card.Level,
+		OriginalPrice: int(Card.Card.Money),
+		From:          Card.From,
+	}
+
+	response.OkWithData(res, c)
+	return
 }

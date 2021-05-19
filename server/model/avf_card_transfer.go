@@ -42,6 +42,9 @@ func (h *AvfCardTransfer) Create(DB *gorm.DB) error {
 func (h *AvfCardTransfer) GetById(DB *gorm.DB) error {
 	return DB.Table(h.TableName()).Where("id =?", h.ID).First(&h).Error
 }
+func (h *AvfCardTransfer) GetById2(DB *gorm.DB) error {
+	return DB.Table(h.TableName()).Where("id =?", h.ID).Preload("Card").First(&h).Error
+}
 
 func (h *AvfCardTransfer) GetByHash(DB *gorm.DB) error {
 	return DB.Table(h.TableName()).Where("tx_hash = ?", h.TxHash).First(&h).Error

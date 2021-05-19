@@ -286,7 +286,9 @@ func (c *Manager) LoopPayOrder() {
 			}
 			res.From = strings.ToUpper(res.From)
 			item.From = strings.ToUpper(item.From)
-			if res.From != item.From {
+			res.To = strings.ToUpper(res.To)
+			item.To = strings.ToUpper(item.To)
+			if res.From != item.To {
 				log.Printf("[%s]Failed to pay form:%s orderForm:%s\n", time.Now(), res.From, item.From)
 				continue
 			}
@@ -302,9 +304,7 @@ func (c *Manager) LoopPayOrder() {
 				continue
 			}
 
-			res.To = strings.ToUpper(res.To)
-			item.To = strings.ToUpper(item.To)
-			if res.To != item.To {
+			if res.To != item.From {
 				log.Printf("[%s]Failed to pay to:%s orderTo:%s\n", time.Now(), res.To, item.To)
 				continue
 			}
@@ -317,8 +317,8 @@ func (c *Manager) LoopPayOrder() {
 				TxHash: item.TxHash,
 				Status: 5,
 				Block:  res.Block.String(),
-				From:   res.From,
-				To:     res.To,
+				From:   res.To,
+				To:     res.From,
 			}
 			if err := Order.Update(global.GVA_DB); err != nil {
 				log.Printf("[%s]Failed to pay update Order error:%e\n", time.Now(), err)

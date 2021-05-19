@@ -113,3 +113,20 @@ type CardMarketResponse struct {
 	List  []*model.AvfCardTransfer `json:"list"`  // 出售卡牌列表
 	Total int64                    `json:"total"` // 总数
 }
+
+// 卡牌市场详情
+type CardMarketDetailResponse struct {
+	CardId        int    `json:"card_id"`        // 卡牌ID
+	Name          string `json:"name"`           // 卡牌名称
+	Author        string `json:"author"`         // 作者
+	Desc          string `json:"desc"`           // 描述
+	Star          int    `json:"star"`           // 算力值
+	Image         string `json:"image"`          // 卡牌图片
+	SellId        int    `json:"sell_id"`        // 出售人ID
+	Price         int    `json:"price"`          // 出售价格
+	Fees          int    `json:"fees"`           // 手续费
+	Status        int    `json:"status"`         // 出售状态  1-手续费待支付 2-确认手续费 3-出售中 4-待支付 5-支付确认中 6-已完成 7-已撤销
+	Level         int    `json:"level"`          // 卡牌等级
+	OriginalPrice int    `json:"original_price"` // 卡牌原价
+	From          string `json:"from"`           // 出售人钱包地址
+}

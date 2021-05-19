@@ -4396,6 +4396,37 @@ var doc = `{
                 }
             }
         },
+        "/web/card/cardMarketDetail": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "前端接口"
+                ],
+                "summary": "卡牌市场卡牌详情",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "出售卡牌记录ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web_tools.CardMarketDetailResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/web/card/detail": {
             "get": {
                 "consumes": [
@@ -7433,6 +7464,63 @@ var doc = `{
                 "updated_at": {
                     "description": "更新时间",
                     "type": "string"
+                }
+            }
+        },
+        "web_tools.CardMarketDetailResponse": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "description": "作者",
+                    "type": "string"
+                },
+                "card_id": {
+                    "description": "卡牌ID",
+                    "type": "integer"
+                },
+                "desc": {
+                    "description": "描述",
+                    "type": "string"
+                },
+                "fees": {
+                    "description": "手续费",
+                    "type": "integer"
+                },
+                "from": {
+                    "description": "出售人钱包地址",
+                    "type": "string"
+                },
+                "image": {
+                    "description": "卡牌图片",
+                    "type": "string"
+                },
+                "level": {
+                    "description": "卡牌等级",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "卡牌名称",
+                    "type": "string"
+                },
+                "original_price": {
+                    "description": "卡牌原价",
+                    "type": "integer"
+                },
+                "price": {
+                    "description": "出售价格",
+                    "type": "integer"
+                },
+                "sell_id": {
+                    "description": "出售人ID",
+                    "type": "integer"
+                },
+                "star": {
+                    "description": "算力值",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "出售状态  1-手续费待支付 2-确认手续费 3-出售中 4-待支付 5-支付确认中 6-已完成 7-已撤销",
+                    "type": "integer"
                 }
             }
         },
