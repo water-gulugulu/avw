@@ -406,6 +406,8 @@ definitions:
       buy_id:
         description: 购买人ID
         type: integer
+      card:
+        $ref: '#/definitions/model.AvfCard'
       card_id:
         description: 卡牌ID
         type: integer
@@ -1111,6 +1113,8 @@ definitions:
       buy_id:
         description: 购买人ID
         type: integer
+      card:
+        $ref: '#/definitions/model.AvfCard'
       card_id:
         description: 卡牌ID
         type: integer
@@ -1713,6 +1717,17 @@ definitions:
       updated_at:
         description: 更新时间
         type: string
+    type: object
+  web_tools.CardMarketResponse:
+    properties:
+      list:
+        description: 出售卡牌列表
+        items:
+          $ref: '#/definitions/model.AvfCardTransfer'
+        type: array
+      total:
+        description: 总数
+        type: integer
     type: object
   web_tools.CreateOrderResponse:
     properties:
@@ -4475,6 +4490,33 @@ paths:
       summary: 设置用户信息
       tags:
       - SysUser
+  /web/card/cardMarket:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 页码
+        in: query
+        name: page
+        type: string
+      - description: 数量默认10
+        in: query
+        name: size
+        type: string
+      - description: 卡牌等级 1-N 2-R 3-SR 4-SSR
+        in: query
+        name: level
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web_tools.CardMarketResponse'
+      summary: 卡牌市场
+      tags:
+      - 前端接口
   /web/card/detail:
     get:
       consumes:

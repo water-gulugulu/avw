@@ -18,6 +18,7 @@
 package web
 
 import (
+	web_tools "gin-vue-admin/api/web/tools"
 	"gin-vue-admin/api/web/tools/response"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
@@ -97,13 +98,47 @@ func GetCardDetail(c *gin.Context) {
 	return
 }
 
+// @Tags 前端接口
+// @Summary 卡牌市场
+// @accept application/json
+// @Produce application/json
+// @Param page query string  false "页码"
+// @Param size query string  false "数量默认10"
+// @Param level query string  false "卡牌等级 1-N 2-R 3-SR 4-SSR"
+// @Success 200  {object} web_tools.CardMarketResponse
+// @Router /web/card/cardMarket [get]
 func CardMarket(c *gin.Context) {
-	// size := c.Query("size")
+	size := c.Query("size")
+	page := c.Query("page")
+	level := c.Query("level")
 
-	// if len(size) == 0 {
-	// 	size = "10"
-	// }
-	// if len(page) == 0 {
-	// 	page = "0"
-	// }
+	if len(size) == 0 {
+		size = "10"
+	}
+	if len(page) == 0 {
+		page = "0"
+	}
+
+	Card := model.AvfCardTransfer{
+		Status: 3,
+	}
+	if len(level) != 0 && level != "0" {
+		l, _ := strconv.Atoi(level)
+		Card.Level = l
+	}
+	s, _ := strconv.Atoi(size)
+	p, _ := strconv.Atoi(page)
+
+	list, total, err := Card.GetList(global.GVA_DB, p, s)
+	res := web_tools.CardMarketResponse{
+		List:  list,
+		Total: total,
+	}
+	if err != nil {
+		response.OkWithDetailed(res, "获取成功", c)
+		return
+	}
+
+	response.OkWithDetailed(res, "获取成功", c)
+	return
 }

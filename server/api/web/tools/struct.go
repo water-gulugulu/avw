@@ -107,3 +107,9 @@ type MyCardDetailResponse struct {
 	PricePercentage int                    `json:"price_percentage"` // 手续费百分比
 	FeesPercentage  int                    `json:"fees_percentage"`  // 最低价格百分比
 }
+
+// 卡牌市场返回信息
+type CardMarketResponse struct {
+	List  []*model.AvfCardTransfer `json:"list"`  // 出售卡牌列表
+	Total int64                    `json:"total"` // 总数
+}

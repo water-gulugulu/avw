@@ -4354,6 +4354,48 @@ var doc = `{
                 }
             }
         },
+        "/web/card/cardMarket": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "前端接口"
+                ],
+                "summary": "卡牌市场",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "数量默认10",
+                        "name": "size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "卡牌等级 1-N 2-R 3-SR 4-SSR",
+                        "name": "level",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web_tools.CardMarketResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/web/card/detail": {
             "get": {
                 "consumes": [
@@ -5584,6 +5626,9 @@ var doc = `{
                     "description": "购买人ID",
                     "type": "integer"
                 },
+                "card": {
+                    "$ref": "#/definitions/model.AvfCard"
+                },
                 "cardName": {
                     "description": "卡牌名称",
                     "type": "string"
@@ -6556,6 +6601,9 @@ var doc = `{
                     "description": "购买人ID",
                     "type": "integer"
                 },
+                "card": {
+                    "$ref": "#/definitions/model.AvfCard"
+                },
                 "cardName": {
                     "description": "卡牌名称",
                     "type": "string"
@@ -7385,6 +7433,22 @@ var doc = `{
                 "updated_at": {
                     "description": "更新时间",
                     "type": "string"
+                }
+            }
+        },
+        "web_tools.CardMarketResponse": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "description": "出售卡牌列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.AvfCardTransfer"
+                    }
+                },
+                "total": {
+                    "description": "总数",
+                    "type": "integer"
                 }
             }
         },
