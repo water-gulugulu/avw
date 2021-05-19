@@ -222,7 +222,7 @@ func BuyCard(c *gin.Context) {
 	}
 	CardTransfer = model.AvfCardTransfer{
 		GVA_MODEL:  global.GVA_MODEL{ID: uint(rid), UpdatedAt: time.Now()},
-		Uid:        int(UserId),
+		BuyId:      int(UserId),
 		ExpireTime: int(time.Now().Unix()) + 1800,
 		Status:     4,
 	}
