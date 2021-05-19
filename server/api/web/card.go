@@ -311,7 +311,7 @@ func PayCard(c *gin.Context) {
 }
 
 // @Tags 前端接口
-// @Summary 卡牌市场
+// @Summary 我购买的卡牌列表
 // @accept application/json
 // @Produce application/json
 // @Param page query string  false "页码"
