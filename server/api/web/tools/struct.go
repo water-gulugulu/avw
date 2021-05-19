@@ -130,4 +130,5 @@ type CardMarketDetailResponse struct {
 	Level           int    `json:"level"`            // 卡牌等级
 	OriginalPrice   int    `json:"original_price"`   // 卡牌原价
 	From            string `json:"from"`             // 出售人钱包地址
+	ExpireTime      int    `json:"expire_time"`      // 过期时间
 }

@@ -7630,6 +7630,10 @@ var doc = `{
                     "description": "描述",
                     "type": "string"
                 },
+                "expire_time": {
+                    "description": "过期时间",
+                    "type": "integer"
+                },
                 "fees": {
                     "description": "手续费",
                     "type": "integer"

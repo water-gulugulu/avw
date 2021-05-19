@@ -183,6 +183,7 @@ func CardMarketDetail(c *gin.Context) {
 		Level:           Card.Level,
 		OriginalPrice:   int(Card.Card.Money),
 		From:            Card.From,
+		ExpireTime:      Card.ExpireTime,
 	}
 
 	response.OkWithData(res, c)
