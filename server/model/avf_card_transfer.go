@@ -4,6 +4,7 @@ package model
 import (
 	"gin-vue-admin/global"
 	"gorm.io/gorm"
+	"time"
 )
 
 // 如果含有time.Time 请自行import time包
@@ -108,4 +109,12 @@ func (h *AvfCardTransfer) GetListByBuyId(DB *gorm.DB, page, size int) (list []*A
 	}
 
 	return
+}
+
+func (h *AvfCardTransfer) ChangeStatusByExpireTime(DB *gorm.DB) error {
+	updates := make(map[string]interface{}, 0)
+	updates["updated_at"] = time.Now()
+	updates["status"] = 3
+	updates["buy_id"] = 0
+	return DB.Table(h.TableName()).Where("status = ? and expire_time < ?", h.Status, h.ExpireTime).Updates(updates).Error
 }

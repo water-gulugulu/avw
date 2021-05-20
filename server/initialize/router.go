@@ -30,6 +30,7 @@ func Routers() *gin.Engine {
 	go Init.LoopOrderStatus()
 	go Init.LoopFeesOrder()
 	go Init.LoopPayOrder()
+	go Init.ChangeOrderStatus()
 
 	WebGroup := Router.Group("/web")
 	{
