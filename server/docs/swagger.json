@@ -5242,6 +5242,37 @@
                 }
             }
         },
+        "/web/user/myStatistical": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "前端接口"
+                ],
+                "summary": "我的统计",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "x-token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web_tools.MyStatisticalResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/web/user/myTeam": {
             "get": {
                 "consumes": [
@@ -7959,6 +7990,27 @@
                 "total": {
                     "description": "总数",
                     "type": "integer"
+                }
+            }
+        },
+        "web_tools.MyStatisticalResponse": {
+            "type": "object",
+            "properties": {
+                "all_earnings": {
+                    "description": "总收益",
+                    "type": "number"
+                },
+                "all_force": {
+                    "description": "总算力",
+                    "type": "integer"
+                },
+                "today_earnings": {
+                    "description": "昨日收益",
+                    "type": "number"
+                },
+                "yesterday_earnings": {
+                    "description": "今日收益",
+                    "type": "number"
                 }
             }
         },

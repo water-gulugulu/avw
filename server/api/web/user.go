@@ -257,3 +257,48 @@ func UserBill(c *gin.Context) {
 	response.OkWithData(res, c)
 	return
 }
+
+// @Tags 前端接口
+// @Summary 我的统计
+// @accept application/json
+// @Produce application/json
+// @Param x-token header string  true "token"
+// @Success 200 {object} web_tools.MyStatisticalResponse
+// @Router /web/user/myStatistical [get]
+func MyStatistical(c *gin.Context) {
+	UserId, err := web_tools.GetUserId(c)
+	if err != nil {
+		response.FailWithMessage("41003", c)
+		return
+	}
+	UserBill := model.AvfUserBill{
+		Uid: int(UserId),
+	}
+	res := web_tools.MyStatisticalResponse{}
+	list, err := UserBill.GetUserStatistical(global.GVA_DB)
+
+	if err != nil {
+		response.OkWithData(res, c)
+		return
+	}
+	var all, today, yesterday float64
+	todayTime := web_tools.GetTodayZeroTimeStamp()
+	yesterdayTime := todayTime - 84600
+
+	for _, item := range list {
+		all = all + item.Money
+		if item.CreateTime > todayTime && item.CreateTime < todayTime+86399 {
+			today = today + item.Money
+		}
+		if item.CreateTime > yesterdayTime && item.CreateTime < yesterdayTime+86399 {
+			yesterday = yesterday + item.Money
+		}
+	}
+
+	res.AllEarnings = all
+	res.TodayEarnings = today
+	res.YesterdayEarnings = yesterday
+
+	response.OkWithData(res, c)
+	return
+}

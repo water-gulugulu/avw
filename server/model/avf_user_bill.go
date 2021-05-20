@@ -114,3 +114,14 @@ func (h *AvfUserBill) GetMiningList(DB *gorm.DB, page, size int, cardId string) 
 	}
 	return
 }
+
+func (h *AvfUserBill) GetUserStatistical(DB *gorm.DB) (list []AvfUserBill, err error) {
+	DB = DB.Table(h.TableName()).Where("uid = ?", h.Uid)
+	if h.CreateTime != 0 {
+		DB = DB.Where("create_time between ? and ?", h.CreateTime, h.CreateTime+86400)
+	}
+	if err = DB.Order("id desc").Find(&list).Error; err != nil {
+		return nil, err
+	}
+	return
+}

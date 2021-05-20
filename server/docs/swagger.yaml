@@ -1898,6 +1898,21 @@ definitions:
         description: 总数
         type: integer
     type: object
+  web_tools.MyStatisticalResponse:
+    properties:
+      all_earnings:
+        description: 总收益
+        type: number
+      all_force:
+        description: 总算力
+        type: integer
+      today_earnings:
+        description: 昨日收益
+        type: number
+      yesterday_earnings:
+        description: 今日收益
+        type: number
+    type: object
   web_tools.MyTeamResponse:
     properties:
       list:
@@ -5196,6 +5211,26 @@ paths:
           schema:
             $ref: '#/definitions/web_tools.LoginResponse'
       summary: 登录
+      tags:
+      - 前端接口
+  /web/user/myStatistical:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: x-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web_tools.MyStatisticalResponse'
+      summary: 我的统计
       tags:
       - 前端接口
   /web/user/myTeam:

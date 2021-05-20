@@ -181,3 +181,11 @@ type AvfUserBill struct {
 	Star       int       `json:"star"`                                                                                             // 算力
 	Level      int       `json:"level"`                                                                                            // 卡牌等级 1-N 2-R 3-SR 4-SSR
 }
+
+// 我的统计返回信息
+type MyStatisticalResponse struct {
+	AllForce          int     `json:"all_force"`          // 总算力
+	AllEarnings       float64 `json:"all_earnings"`       // 总收益
+	TodayEarnings     float64 `json:"today_earnings"`     // 昨日收益
+	YesterdayEarnings float64 `json:"yesterday_earnings"` // 今日收益
+}
