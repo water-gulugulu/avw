@@ -20,9 +20,17 @@ import (
 func Gorm() *gorm.DB {
 	switch global.GVA_CONFIG.System.DbType {
 	case "mysql":
-		return GormMysql()
+		DB := GormMysql()
+		if global.GVA_CONFIG.CollectionAddress.Debug == "1" {
+			DB = DB.Debug()
+		}
+		return DB
 	default:
-		return GormMysql()
+		DB := GormMysql()
+		if global.GVA_CONFIG.CollectionAddress.Debug == "1" {
+			DB = DB.Debug()
+		}
+		return DB
 	}
 }
 
