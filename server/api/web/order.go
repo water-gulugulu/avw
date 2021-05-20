@@ -249,8 +249,6 @@ func PayOrder(c *gin.Context) {
 // @Success 200 {object} web_tools.OrderDetailResponse
 // @Router /web/order/orderDetail [get]
 func OrderDetail(c *gin.Context) {
-	// web_tools.LoopOrderStatus("0x1a7ff0c8ee89b28273da4288a77aedd830bd5279c49155630297ec97da0037d6", 7)
-	// return
 	UserId, err := web_tools.GetUserId(c)
 	if err != nil {
 		response.FailWithMessage("41003", c)
@@ -273,6 +271,7 @@ func OrderDetail(c *gin.Context) {
 	}
 	OrderCard := model.AvfOrderCard{
 		OrderId: oid,
+		Uid:     int(UserId),
 	}
 	list, _ := OrderCard.FindListByOrderId(global.GVA_DB)
 

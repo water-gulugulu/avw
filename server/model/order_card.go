@@ -31,7 +31,7 @@ func (h *AvfOrderCard) FindListByOrderId(DB *gorm.DB) (list []AvfOrderCard, err 
 		return nil, errors.New("订单ID不能为空")
 	}
 
-	if err = DB.Table(h.TableName()).Where("order_id = ?", h.OrderId).Preload("Card").Find(&list).Error; err != nil {
+	if err = DB.Table(h.TableName()).Where("order_id = ? and uid = ?", h.OrderId, h.Uid).Preload("Card").Find(&list).Error; err != nil {
 		return list, err
 	}
 
@@ -66,4 +66,14 @@ func (h *AvfOrderCard) GetById(DB *gorm.DB) error {
 
 func (h *AvfOrderCard) Update(DB *gorm.DB) error {
 	return DB.Table(h.TableName()).Where("id = ?", h.ID).Updates(&h).Error
+}
+
+func (h *AvfOrderCard) GetListByMining(DB *gorm.DB) (list []*AvfOrderCard, err error) {
+	DB = DB.Table(h.TableName()).Where("status = ?", h.Status)
+
+	if err = DB.Find(&list).Error; err != nil {
+		return nil, err
+	}
+
+	return
 }

@@ -549,6 +549,20 @@ func CancelTransfer(c *gin.Context) {
 
 // 挖矿
 func Mining() {
-	// CardRecord := model.AvfOrderCard{}
+	CardRecord := model.AvfOrderCard{
+		Status: 1,
+	}
+	list, err := CardRecord.GetListByMining(global.GVA_DB)
+	if err != nil {
+		log.Printf("[%s]query card list failed error:%e\n", time.Now(), err)
+		return
+	}
+
+	Exchange := global.GVA_CONFIG.CollectionAddress.Exchange
+	e, _ := strconv.Atoi(Exchange)
+	fmt.Printf("e:%s\n", e)
+	for _, item := range list {
+		fmt.Printf("item:%s\n", item)
+	}
 
 }

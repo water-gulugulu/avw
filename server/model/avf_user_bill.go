@@ -19,6 +19,7 @@ type AvfUserBill struct {
 	Payment    int    `json:"payment" form:"payment" gorm:"column:payment;comment:收入支出 1-收入 2-支出;type:int;size:10;"`            // 收入支出
 	PayType    int    `json:"payType" form:"payType" gorm:"column:pay_type;comment:支付方式 1-avw 2-ht;type:int;size:10;"`          // 支付方式 1-avw 2-ht
 	Detail     string `json:"detail" form:"detail" gorm:"column:detail;comment:描述;type:varchar(255);size:255;"`                 // 详情
+	TxHash     string `json:"tx_hash" form:"tx_hash" gorm:"column:tx_hash;comment:交易hash;type:varchar(255);size:255;"`          // 交易hash
 	CreateTime int    `json:"createTime" form:"createTime" gorm:"column:create_time;comment:创建时间;type:int;size:10;"`            // 创建时间
 }
 
