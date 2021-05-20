@@ -2,6 +2,7 @@
 package model
 
 import (
+	"fmt"
 	"gin-vue-admin/global"
 	"gorm.io/gorm"
 )
@@ -70,9 +71,11 @@ func (h *AvfUserBill) GetList(DB *gorm.DB, page, size int, billType string) (lis
 	if h.CreateTime != 0 {
 		DB = DB.Where("create_time between ? and ?", h.CreateTime, h.CreateTime+86400)
 	}
+	fmt.Printf("billType:%s", billType)
 	if len(billType) != 0 {
-		DB = DB.Where("type in(?)", billType)
+		DB = DB.Where("type IN(?)", billType)
 	}
+
 	if err = DB.Count(&total).Error; err != nil {
 		return nil, 0, err
 	}
