@@ -99,7 +99,7 @@ func (h *AvfOrder) GetByUid(DB *gorm.DB) error {
 }
 
 func (h *AvfOrder) GetListByUid(DB *gorm.DB) (list []*AvfOrder, err error) {
-	if err = DB.Table(h.TableName()).Where("uid = ?", h.Uid).Find(&list).Error; err != nil {
+	if err = DB.Table(h.TableName()).Where("uid = ? and status = ?", h.Uid, 3).Find(&list).Error; err != nil {
 		return nil, err
 	}
 	return

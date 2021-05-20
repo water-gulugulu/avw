@@ -207,7 +207,7 @@ type StatisticalResponse struct {
 	Direct   float64 `json:"direct"`    // 直推收益
 	All      float64 `json:"all"`       // 总收益
 	MyBox    int     `json:"my_box"`    // 我的盲盒
-	MyTeam   int     `json:"my_card"`   // 我的团队
+	MyTeam   int     `json:"my_team"`   // 我的团队
 	BuyCard  int     `json:"buy_card"`  // 买的卡牌
 	MyCard   int     `json:"my_card"`   // 我的卡牌
 }
