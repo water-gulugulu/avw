@@ -132,3 +132,10 @@ type CardMarketDetailResponse struct {
 	From            string `json:"from"`             // 出售人钱包地址
 	ExpireTime      int    `json:"expire_time"`      // 过期时间
 }
+
+// 我的团队返回信息
+type MyTeamResponse struct {
+	List       []model.AvfUser `json:"list"` // 我的直推下级
+	TeamCount  int             `json:"team_count"`
+	LowerCount int             `json:"lower_count"`
+}

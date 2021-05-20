@@ -146,11 +146,16 @@ func MyTeam(c *gin.Context) {
 		return
 	}
 
-	_, err2 := User.FindUserByPid(DB)
+	list, err2 := User.FindUserByPid(DB)
 	if err2 != nil {
 		response.FailWithMessage("40004", c)
 		return
 	}
+	res := web_tools.MyTeamResponse{
+		List:       list,
+		LowerCount: len(list),
+	}
 
+	response.OkWithData(res, c)
 	return
 }

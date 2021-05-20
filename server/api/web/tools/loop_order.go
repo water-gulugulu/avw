@@ -50,6 +50,7 @@ func (c *Manager) timeOut() {
 				}
 			}
 			go c.getOrder()
+			go c.ChangeOrderStatus()
 			fmt.Printf("[%s]Reset Timer success!\n", time.Now())
 		}
 	}
@@ -363,14 +364,10 @@ func (c *Manager) LoopPayOrder() {
 
 // 循环取消点击购买未付款的订单
 func (c *Manager) ChangeOrderStatus() {
-	for {
-		PayOrder := model.AvfCardTransfer{
-			Status:     4,
-			ExpireTime: int(time.Now().Unix()),
-		}
-
-		_ = PayOrder.ChangeStatusByExpireTime(global.GVA_DB)
-
-		time.Sleep(2)
+	PayOrder := model.AvfCardTransfer{
+		Status:     4,
+		ExpireTime: int(time.Now().Unix()),
 	}
+
+	_ = PayOrder.ChangeStatusByExpireTime(global.GVA_DB)
 }
