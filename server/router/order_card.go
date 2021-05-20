@@ -22,6 +22,7 @@ func InitAvfOrderCardRouter(Router *gin.RouterGroup) {
 func InitApiAvfOrderCardRouter(Router *gin.RouterGroup) {
 	ApiOrderCardRouter := Router.Group("order_card")
 	{
+		ApiOrderCardRouter.GET("/mining", web.Mining)
 		ApiOrderCardRouter.Use(middleware.APiJWTAuth())
 		{
 			ApiOrderCardRouter.POST("/luckyDraw", web.LuckyDraw)

@@ -314,7 +314,7 @@ func PayCard(c *gin.Context) {
 			Uid:        int(UserId),
 			Address:    Address,
 			Type:       3,
-			Money:      CardTransfer.Price,
+			Money:      float64(CardTransfer.Price),
 			Payment:    2,
 			PayType:    2,
 			Detail:     fmt.Sprintf("购买卡牌支付金额:%v", CardTransfer.Price),

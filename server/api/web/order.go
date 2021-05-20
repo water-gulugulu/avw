@@ -219,7 +219,7 @@ func PayOrder(c *gin.Context) {
 			Uid:        int(UserId),
 			Address:    address,
 			Type:       2,
-			Money:      int(Order.Price),
+			Money:      float64(Order.Price),
 			Payment:    2,
 			PayType:    2,
 			Detail:     fmt.Sprintf("购买卡牌盲盒支付金额:%v", Order.Price),

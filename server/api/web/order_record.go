@@ -23,6 +23,7 @@ import (
 	"gin-vue-admin/api/web/tools/response"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
+	"gin-vue-admin/utils/blockchian"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"log"
@@ -204,14 +205,14 @@ func MyCardDetail(c *gin.Context) {
 		CardId: OrderCard.CardId,
 		Type:   1,
 	}
-	var yesterday, today, all int
+	var yesterday, today, all float64
 
 	list, err3 := UserBill.GetByUidAndCardId(DB)
 	if err3 != nil {
 		yesterday, today, all = 0, 0, 0
 	}
 	todayTime := web_tools.GetTodayZeroTimeStamp()
-	yesterdayTime := today - 86400
+	yesterdayTime := int(today) - 86400
 	// 统计昨日，今日，全部收益
 	for _, item := range list {
 		all = all + item.Money
@@ -450,8 +451,8 @@ func PayFees(c *gin.Context) {
 			Uid:        int(UserId),
 			Address:    Address,
 			Type:       4,
-			Money:      cardTransfer.Fees,
-			Fees:       cardTransfer.Fees,
+			Money:      float64(cardTransfer.Fees),
+			Fees:       float64(cardTransfer.Fees),
 			Payment:    2,
 			PayType:    2,
 			Detail:     fmt.Sprintf("转让卡牌支付手续费:%v", cardTransfer.Fees),
@@ -548,21 +549,96 @@ func CancelTransfer(c *gin.Context) {
 }
 
 // 挖矿
-func Mining() {
+func Mining(c *gin.Context) {
+	DB := global.GVA_DB
+
+	client, err := blockchian.NewClient()
+	if err != nil {
+		log.Printf("[%s]client blockchian failed error:%e\n", time.Now(), err)
+		return
+	}
 	CardRecord := model.AvfOrderCard{
 		Status: 1,
 	}
-	list, err := CardRecord.GetListByMining(global.GVA_DB)
+	list, err := CardRecord.GetListByMining(DB)
 	if err != nil {
 		log.Printf("[%s]query card list failed error:%e\n", time.Now(), err)
 		return
 	}
-
+	UserList, err2 := new(model.AvfUser).GetListAll(DB)
+	if err2 != nil {
+		log.Printf("[%s]query user list failed error:%e\n", time.Now(), err2)
+		return
+	}
+	UserMap := make(map[string]*model.AvfUser, 0)
+	for _, item := range UserList {
+		UserMap[item.WalletAddress] = item
+	}
 	Exchange := global.GVA_CONFIG.CollectionAddress.Exchange
-	e, _ := strconv.Atoi(Exchange)
-	fmt.Printf("e:%s\n", e)
+	Direct := global.GVA_CONFIG.CollectionAddress.Direct
+	e, _ := strconv.ParseFloat(Exchange, 64)
+	d, _ := strconv.ParseFloat(Direct, 64)
+	var UserBill *model.AvfUserBill
+	var txHash, txHash2 string
 	for _, item := range list {
-		fmt.Printf("item:%s\n", item)
+		Price := e * float64(item.Star)
+		ParentPrice := d * Price / 100
+
+		err = DB.Transaction(func(tx *gorm.DB) error {
+			Price = web_tools.FormatFloat(Price, 4)
+			txHash, err = client.TransferToAddress(item.User.WalletAddress, Price)
+			if err != nil {
+				log.Printf("[%s]用户地址：%s,发放每日挖矿收益失败，金额：%v,:%e\n", time.Now(), item.User.WalletAddress, Price, err2)
+				return err
+			}
+			UserBill = &model.AvfUserBill{
+				GVA_MODEL:  global.GVA_MODEL{CreatedAt: time.Now(), UpdatedAt: time.Now()},
+				Uid:        item.Uid,
+				CardId:     item.CardId,
+				Address:    item.User.WalletAddress,
+				Type:       1,
+				Money:      Price,
+				Payment:    1,
+				PayType:    1,
+				Detail:     fmt.Sprintf("卡牌挖矿每日收益：%v", Price),
+				TxHash:     txHash,
+				CreateTime: int(time.Now().Unix()),
+			}
+			if err = UserBill.Create(tx); err != nil {
+				log.Printf("[%s]用户地址：%s,发放每日挖矿收益账单保存失败，金额：%v,:%e\n", time.Now(), item.User.WalletAddress, Price, err2)
+				return err
+			}
+
+			if len(UserMap[item.User.Pid].WalletAddress) != 0 && ParentPrice > 0 {
+				u := UserMap[item.User.Pid]
+				ParentPrice = web_tools.FormatFloat(ParentPrice, 4)
+
+				txHash2, err = client.TransferToAddress(u.WalletAddress, ParentPrice)
+				if err != nil {
+					log.Printf("[%s]用户地址：%s,发放每日挖矿直推收益失败，金额：%v,:%e\n", time.Now(), u.WalletAddress, ParentPrice, err2)
+					return err
+				}
+				UserBill = &model.AvfUserBill{
+					GVA_MODEL:  global.GVA_MODEL{CreatedAt: time.Now(), UpdatedAt: time.Now()},
+					Uid:        int(u.ID),
+					CardId:     item.CardId,
+					Address:    u.WalletAddress,
+					Type:       5,
+					Money:      ParentPrice,
+					Payment:    1,
+					PayType:    1,
+					Detail:     fmt.Sprintf("直推下级：%s,产生直推收益：%v", item.User.WalletAddress, ParentPrice),
+					TxHash:     txHash2,
+					CreateTime: int(time.Now().Unix()),
+				}
+				if err = UserBill.Create(tx); err != nil {
+					log.Printf("[%s]用户地址：%s,发放直推下级收益账单保存失败，金额：%v,:%e\n", time.Now(), u.WalletAddress, ParentPrice, err2)
+					return err
+				}
+			}
+
+			return nil
+		})
 	}
 
 }

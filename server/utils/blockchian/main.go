@@ -48,7 +48,7 @@ type LogTransfer struct {
 
 const (
 	contract = "0x21fd0FBE5Fb40B9A86FF21f223dCbCB2A308c3E5"
-	key      = "./wallets/UTC--2021-05-11T06-48-26.264188000Z--8f2b1cea616b837b74ae5b5e31054a36cd2fd380" // 火币链 0x8f2b1CeA616b837b74Ae5B5E31054A36cd2FD380
+	key      = "./utils/blockchian/wallets/UTC--2021-05-11T06-48-26.264188000Z--8f2b1cea616b837b74ae5b5e31054a36cd2fd380" // 火币链 0x8f2b1CeA616b837b74Ae5B5E31054A36cd2FD380
 	// key = "./wallets/UTC--2021-05-10T16-31-35.638486000Z--d7940959ec892652f2042fcb0f9feef3e498e724" // 私链     0xd7940959ec892652f2042fcb0f9feef3e498e724
 	RawUrl = "https://http-mainnet-node.huobichain.com"
 )
@@ -63,13 +63,13 @@ type ClientManage struct {
 func NewClient() (*ClientManage, error) {
 	rpcDial, err := rpc.Dial(RawUrl)
 	if err != nil {
-		log.Fatalf("[%s]Failed to init rpc client error:%v\n", time.Now(), err)
+		log.Printf("[%s]Failed to init rpc client error:%v\n", time.Now(), err)
 		return nil, err
 	}
 	client := ethclient.NewClient(rpcDial)
 	token, e := Token.NewToken(common.HexToAddress(contract), client)
 	if e != nil {
-		log.Fatalf("[%s]Failed to init token error:%v\n", time.Now(), e)
+		log.Printf("[%s]Failed to init token error:%v\n", time.Now(), e)
 		return nil, e
 	}
 
@@ -85,12 +85,12 @@ func (c *ClientManage) CreateAccount(password string) (account string, err error
 	addressJson, _ := ks.NewAccount(password)
 	a, e := ks.Export(addressJson, password, password)
 	if e != nil {
-		log.Fatalf("[%s]Failed to create new account error:%v\n", time.Now(), e)
+		log.Printf("[%s]Failed to create new account error:%v\n", time.Now(), e)
 		return "", e
 	}
 	address := tools.Address{}
 	if err := json.Unmarshal(a, &address); err != nil {
-		log.Fatalf("[%s]Failed to parse json error:%v\n", time.Now(), err)
+		log.Printf("[%s]Failed to parse json error:%v\n", time.Now(), err)
 		return "", err
 	}
 	// fmt.Printf("account:%s\n", account)
@@ -102,7 +102,7 @@ func (c *ClientManage) CreateAccount(password string) (account string, err error
 func (c *ClientManage) SelectBalance(address string) (balance *big.Float, err error) {
 	b, e := c.token.BalanceOf(nil, common.HexToAddress(address))
 	if e != nil {
-		log.Fatalf("[%s]Failed to select wallet balance error:%v\n", time.Now(), e)
+		log.Printf("[%s]Failed to select wallet balance error:%v\n", time.Now(), e)
 		return nil, e
 	}
 	BigFloat := new(big.Float)
@@ -116,13 +116,13 @@ func (c *ClientManage) SelectBalance(address string) (balance *big.Float, err er
 func (c *ClientManage) NewTransactorChainID() error {
 	data, err := ioutil.ReadFile(key)
 	if err != nil {
-		log.Fatalf("[%s]Read file error:%v\n", time.Now(), err)
+		log.Printf("[%s]Read file error:%v\n", time.Now(), err)
 		return err
 	}
 
 	auth, err2 := bind.NewTransactorWithChainID(strings.NewReader(string(data)), "password", big.NewInt(128))
 	if err2 != nil {
-		log.Fatalf("[%s]Init Transactor chainId error:%v\n", time.Now(), err2)
+		log.Printf("[%s]Init Transactor chainId error:%v\n", time.Now(), err2)
 		return err2
 	}
 	c.auth = auth
@@ -131,11 +131,11 @@ func (c *ClientManage) NewTransactorChainID() error {
 
 // 转账到地址
 // Address 收款地址
-func (c *ClientManage) TransferToAddress(Address string, Number float64) error {
+func (c *ClientManage) TransferToAddress(Address string, Number float64) (string, error) {
 	toAddress := common.HexToAddress(Address)
 	// val, err := c.SelectBalance(Address)
 	// if err != nil {
-	// 	log.Fatalf("[%s]Failed to select balance: %v\n", time.Now(), err)
+	// 	log.Printf("[%s]Failed to select balance: %v\n", time.Now(), err)
 	// 	return err
 	// }
 	// fmt.Printf("[%s]before transfer :%s\n", time.Now(), val)
@@ -143,16 +143,16 @@ func (c *ClientManage) TransferToAddress(Address string, Number float64) error {
 	// Create an authorized transactor and spend 1 unicorn
 	if c.auth == nil {
 		if err := c.NewTransactorChainID(); err != nil {
-			log.Fatalf("[%s]Failed to create authorized transactor: %v\n", time.Now(), err)
-			return err
+			log.Printf("[%s]Failed to create authorized transactor: %v\n", time.Now(), err)
+			return "", err
 		}
 	}
 
 	// 每个代币都会有相应的位数，例如eos是18位，那么我们转账的时候，需要在金额后面加18个0
 	decimal, err3 := c.token.Decimals(nil)
 	if err3 != nil {
-		log.Fatalf("[%s]Failed to create decimal: %v\n", time.Now(), err3)
-		return err3
+		log.Printf("[%s]Failed to create decimal: %v\n", time.Now(), err3)
+		return "", err3
 	}
 
 	tenDecimal := big.NewFloat(math.Pow(10, float64(decimal)))
@@ -160,27 +160,20 @@ func (c *ClientManage) TransferToAddress(Address string, Number float64) error {
 	tx, txErr := c.token.Transfer(c.auth, toAddress, convertAmount)
 
 	if txErr != nil {
-		log.Fatalf("[%s]Failed to request token transfer: %v\n", time.Now(), txErr)
-		return txErr
+		log.Printf("[%s]Failed to request token transfer: %v\n", time.Now(), txErr)
+		return "", txErr
 	}
 	ctx := context.Background()
-	receipt, WaitErr := bind.WaitMined(ctx, c.client, tx)
+	_, WaitErr := bind.WaitMined(ctx, c.client, tx)
 
 	if WaitErr != nil {
-		log.Fatalf("[%s]tx mining error:%v\n", time.Now(), WaitErr)
-		return WaitErr
+		log.Printf("[%s]tx mining error:%v\n", time.Now(), WaitErr)
+		return "", WaitErr
 	}
-	//
-	// val2, err3 := c.SelectBalance(Address)
-	// if err3 != nil {
-	// 	log.Fatalf("[%s]Failed to select balance: %v\n", time.Now(), err3)
-	// 	return err3
-	// }
-	// fmt.Printf("after transfere:%s\n", val)
-	fmt.Printf("tx is :%s\n", tx)
-	fmt.Printf("receipt is :%s\n", receipt)
+	// fmt.Printf("tx is :%s\n", tx.Hash().String())
+	// fmt.Printf("receipt is :%s\n", receipt)
 
-	return nil
+	return tx.Hash().String(), nil
 }
 
 // 读取事件日志

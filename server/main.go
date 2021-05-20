@@ -16,11 +16,11 @@ import (
 // @name x-token
 // @BasePath /
 func main() {
+
 	global.GVA_VP = core.Viper()         // 初始化Viper
 	global.GVA_LOG = core.Zap()          // 初始化zap日志库
 	global.GVA_ERRCODE = readErrorCode() // 读取错误码
 	global.GVA_DB = initialize.Gorm()    // gorm连接数据库
-	// fmt.Printf("errorCode:%s", global.GVA_ERRCODE)
 	initialize.Timer()
 	// if global.GVA_DB != nil {
 	// 	initialize.MysqlTables(global.GVA_DB) // 初始化表
@@ -28,6 +28,7 @@ func main() {
 	db, _ := global.GVA_DB.DB()
 	defer db.Close()
 	// }
+
 	core.RunWindowsServer()
 }
 

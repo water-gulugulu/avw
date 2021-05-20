@@ -30,6 +30,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"github.com/w3liu/go-common/constant/timeformat"
 	"go.uber.org/zap"
+	"math"
 	"math/rand"
 	"os"
 	"sync/atomic"
@@ -166,4 +167,17 @@ func GetTodayZeroTimeStamp() int {
 	t, _ := time.Parse("2006-01-02", timeStr)
 	timeNumber := t.Unix()
 	return int(timeNumber)
+}
+
+func FormatFloat(num float64, decimal int) float64 {
+	// 默认乘1
+	d := float64(1)
+	if decimal > 0 {
+		// 10的N次方
+		d = math.Pow10(decimal)
+	}
+	// math.trunc作用就是返回浮点数的整数部分
+	// 再除回去，小数点后无效的0也就不存在了
+	return math.Trunc(num*d) / d
+	// return strconv.FormatFloat(math.Trunc(num*d)/d, 'f', -1, 64)
 }

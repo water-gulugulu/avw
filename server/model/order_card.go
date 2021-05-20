@@ -20,6 +20,7 @@ type AvfOrderCard struct {
 	GiveType   int     `json:"giveType" form:"giveType" gorm:"column:give_type;comment:获得方式 1-抽奖 2-购买;type:int;size:10;"` // 获得方式 1-抽奖 2-购买
 	Level      int     `json:"level" form:"level" gorm:"column:level;comment:1-N 2-R 3-SR 4-SSR;type:int;size:10;"`       // 等级 1-N 2-R 3-SR 4-SSR
 	Card       AvfCard `gorm:"ForeignKey:CardId;References:ID"`                                                           // 卡牌信息
+	User       AvfUser `gorm:"ForeignKey:Uid;References:ID"`                                                              // 卡牌信息
 }
 
 func (h *AvfOrderCard) TableName() string {
@@ -71,7 +72,7 @@ func (h *AvfOrderCard) Update(DB *gorm.DB) error {
 func (h *AvfOrderCard) GetListByMining(DB *gorm.DB) (list []*AvfOrderCard, err error) {
 	DB = DB.Table(h.TableName()).Where("status = ?", h.Status)
 
-	if err = DB.Find(&list).Error; err != nil {
+	if err = DB.Preload("User").Find(&list).Error; err != nil {
 		return nil, err
 	}
 
