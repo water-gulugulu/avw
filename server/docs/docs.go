@@ -5320,6 +5320,28 @@ var doc = `{
                 }
             }
         },
+        "/web/user/openStatistical": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "前端接口"
+                ],
+                "summary": "开源统计",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web_tools.OpenStatisticalResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/web/user/userBill": {
             "get": {
                 "consumes": [
@@ -8046,6 +8068,35 @@ var doc = `{
                 },
                 "team_count": {
                     "description": "我的团队",
+                    "type": "integer"
+                }
+            }
+        },
+        "web_tools.OpenStatisticalResponse": {
+            "type": "object",
+            "properties": {
+                "activation_user": {
+                    "description": "激活用户",
+                    "type": "integer"
+                },
+                "all_day_trading": {
+                    "description": "24小时交易总额",
+                    "type": "integer"
+                },
+                "inflows": {
+                    "description": "流入",
+                    "type": "integer"
+                },
+                "out_of": {
+                    "description": "流出",
+                    "type": "integer"
+                },
+                "reg_user": {
+                    "description": "注册用户",
+                    "type": "integer"
+                },
+                "trading": {
+                    "description": "交易总额",
                     "type": "integer"
                 }
             }

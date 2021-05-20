@@ -125,3 +125,15 @@ func (h *AvfUserBill) GetUserStatistical(DB *gorm.DB) (list []AvfUserBill, err e
 	}
 	return
 }
+
+type Output struct {
+	Money int `json:"money"`
+}
+
+func (h *AvfUserBill) GetAllOutput(DB *gorm.DB) (all int, err error) {
+	data := Output{}
+	if err = DB.Table(h.TableName()).Where("type IN(?)", []int{1, 5}).Select("SUM(money) money").First(&data).Error; err != nil {
+		return 0, err
+	}
+	return data.Money, nil
+}

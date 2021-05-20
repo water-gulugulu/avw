@@ -1927,6 +1927,27 @@ definitions:
         description: 我的团队
         type: integer
     type: object
+  web_tools.OpenStatisticalResponse:
+    properties:
+      activation_user:
+        description: 激活用户
+        type: integer
+      all_day_trading:
+        description: 24小时交易总额
+        type: integer
+      inflows:
+        description: 流入
+        type: integer
+      out_of:
+        description: 流出
+        type: integer
+      reg_user:
+        description: 注册用户
+        type: integer
+      trading:
+        description: 交易总额
+        type: integer
+    type: object
   web_tools.OrderDetailResponse:
     properties:
       order_card_list:
@@ -5251,6 +5272,20 @@ paths:
           schema:
             $ref: '#/definitions/web_tools.MyTeamResponse'
       summary: 我的团队
+      tags:
+      - 前端接口
+  /web/user/openStatistical:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web_tools.OpenStatisticalResponse'
+      summary: 开源统计
       tags:
       - 前端接口
   /web/user/userBill:

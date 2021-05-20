@@ -302,3 +302,53 @@ func MyStatistical(c *gin.Context) {
 	response.OkWithData(res, c)
 	return
 }
+
+// @Tags 前端接口
+// @Summary 开源统计
+// @accept application/json
+// @Produce application/json
+// @Success 200 {object} web_tools.OpenStatisticalResponse
+// @Router /web/user/openStatistical [get]
+func OpenStatistical(c *gin.Context) {
+	var RegUser, ActivationUser, Trading, AllDayTrading, Input, Output int
+	User := model.AvfUser{}
+	DB := global.GVA_DB
+	list, err := User.GetListAll(DB)
+	if err != nil {
+		RegUser = 0
+		ActivationUser = 0
+	}
+	RegUser = len(list)
+	Order := model.AvfOrder{}
+	OrderList, err3 := Order.GetListAll(DB)
+
+	if err3 != nil {
+		Trading = 0
+		AllDayTrading = 0
+		Input = 0
+	}
+	userMap := make(map[int]int, 0)
+	for _, item := range OrderList {
+		Trading = Trading + int(item.Price)
+		userMap[item.Uid] = 1
+		Input = Input + int(item.Price)
+	}
+	ActivationUser = len(userMap)
+	UserBill := model.AvfUserBill{}
+
+	Output, err = UserBill.GetAllOutput(DB)
+	if err != nil {
+		Output = 0
+	}
+	res := web_tools.OpenStatisticalResponse{
+		RegUser:        RegUser,
+		ActivationUser: ActivationUser,
+		Trading:        Trading,
+		AllDayTrading:  AllDayTrading,
+		Input:          Input,
+		Output:         Output,
+	}
+
+	response.OkWithData(res, c)
+	return
+}

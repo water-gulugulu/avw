@@ -97,3 +97,11 @@ func (h *AvfOrder) FindByHash(DB *gorm.DB) error {
 func (h *AvfOrder) GetByUid(DB *gorm.DB) error {
 	return DB.Table(h.TableName()).Where("uid = ?", h.Uid).First(&h).Error
 }
+
+func (h *AvfOrder) GetListAll(DB *gorm.DB) (list []*AvfOrder, err error) {
+
+	if err = DB.Table(h.TableName()).Order("id asc").Find(&list).Error; err != nil {
+		return nil, err
+	}
+	return
+}

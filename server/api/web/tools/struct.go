@@ -189,3 +189,13 @@ type MyStatisticalResponse struct {
 	TodayEarnings     float64 `json:"today_earnings"`     // 昨日收益
 	YesterdayEarnings float64 `json:"yesterday_earnings"` // 今日收益
 }
+
+// 开源统计返回信息
+type OpenStatisticalResponse struct {
+	RegUser        int `json:"reg_user"`        // 注册用户
+	ActivationUser int `json:"activation_user"` // 激活用户
+	Trading        int `json:"trading"`         // 	交易总额
+	AllDayTrading  int `json:"all_day_trading"` // 24小时交易总额
+	Input          int `json:"inflows"`         // 流入
+	Output         int `json:"out_of"`          // 流出
+}
