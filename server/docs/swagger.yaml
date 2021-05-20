@@ -1859,6 +1859,18 @@ definitions:
         description: 总数
         type: integer
     type: object
+  web_tools.MyTeamResponse:
+    properties:
+      list:
+        description: 我的直推下级
+        items:
+          $ref: '#/definitions/model.AvfUser'
+        type: array
+      lower_count:
+        type: integer
+      team_count:
+        type: integer
+    type: object
   web_tools.OrderDetailResponse:
     properties:
       order_card_list:
@@ -5099,6 +5111,26 @@ paths:
           schema:
             $ref: '#/definitions/web_tools.LoginResponse'
       summary: 登录
+      tags:
+      - 前端接口
+  /web/user/myTeam:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: token信息
+        in: header
+        name: x-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web_tools.MyTeamResponse'
+      summary: 我的团队
       tags:
       - 前端接口
 securityDefinitions:

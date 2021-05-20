@@ -37,7 +37,7 @@ func (h *AvfUser) CreateUser(DB *gorm.DB) error {
 	return DB.Table(h.TableName()).Create(&h).Error
 }
 func (h *AvfUser) FindUserByPid(DB *gorm.DB) (list []AvfUser, err error) {
-	if err = DB.Table(h.TableName()).Where("pid = ?", h.WalletAddress).Select("id,pid,username,wallet_address,created_at").First(&h).Error; err != nil {
+	if err = DB.Table(h.TableName()).Where("pid = ?", h.WalletAddress).Select("id,pid,username,wallet_address,created_at").Find(&list).Error; err != nil {
 		return nil, err
 	}
 

@@ -5207,6 +5207,37 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/web/user/myTeam": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "前端接口"
+                ],
+                "summary": "我的团队",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token信息",
+                        "name": "x-token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web_tools.MyTeamResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -7791,6 +7822,24 @@ var doc = `{
                 },
                 "total": {
                     "description": "总数",
+                    "type": "integer"
+                }
+            }
+        },
+        "web_tools.MyTeamResponse": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "description": "我的直推下级",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.AvfUser"
+                    }
+                },
+                "lower_count": {
+                    "type": "integer"
+                },
+                "team_count": {
                     "type": "integer"
                 }
             }

@@ -69,7 +69,7 @@ func Login(c *gin.Context) {
 	token, e := web_tools.TokenNext(User)
 	if e != nil {
 		log.Printf("[%s]Failed to Create token error:%e", e)
-		response.FailWithMessage("40002", c)
+		response.FailWithMessage("41002", c)
 		return
 	}
 	res := web_tools.LoginResponse{
@@ -101,19 +101,19 @@ func GetUserInfo(c *gin.Context) {
 		GVA_MODEL: global.GVA_MODEL{ID: UserId},
 	}
 	if err := User.FindUserID(global.GVA_DB); err != nil {
-		response.FailWithMessage("40004", c)
+		response.FailWithMessage("41004", c)
 		return
 	}
 
 	client, err := blockchian.NewClient()
 	if err != nil {
-		response.FailWithMessage("40005", c)
+		response.FailWithMessage("41005", c)
 		return
 	}
 
 	balance, err2 := client.SelectBalance(User.WalletAddress)
 	if err2 != nil {
-		response.FailWithMessage("40006", c)
+		response.FailWithMessage("41006", c)
 		return
 	}
 	b, _ := balance.Float64()
@@ -130,6 +130,13 @@ func GetUserInfo(c *gin.Context) {
 	return
 }
 
+// @Tags 前端接口
+// @Summary 我的团队
+// @accept application/json
+// @Produce application/json
+// @Param x-token header string  true "token信息"
+// @Success 200  {object}  web_tools.MyTeamResponse
+// @Router /web/user/myTeam [get]
 func MyTeam(c *gin.Context) {
 	UserId, e := web_tools.GetUserId(c)
 	if e != nil {
@@ -142,20 +149,40 @@ func MyTeam(c *gin.Context) {
 		GVA_MODEL: global.GVA_MODEL{ID: UserId},
 	}
 	if err := User.FindUserID(DB); err != nil {
-		response.FailWithMessage("40004", c)
+		response.FailWithMessage("41004", c)
 		return
 	}
 
 	list, err2 := User.FindUserByPid(DB)
 	if err2 != nil {
-		response.FailWithMessage("40004", c)
+		response.FailWithMessage("41004", c)
 		return
 	}
 	res := web_tools.MyTeamResponse{
 		List:       list,
 		LowerCount: len(list),
 	}
+	listAll, err3 := User.GetListAll(DB)
+	if err3 != nil {
+		res.TeamCount = res.LowerCount
+	} else {
+		Count := LoopUserLower(listAll, User.WalletAddress)
+		if Count == 0 {
+			Count = res.LowerCount
+		}
+		res.TeamCount = Count
+	}
 
 	response.OkWithData(res, c)
 	return
+}
+
+func LoopUserLower(list []*model.AvfUser, pid string) int {
+	var count int
+	for _, item := range list {
+		if item.Pid == pid {
+			count = count + LoopUserLower(list, item.WalletAddress)
+		}
+	}
+	return count
 }
