@@ -8194,6 +8194,10 @@ var doc = `{
                 "my_force": {
                     "description": "我的算力",
                     "type": "integer"
+                },
+                "my_team": {
+                    "description": "我的团队",
+                    "type": "integer"
                 }
             }
         },
