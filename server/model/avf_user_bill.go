@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"gin-vue-admin/global"
 	"gorm.io/gorm"
+	"strings"
 )
 
 // 如果含有time.Time 请自行import time包
@@ -72,8 +73,9 @@ func (h *AvfUserBill) GetList(DB *gorm.DB, page, size int, billType string) (lis
 		DB = DB.Where("create_time between ? and ?", h.CreateTime, h.CreateTime+86400)
 	}
 	fmt.Printf("billType:%s", billType)
+	t := strings.Split(billType, ",")
 	if len(billType) != 0 {
-		DB = DB.Where("type IN(?)", billType)
+		DB = DB.Where("type IN(?)", t)
 	}
 
 	if err = DB.Count(&total).Error; err != nil {

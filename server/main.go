@@ -25,6 +25,7 @@ func main() {
 	// if global.GVA_DB != nil {
 	// 	initialize.MysqlTables(global.GVA_DB) // 初始化表
 	// 	// 程序结束前关闭数据库链接
+	global.GVA_DB = global.GVA_DB.Debug()
 	db, _ := global.GVA_DB.DB()
 	defer db.Close()
 	// }
