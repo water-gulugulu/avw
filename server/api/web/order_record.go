@@ -609,7 +609,7 @@ func Mining(c *gin.Context) {
 				return err
 			}
 
-			if len(UserMap[item.User.Pid].WalletAddress) != 0 && ParentPrice > 0 {
+			if item.User.Pid != "" && len(UserMap[item.User.Pid].WalletAddress) != 0 && ParentPrice > 0 {
 				u := UserMap[item.User.Pid]
 				ParentPrice = web_tools.FormatFloat(ParentPrice, 4)
 
