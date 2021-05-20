@@ -5238,6 +5238,55 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/web/user/userBill": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "前端接口"
+                ],
+                "summary": "用户账单",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "x-token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "类型 1-发放收益 2-盲盒 3-购买卡牌 4-手续费 5-直推收益，多种类型传1,2,3逗号分割",
+                        "name": "type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "数量",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web_tools.UserBillResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -6178,7 +6227,7 @@ var doc = `{
                     "type": "integer"
                 },
                 "type": {
-                    "description": "类型 1-发放收益 2-盲盒 3-购买卡牌 4-手续费",
+                    "description": "类型 1-发放收益 2-盲盒 3-购买卡牌 4-手续费 5-直推收益",
                     "type": "integer"
                 },
                 "uid": {
@@ -7137,7 +7186,7 @@ var doc = `{
                     "type": "integer"
                 },
                 "type": {
-                    "description": "类型 1-发放收益 2-盲盒 3-购买卡牌 4-手续费",
+                    "description": "类型 1-发放收益 2-盲盒 3-购买卡牌 4-手续费 5-直推收益",
                     "type": "integer"
                 },
                 "uid": {
@@ -7924,6 +7973,22 @@ var doc = `{
                 },
                 "transfer_id": {
                     "description": "转让卡牌ID",
+                    "type": "integer"
+                }
+            }
+        },
+        "web_tools.UserBillResponse": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "description": "账单列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.AvfUserBill"
+                    }
+                },
+                "total": {
+                    "description": "总条数",
                     "type": "integer"
                 }
             }

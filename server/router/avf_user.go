@@ -26,6 +26,7 @@ func InitApiUserRouter(Router *gin.RouterGroup) {
 		{
 			ApiUserRouter.GET("/getUserInfo", web.GetUserInfo)
 			ApiUserRouter.GET("/myTeam", web.MyTeam)
+			ApiUserRouter.GET("/userBill", web.UserBill)
 		}
 	}
 }

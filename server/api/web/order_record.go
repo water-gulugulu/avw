@@ -546,3 +546,9 @@ func CancelTransfer(c *gin.Context) {
 	response.Ok(c)
 	return
 }
+
+// 挖矿
+func Mining() {
+	// CardRecord := model.AvfOrderCard{}
+
+}

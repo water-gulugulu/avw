@@ -667,7 +667,7 @@ definitions:
         description: 收入支出
         type: integer
       type:
-        description: 类型 1-发放收益 2-盲盒 3-购买卡牌 4-手续费
+        description: 类型 1-发放收益 2-盲盒 3-购买卡牌 4-手续费 5-直推收益
         type: integer
       uid:
         description: 用户ID
@@ -1363,7 +1363,7 @@ definitions:
         description: 收入支出
         type: integer
       type:
-        description: 类型 1-发放收益 2-盲盒 3-购买卡牌 4-手续费
+        description: 类型 1-发放收益 2-盲盒 3-购买卡牌 4-手续费 5-直推收益
         type: integer
       uid:
         description: 用户ID
@@ -1929,6 +1929,17 @@ definitions:
         type: string
       transfer_id:
         description: 转让卡牌ID
+        type: integer
+    type: object
+  web_tools.UserBillResponse:
+    properties:
+      list:
+        description: 账单列表
+        items:
+          $ref: '#/definitions/model.AvfUserBill'
+        type: array
+      total:
+        description: 总条数
         type: integer
     type: object
   web_tools.UserInfo:
@@ -5154,6 +5165,38 @@ paths:
           schema:
             $ref: '#/definitions/web_tools.MyTeamResponse'
       summary: 我的团队
+      tags:
+      - 前端接口
+  /web/user/userBill:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: x-token
+        required: true
+        type: string
+      - description: 类型 1-发放收益 2-盲盒 3-购买卡牌 4-手续费 5-直推收益，多种类型传1,2,3逗号分割
+        in: query
+        name: type
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: string
+      - description: 数量
+        in: query
+        name: size
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web_tools.UserBillResponse'
+      summary: 用户账单
       tags:
       - 前端接口
 securityDefinitions:

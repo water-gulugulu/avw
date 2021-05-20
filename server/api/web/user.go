@@ -18,6 +18,7 @@
 package web
 
 import (
+	"fmt"
 	web_tools "gin-vue-admin/api/web/tools"
 	"gin-vue-admin/api/web/tools/response"
 	"gin-vue-admin/global"
@@ -25,6 +26,7 @@ import (
 	"gin-vue-admin/utils/blockchian"
 	"github.com/gin-gonic/gin"
 	"log"
+	"strconv"
 	"time"
 )
 
@@ -207,4 +209,51 @@ func LoopUserLower(list []*model.AvfUser, pid string) int {
 		}
 	}
 	return count
+}
+
+// @Tags 前端接口
+// @Summary 用户账单
+// @accept application/json
+// @Produce application/json
+// @Param x-token header string  true "token"
+// @Param type query string  false "类型 1-发放收益 2-盲盒 3-购买卡牌 4-手续费 5-直推收益，多种类型传1,2,3逗号分割"
+// @Param page query string false "页码"
+// @Param size query string false "数量"
+// @Success 200 {object} web_tools.UserBillResponse
+// @Router /web/user/userBill [get]
+func UserBill(c *gin.Context) {
+	UserId, err := web_tools.GetUserId(c)
+	if err != nil {
+		response.FailWithMessage("41003", c)
+		return
+	}
+	billType := c.Query("type")
+	page := c.Query("page")
+	size := c.Query("size")
+	if len(size) == 0 {
+		size = "10"
+	}
+	if len(page) == 0 {
+		size = "0"
+	}
+	p, _ := strconv.Atoi(page)
+	s, _ := strconv.Atoi(size)
+
+	DB := global.GVA_DB
+	UserBill := model.AvfUserBill{
+		Uid: int(UserId),
+	}
+	res := web_tools.UserBillResponse{}
+	res.List = make([]*model.AvfUserBill, 0)
+	list, total, err2 := UserBill.GetList(DB, p, s, billType)
+	if err2 != nil {
+		fmt.Printf("err:%s\n", err2)
+		response.OkWithData(res, c)
+		return
+	}
+	res.List = list
+	res.Total = total
+
+	response.OkWithData(res, c)
+	return
 }

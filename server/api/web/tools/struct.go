@@ -148,3 +148,9 @@ type AvfUser struct {
 	CreatedAt     time.Time `json:"created_at"`     // 创建时间
 	IsNumber      bool      `json:"is_number"`      // 是否正式会员
 }
+
+// 用户账单返回
+type UserBillResponse struct {
+	List  []*model.AvfUserBill `json:"list"`  // 账单列表
+	Total int64                `json:"total"` // 总条数
+}
