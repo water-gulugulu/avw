@@ -6178,7 +6178,7 @@ var doc = `{
                     "type": "integer"
                 },
                 "type": {
-                    "description": "类型 1-发放收益 2-转账 3-购买卡牌 4-提现 -支付手续费",
+                    "description": "类型 1-发放收益 2-盲盒 3-购买卡牌 4-手续费",
                     "type": "integer"
                 },
                 "uid": {
@@ -7137,7 +7137,7 @@ var doc = `{
                     "type": "integer"
                 },
                 "type": {
-                    "description": "类型 1-发放收益 2-转账 3-购买卡牌 4-提现 -支付手续费",
+                    "description": "类型 1-发放收益 2-盲盒 3-购买卡牌 4-手续费",
                     "type": "integer"
                 },
                 "uid": {
@@ -7642,6 +7642,35 @@ var doc = `{
                 }
             }
         },
+        "web_tools.AvfUser": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "用户ID",
+                    "type": "integer"
+                },
+                "is_number": {
+                    "description": "是否正式会员",
+                    "type": "boolean"
+                },
+                "pid": {
+                    "description": "上级地址",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "用户名",
+                    "type": "string"
+                },
+                "wallet_address": {
+                    "description": "钱包地址",
+                    "type": "string"
+                }
+            }
+        },
         "web_tools.CardMarketDetailResponse": {
             "type": "object",
             "properties": {
@@ -7833,13 +7862,15 @@ var doc = `{
                     "description": "我的直推下级",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/model.AvfUser"
+                        "$ref": "#/definitions/web_tools.AvfUser"
                     }
                 },
                 "lower_count": {
+                    "description": "我的下级",
                     "type": "integer"
                 },
                 "team_count": {
+                    "description": "我的团队",
                     "type": "integer"
                 }
             }

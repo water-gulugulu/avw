@@ -18,11 +18,13 @@
 package web
 
 import (
+	"fmt"
 	web_tools "gin-vue-admin/api/web/tools"
 	"gin-vue-admin/api/web/tools/response"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"log"
 	"strconv"
 	"time"
@@ -301,12 +303,32 @@ func PayCard(c *gin.Context) {
 		To:        Address,
 	}
 
-	if err := CardTransfer.Update(DB); err != nil {
-		log.Printf("pay update error:%e\n", err)
+	err = DB.Transaction(func(tx *gorm.DB) error {
+		if err := CardTransfer.Update(tx); err != nil {
+			log.Printf("pay update error:%e\n", err)
+			return err
+		}
+
+		UserBill := model.AvfUserBill{
+			GVA_MODEL:  global.GVA_MODEL{CreatedAt: time.Now(), UpdatedAt: time.Now()},
+			Uid:        int(UserId),
+			Address:    Address,
+			Type:       3,
+			Money:      CardTransfer.Price,
+			Payment:    2,
+			PayType:    2,
+			Detail:     fmt.Sprintf("购买卡牌支付金额:%v", CardTransfer.Price),
+			CreateTime: int(time.Now().Unix()),
+		}
+		if err := UserBill.Create(tx); err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
 		response.FailWithMessage("60003", c)
 		return
 	}
-
 	response.Ok(c)
 	return
 }

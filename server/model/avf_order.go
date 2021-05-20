@@ -93,3 +93,7 @@ func (h *AvfOrder) FindListByStatus(DB *gorm.DB) (list []*AvfOrder, err error) {
 func (h *AvfOrder) FindByHash(DB *gorm.DB) error {
 	return DB.Table(h.TableName()).Where("tx_hash = ?", h.TxHash).First(&h).Error
 }
+
+func (h *AvfOrder) GetByUid(DB *gorm.DB) error {
+	return DB.Table(h.TableName()).Where("uid = ?", h.Uid).First(&h).Error
+}

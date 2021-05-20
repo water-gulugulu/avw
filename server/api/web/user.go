@@ -158,8 +158,29 @@ func MyTeam(c *gin.Context) {
 		response.FailWithMessage("41004", c)
 		return
 	}
+	l := make([]web_tools.AvfUser, 0)
+	for _, item := range list {
+		u := web_tools.AvfUser{
+			Id:            int(item.ID),
+			Pid:           item.Pid,
+			Username:      item.Username,
+			WalletAddress: item.WalletAddress,
+			CreatedAt:     item.CreatedAt,
+		}
+		Order := model.AvfOrder{
+			Uid: int(item.ID),
+		}
+
+		if err := Order.GetByUid(DB); err != nil {
+			u.IsNumber = false
+		} else {
+			u.IsNumber = true
+		}
+		l = append(l, u)
+	}
+
 	res := web_tools.MyTeamResponse{
-		List:       list,
+		List:       l,
 		LowerCount: len(list),
 	}
 	listAll, err3 := User.GetListAll(DB)
@@ -177,6 +198,7 @@ func MyTeam(c *gin.Context) {
 	return
 }
 
+// 查找下级
 func LoopUserLower(list []*model.AvfUser, pid string) int {
 	var count int
 	for _, item := range list {

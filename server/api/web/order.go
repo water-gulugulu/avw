@@ -18,11 +18,13 @@
 package web
 
 import (
+	"fmt"
 	web_tools "gin-vue-admin/api/web/tools"
 	"gin-vue-admin/api/web/tools/response"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"strconv"
 	"time"
 )
@@ -208,11 +210,31 @@ func PayOrder(c *gin.Context) {
 		Status: 2,
 		From:   address,
 	}
-	if err := Order.UpdateOrder(global.GVA_DB); err != nil {
+	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		if err := Order.UpdateOrder(tx); err != nil {
+			return err
+		}
+		UserBill := model.AvfUserBill{
+			GVA_MODEL:  global.GVA_MODEL{CreatedAt: time.Now(), UpdatedAt: time.Now()},
+			Uid:        int(UserId),
+			Address:    address,
+			Type:       2,
+			Money:      int(Order.Price),
+			Payment:    2,
+			PayType:    2,
+			Detail:     fmt.Sprintf("购买卡牌盲盒支付金额:%v", Order.Price),
+			CreateTime: int(time.Now().Unix()),
+		}
+		if err := UserBill.Create(tx); err != nil {
+			return err
+		}
+		return nil
+	})
+
+	if err != nil {
 		response.FailWithMessage("60003", c)
 		return
 	}
-	// go web_tools.LoopOrderStatus(TxHash, oid)
 
 	response.OkWithMessage("200", c)
 	return

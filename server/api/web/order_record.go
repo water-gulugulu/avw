@@ -440,7 +440,30 @@ func PayFees(c *gin.Context) {
 		System:   global.GVA_CONFIG.CollectionAddress.Address,
 	}
 
-	if err := cardTransfer.Update(DB); err != nil {
+	err = DB.Transaction(func(tx *gorm.DB) error {
+		if err := cardTransfer.Update(tx); err != nil {
+			return err
+		}
+
+		UserBill := model.AvfUserBill{
+			GVA_MODEL:  global.GVA_MODEL{CreatedAt: time.Now(), UpdatedAt: time.Now()},
+			Uid:        int(UserId),
+			Address:    Address,
+			Type:       4,
+			Money:      cardTransfer.Fees,
+			Fees:       cardTransfer.Fees,
+			Payment:    2,
+			PayType:    2,
+			Detail:     fmt.Sprintf("转让卡牌支付手续费:%v", cardTransfer.Fees),
+			CreateTime: int(time.Now().Unix()),
+		}
+		if err := UserBill.Create(tx); err != nil {
+			return err
+		}
+		return nil
+	})
+
+	if err != nil {
 		response.FailWithMessage("60007", c)
 		return
 	}

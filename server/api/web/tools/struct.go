@@ -135,7 +135,16 @@ type CardMarketDetailResponse struct {
 
 // 我的团队返回信息
 type MyTeamResponse struct {
-	List       []model.AvfUser `json:"list"` // 我的直推下级
-	TeamCount  int             `json:"team_count"`
-	LowerCount int             `json:"lower_count"`
+	List       []AvfUser `json:"list"`        // 我的直推下级
+	TeamCount  int       `json:"team_count"`  // 我的团队
+	LowerCount int       `json:"lower_count"` // 我的下级
+}
+
+type AvfUser struct {
+	Id            int       `json:"id"`             // 用户ID
+	Pid           string    `json:"pid"`            // 上级地址
+	Username      string    `json:"username"`       // 用户名
+	WalletAddress string    `json:"wallet_address"` // 钱包地址
+	CreatedAt     time.Time `json:"created_at"`     // 创建时间
+	IsNumber      bool      `json:"is_number"`      // 是否正式会员
 }
