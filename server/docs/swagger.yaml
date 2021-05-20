@@ -585,6 +585,9 @@ definitions:
       updatedAt:
         description: 更新时间
         type: string
+      user:
+        $ref: '#/definitions/model.AvfUser'
+        description: 卡牌信息
     type: object
   model.AvfUser:
     properties:
@@ -638,7 +641,10 @@ definitions:
         type: string
       balance:
         description: 余额
-        type: integer
+        type: number
+      card:
+        $ref: '#/definitions/model.AvfCard'
+        description: 卡牌信息
       cardId:
         description: 卡牌ID
         type: integer
@@ -653,19 +659,22 @@ definitions:
         type: string
       fees:
         description: 手续费
-        type: integer
+        type: number
       id:
         description: 主键ID
         type: integer
       money:
         description: 金额
-        type: integer
+        type: number
       payType:
         description: 支付方式 1-avw 2-ht
         type: integer
       payment:
         description: 收入支出
         type: integer
+      tx_hash:
+        description: 交易hash
+        type: string
       type:
         description: 类型 1-发放收益 2-盲盒 3-购买卡牌 4-手续费 5-直推收益
         type: integer
@@ -1263,6 +1272,9 @@ definitions:
       updatedAt:
         description: 更新时间
         type: string
+      user:
+        $ref: '#/definitions/model.AvfUser'
+        description: 卡牌信息
     type: object
   request.AvfOrderSearch:
     properties:
@@ -1328,7 +1340,10 @@ definitions:
         type: string
       balance:
         description: 余额
-        type: integer
+        type: number
+      card:
+        $ref: '#/definitions/model.AvfCard'
+        description: 卡牌信息
       cardId:
         description: 卡牌ID
         type: integer
@@ -1343,13 +1358,13 @@ definitions:
         type: string
       fees:
         description: 手续费
-        type: integer
+        type: number
       id:
         description: 主键ID
         type: integer
       money:
         description: 金额
-        type: integer
+        type: number
       page:
         description: 页码
         type: integer
@@ -1362,6 +1377,9 @@ definitions:
       payment:
         description: 收入支出
         type: integer
+      tx_hash:
+        description: 交易hash
+        type: string
       type:
         description: 类型 1-发放收益 2-盲盒 3-购买卡牌 4-手续费 5-直推收益
         type: integer
@@ -1843,7 +1861,7 @@ definitions:
     properties:
       all:
         description: 全部收益
-        type: integer
+        type: number
       fees:
         description: 手续费
         type: object
@@ -1864,10 +1882,10 @@ definitions:
         type: integer
       today:
         description: 今日收益
-        type: integer
+        type: number
       yesterday:
         description: 昨日收益
-        type: integer
+        type: number
     type: object
   web_tools.MyCardResponse:
     properties:
@@ -4702,6 +4720,39 @@ paths:
           schema:
             $ref: '#/definitions/model.AvfCard'
       summary: 获取卡牌列表
+      tags:
+      - 前端接口
+  /web/card/miningRecord:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: x-token
+        required: true
+        type: string
+      - description: 卡牌ID
+        in: query
+        name: card_id
+        required: true
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: string
+      - description: 数量
+        in: query
+        name: size
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web_tools.UserBillResponse'
+      summary: 卡牌挖矿记录
       tags:
       - 前端接口
   /web/card/myBuyCard:

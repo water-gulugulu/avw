@@ -639,6 +639,10 @@ func Mining(c *gin.Context) {
 
 			return nil
 		})
+		if err != nil {
+			// log.Printf("[%s]用户地址：%s,发放直推下级收益账单保存失败，金额：%v,:%e\n", time.Now(), u.WalletAddress, ParentPrice, err2)
+			continue
+		}
 	}
 
 }

@@ -4528,6 +4528,56 @@ var doc = `{
                 }
             }
         },
+        "/web/card/miningRecord": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "前端接口"
+                ],
+                "summary": "卡牌挖矿记录",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "x-token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "卡牌ID",
+                        "name": "card_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "数量",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web_tools.UserBillResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/web/card/myBuyCard": {
             "get": {
                 "consumes": [
@@ -6115,6 +6165,10 @@ var doc = `{
                 "updatedAt": {
                     "description": "更新时间",
                     "type": "string"
+                },
+                "user": {
+                    "description": "卡牌信息",
+                    "$ref": "#/definitions/model.AvfUser"
                 }
             }
         },
@@ -6188,7 +6242,11 @@ var doc = `{
                 },
                 "balance": {
                     "description": "余额",
-                    "type": "integer"
+                    "type": "number"
+                },
+                "card": {
+                    "description": "卡牌信息",
+                    "$ref": "#/definitions/model.AvfCard"
                 },
                 "cardId": {
                     "description": "卡牌ID",
@@ -6208,7 +6266,7 @@ var doc = `{
                 },
                 "fees": {
                     "description": "手续费",
-                    "type": "integer"
+                    "type": "number"
                 },
                 "id": {
                     "description": "主键ID",
@@ -6216,7 +6274,7 @@ var doc = `{
                 },
                 "money": {
                     "description": "金额",
-                    "type": "integer"
+                    "type": "number"
                 },
                 "payType": {
                     "description": "支付方式 1-avw 2-ht",
@@ -6225,6 +6283,10 @@ var doc = `{
                 "payment": {
                     "description": "收入支出",
                     "type": "integer"
+                },
+                "tx_hash": {
+                    "description": "交易hash",
+                    "type": "string"
                 },
                 "type": {
                     "description": "类型 1-发放收益 2-盲盒 3-购买卡牌 4-手续费 5-直推收益",
@@ -7050,6 +7112,10 @@ var doc = `{
                 "updatedAt": {
                     "description": "更新时间",
                     "type": "string"
+                },
+                "user": {
+                    "description": "卡牌信息",
+                    "$ref": "#/definitions/model.AvfUser"
                 }
             }
         },
@@ -7139,7 +7205,11 @@ var doc = `{
                 },
                 "balance": {
                     "description": "余额",
-                    "type": "integer"
+                    "type": "number"
+                },
+                "card": {
+                    "description": "卡牌信息",
+                    "$ref": "#/definitions/model.AvfCard"
                 },
                 "cardId": {
                     "description": "卡牌ID",
@@ -7159,7 +7229,7 @@ var doc = `{
                 },
                 "fees": {
                     "description": "手续费",
-                    "type": "integer"
+                    "type": "number"
                 },
                 "id": {
                     "description": "主键ID",
@@ -7167,7 +7237,7 @@ var doc = `{
                 },
                 "money": {
                     "description": "金额",
-                    "type": "integer"
+                    "type": "number"
                 },
                 "page": {
                     "description": "页码",
@@ -7184,6 +7254,10 @@ var doc = `{
                 "payment": {
                     "description": "收入支出",
                     "type": "integer"
+                },
+                "tx_hash": {
+                    "description": "交易hash",
+                    "type": "string"
                 },
                 "type": {
                     "description": "类型 1-发放收益 2-盲盒 3-购买卡牌 4-手续费 5-直推收益",
@@ -7852,7 +7926,7 @@ var doc = `{
             "properties": {
                 "all": {
                     "description": "全部收益",
-                    "type": "integer"
+                    "type": "number"
                 },
                 "fees": {
                     "description": "手续费",
@@ -7880,11 +7954,11 @@ var doc = `{
                 },
                 "today": {
                     "description": "今日收益",
-                    "type": "integer"
+                    "type": "number"
                 },
                 "yesterday": {
                     "description": "昨日收益",
-                    "type": "integer"
+                    "type": "number"
                 }
             }
         },

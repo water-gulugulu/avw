@@ -2,9 +2,9 @@
 package model
 
 import (
-	"fmt"
 	"gin-vue-admin/global"
 	"gorm.io/gorm"
+	"strconv"
 	"strings"
 )
 
@@ -23,6 +23,7 @@ type AvfUserBill struct {
 	Detail     string  `json:"detail" form:"detail" gorm:"column:detail;comment:描述;type:varchar(255);size:255;"`                 // 详情
 	TxHash     string  `json:"tx_hash" form:"tx_hash" gorm:"column:tx_hash;comment:交易hash;type:varchar(255);size:255;"`          // 交易hash
 	CreateTime int     `json:"createTime" form:"createTime" gorm:"column:create_time;comment:创建时间;type:int;size:10;"`            // 创建时间
+	Card       AvfCard `gorm:"ForeignKey:CardId;References:ID"`                                                                  // 卡牌信息
 }
 
 func (AvfUserBill) TableName() string {
@@ -72,7 +73,6 @@ func (h *AvfUserBill) GetList(DB *gorm.DB, page, size int, billType string) (lis
 	if h.CreateTime != 0 {
 		DB = DB.Where("create_time between ? and ?", h.CreateTime, h.CreateTime+86400)
 	}
-	fmt.Printf("billType:%s", billType)
 	t := strings.Split(billType, ",")
 	if len(billType) != 0 {
 		DB = DB.Where("type IN(?)", t)
@@ -83,6 +83,33 @@ func (h *AvfUserBill) GetList(DB *gorm.DB, page, size int, billType string) (lis
 	}
 
 	if err = DB.Order("id desc").Limit(size).Offset(page).Find(&list).Error; err != nil {
+		return nil, 0, err
+	}
+	return
+}
+
+func (h *AvfUserBill) GetMiningList(DB *gorm.DB, page, size int, cardId string) (list []*AvfUserBill, total int64, err error) {
+	DB = DB.Table(h.TableName())
+	if page != 0 {
+		page = page * size
+	}
+	if h.Uid != 0 {
+		DB = DB.Where("uid = ?", h.Uid)
+	}
+	if h.CreateTime != 0 {
+		DB = DB.Where("create_time between ? and ?", h.CreateTime, h.CreateTime+86400)
+	}
+
+	if len(cardId) != 0 && cardId != "0" {
+		cid, _ := strconv.Atoi(cardId)
+		DB = DB.Where("card_id = ?", cid)
+	}
+
+	if err = DB.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	if err = DB.Order("id desc").Preload("Card").Limit(size).Offset(page).Find(&list).Error; err != nil {
 		return nil, 0, err
 	}
 	return

@@ -154,3 +154,30 @@ type UserBillResponse struct {
 	List  []*model.AvfUserBill `json:"list"`  // 账单列表
 	Total int64                `json:"total"` // 总条数
 }
+
+// 用户账单返回
+type MiningRecordResponse struct {
+	List  []*AvfUserBill `json:"list"`  // 账单列表
+	Total int64          `json:"total"` // 总条数
+}
+
+// 如果含有time.Time 请自行import time包
+type AvfUserBill struct {
+	ID         uint      `json:"id"`                                                                                               // id
+	CreatedAt  time.Time `json:"created_at"`                                                                                       // 格式化创建时间
+	UpdatedAt  time.Time `json:"updated_at"`                                                                                       // 格式化修改时间
+	Uid        int       `json:"uid" form:"uid" gorm:"column:uid;comment:用户ID;type:int;size:10;"`                                  // 用户ID
+	CardId     int       `json:"cardId" form:"cardId" gorm:"column:card_id;comment:卡牌ID;type:int;size:10;"`                        // 卡牌ID
+	Address    string    `json:"address" form:"address" gorm:"column:address;comment:钱包地址;type:varchar(255);size:255;"`            // 钱包地址
+	Type       int       `json:"type" form:"type" gorm:"column:type;comment:类型 1-发放收益 2-盲盒 3-购买卡牌 4-手续费 5-直推收益;type:int;size:10;"` // 类型 1-发放收益 2-盲盒 3-购买卡牌 4-手续费 5-直推收益
+	Money      float64   `json:"money" form:"money" gorm:"column:money;comment:金额;type:decimal;size:9,4;"`                         // 金额
+	Fees       float64   `json:"fees" form:"fees" gorm:"column:fees;comment:手续费;type:decimal;size:9,4;"`                           // 手续费
+	Balance    float64   `json:"balance" form:"balance" gorm:"column:balance;comment:余额;type:decimal;size:9,4;"`                   // 余额
+	Payment    int       `json:"payment" form:"payment" gorm:"column:payment;comment:收入支出 1-收入 2-支出;type:int;size:10;"`            // 收入支出
+	PayType    int       `json:"payType" form:"payType" gorm:"column:pay_type;comment:支付方式 1-avw 2-ht;type:int;size:10;"`          // 支付方式 1-avw 2-ht
+	Detail     string    `json:"detail" form:"detail" gorm:"column:detail;comment:描述;type:varchar(255);size:255;"`                 // 详情
+	TxHash     string    `json:"tx_hash" form:"tx_hash" gorm:"column:tx_hash;comment:交易hash;type:varchar(255);size:255;"`          // 交易hash
+	CreateTime int       `json:"createTime" form:"createTime" gorm:"column:create_time;comment:创建时间;type:int;size:10;"`            // 创建时间
+	Star       int       `json:"star"`                                                                                             // 算力
+	Level      int       `json:"level"`                                                                                            // 卡牌等级 1-N 2-R 3-SR 4-SSR
+}

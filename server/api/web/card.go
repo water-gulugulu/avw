@@ -377,6 +377,76 @@ func MyBuyCard(c *gin.Context) {
 	return
 }
 
-func DailyEarnings(c *gin.Context) {
-	// User := model.AvfUser{}
+// @Tags 前端接口
+// @Summary 卡牌挖矿记录
+// @accept application/json
+// @Produce application/json
+// @Param x-token header string  true "token"
+// @Param card_id query string  true "卡牌ID"
+// @Param page query string false "页码"
+// @Param size query string false "数量"
+// @Success 200 {object} web_tools.UserBillResponse
+// @Router /web/card/miningRecord [get]
+func MiningRecord(c *gin.Context) {
+	UserId, err := web_tools.GetUserId(c)
+	if err != nil {
+		response.FailWithMessage("41003", c)
+		return
+	}
+	cardId := c.Query("card_id")
+	if len(cardId) == 0 || cardId == "0" {
+		response.FailWithMessage("41012", c)
+		return
+	}
+	page := c.Query("page")
+	size := c.Query("size")
+	if len(size) == 0 {
+		size = "10"
+	}
+	if len(page) == 0 {
+		size = "0"
+	}
+	p, _ := strconv.Atoi(page)
+	s, _ := strconv.Atoi(size)
+
+	UserBill := model.AvfUserBill{
+		Type: 1,
+		Uid:  int(UserId),
+	}
+	l := make([]*web_tools.AvfUserBill, 0)
+	res := web_tools.MiningRecordResponse{
+		List: l,
+	}
+	list, total, err := UserBill.GetMiningList(global.GVA_DB, p, s, cardId)
+	if err != nil {
+		response.OkWithData(res, c)
+		return
+	}
+
+	for _, item := range list {
+		l = append(l, &web_tools.AvfUserBill{
+			ID:         item.ID,
+			CreatedAt:  item.CreatedAt,
+			UpdatedAt:  item.UpdatedAt,
+			Uid:        item.Uid,
+			CardId:     item.CardId,
+			Address:    item.Address,
+			Type:       item.Type,
+			Money:      item.Money,
+			Fees:       item.Fees,
+			Balance:    item.Balance,
+			Payment:    item.Payment,
+			PayType:    item.PayType,
+			Detail:     item.Detail,
+			TxHash:     item.TxHash,
+			CreateTime: item.CreateTime,
+			Star:       item.Card.Star,
+			Level:      item.Card.Level,
+		})
+	}
+
+	res.Total = total
+	res.List = l
+	response.OkWithData(res, c)
+	return
 }
