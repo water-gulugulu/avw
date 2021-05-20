@@ -5326,6 +5326,37 @@
                 }
             }
         },
+        "/web/user/statistical": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "前端接口"
+                ],
+                "summary": "统计",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "x-token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web_tools.StatisticalResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/web/user/userBill": {
             "get": {
                 "consumes": [
@@ -8113,6 +8144,39 @@
                 },
                 "total": {
                     "description": "总条数",
+                    "type": "integer"
+                }
+            }
+        },
+        "web_tools.StatisticalResponse": {
+            "type": "object",
+            "properties": {
+                "all": {
+                    "description": "总收益",
+                    "type": "number"
+                },
+                "all_force": {
+                    "description": "总算力",
+                    "type": "integer"
+                },
+                "buy_card": {
+                    "description": "买的卡牌",
+                    "type": "integer"
+                },
+                "direct": {
+                    "description": "直推收益",
+                    "type": "number"
+                },
+                "my_box": {
+                    "description": "我的盲盒",
+                    "type": "integer"
+                },
+                "my_card": {
+                    "description": "我的卡牌",
+                    "type": "integer"
+                },
+                "my_force": {
+                    "description": "我的算力",
                     "type": "integer"
                 }
             }

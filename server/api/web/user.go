@@ -352,3 +352,92 @@ func OpenStatistical(c *gin.Context) {
 	response.OkWithData(res, c)
 	return
 }
+
+// @Tags 前端接口
+// @Summary 统计
+// @accept application/json
+// @Produce application/json
+// @Param x-token header string  true "token"
+// @Success 200 {object} web_tools.StatisticalResponse
+// @Router /web/user/statistical [get]
+func Statistical(c *gin.Context) {
+	UserId, err := web_tools.GetUserId(c)
+	if err != nil {
+		response.FailWithMessage("41003", c)
+		return
+	}
+	var AllForce, MyForce, MyBox, MyTeam, BuyCard, MyCard int
+	var Direct, All float64
+	DB := global.GVA_DB
+	OrderCard := model.AvfOrderCard{}
+	list, err2 := OrderCard.GetListAll(DB)
+	if err2 != nil {
+		AllForce = 0
+		MyForce = 0
+	}
+	for _, item := range list {
+		AllForce = AllForce + item.Star
+		if item.Uid == int(UserId) {
+			MyForce = MyForce + item.Star
+			if item.GiveType == 1 {
+				MyCard = MyCard + 1
+			} else if item.GiveType == 2 {
+				BuyCard = BuyCard + 1
+			}
+		}
+	}
+
+	User := model.AvfUser{
+		GVA_MODEL: global.GVA_MODEL{ID: UserId},
+	}
+
+	listAll, err3 := User.GetListAll(DB)
+	if err3 != nil {
+		MyTeam = 0
+	} else {
+		MyTeam = LoopUserLower(listAll, User.WalletAddress)
+	}
+
+	Order := model.AvfOrder{
+		Uid: int(UserId),
+	}
+	OList, err4 := Order.GetListByUid(DB)
+	if err4 != nil {
+		MyBox = 0
+	}
+
+	for _, item := range OList {
+		MyBox = MyBox + item.Number
+	}
+
+	UserBill := model.AvfUserBill{
+		Uid: int(UserId),
+	}
+
+	billList, err5 := UserBill.GetUserStatistical(DB)
+	if err5 != nil {
+		All = 0
+		Direct = 0
+	}
+
+	for _, item := range billList {
+		All = All + item.Money
+		if item.Type == 5 {
+			Direct = Direct + item.Money
+		}
+	}
+
+	res := web_tools.StatisticalResponse{
+		AllForce: AllForce,
+		MyForce:  MyForce,
+		Direct:   Direct,
+		All:      All,
+		MyBox:    MyBox,
+		MyTeam:   MyTeam,
+		BuyCard:  BuyCard,
+		MyCard:   MyCard,
+	}
+
+	response.OkWithData(res, c)
+	return
+}

@@ -199,3 +199,15 @@ type OpenStatisticalResponse struct {
 	Input          int `json:"inflows"`         // 流入
 	Output         int `json:"out_of"`          // 流出
 }
+
+// 统计返回信息
+type StatisticalResponse struct {
+	AllForce int     `json:"all_force"` // 总算力
+	MyForce  int     `json:"my_force"`  // 我的算力
+	Direct   float64 `json:"direct"`    // 直推收益
+	All      float64 `json:"all"`       // 总收益
+	MyBox    int     `json:"my_box"`    // 我的盲盒
+	MyTeam   int     `json:"my_card"`   // 我的团队
+	BuyCard  int     `json:"buy_card"`  // 买的卡牌
+	MyCard   int     `json:"my_card"`   // 我的卡牌
+}

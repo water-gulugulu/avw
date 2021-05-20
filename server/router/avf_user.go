@@ -29,6 +29,7 @@ func InitApiUserRouter(Router *gin.RouterGroup) {
 			ApiUserRouter.GET("/myTeam", web.MyTeam)
 			ApiUserRouter.GET("/userBill", web.UserBill)
 			ApiUserRouter.GET("/myStatistical", web.MyStatistical)
+			ApiUserRouter.GET("/statistical", web.Statistical)
 		}
 	}
 }

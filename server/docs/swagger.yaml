@@ -1970,6 +1970,30 @@ definitions:
         description: 总条数
         type: integer
     type: object
+  web_tools.StatisticalResponse:
+    properties:
+      all:
+        description: 总收益
+        type: number
+      all_force:
+        description: 总算力
+        type: integer
+      buy_card:
+        description: 买的卡牌
+        type: integer
+      direct:
+        description: 直推收益
+        type: number
+      my_box:
+        description: 我的盲盒
+        type: integer
+      my_card:
+        description: 我的卡牌
+        type: integer
+      my_force:
+        description: 我的算力
+        type: integer
+    type: object
   web_tools.TransferResponse:
     properties:
       fees:
@@ -5286,6 +5310,26 @@ paths:
           schema:
             $ref: '#/definitions/web_tools.OpenStatisticalResponse'
       summary: 开源统计
+      tags:
+      - 前端接口
+  /web/user/statistical:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: x-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web_tools.StatisticalResponse'
+      summary: 统计
       tags:
       - 前端接口
   /web/user/userBill:
