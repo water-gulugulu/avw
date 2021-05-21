@@ -1,16 +1,16 @@
 package initialize
 
 import (
-	web_tools "gin-vue-admin/api/web/tools"
+	"gin-vue-admin/api/web/tools/order_loop"
+	"gin-vue-admin/api/web/tools/today_loop"
 	_ "gin-vue-admin/docs"
 	"gin-vue-admin/global"
 	"gin-vue-admin/middleware"
 	"gin-vue-admin/router"
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
+	"net/http"
 )
 
 // 初始化总路由
@@ -26,10 +26,18 @@ func Routers() *gin.Engine {
 	Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	global.GVA_LOG.Info("register swagger handler")
 
-	Init := web_tools.Init()
+	Init := order_loop.Init()
 	go Init.LoopOrderStatus()
 	go Init.LoopFeesOrder()
 	go Init.LoopPayOrder()
+	start := today_loop.Start()
+
+	go start.Transfer()
+	// c := gron.New()
+	// c.AddFunc(gron.Every(1*xtime.Day).At("02:08"), func() {
+	// 	fmt.Println("执行了")
+	// })
+	// c.Start()
 
 	WebGroup := Router.Group("/web")
 	{

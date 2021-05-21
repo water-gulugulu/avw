@@ -20,6 +20,7 @@ package blockchian
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	Token "gin-vue-admin/utils/blockchian/token"
 	"gin-vue-admin/utils/blockchian/tools"
@@ -47,8 +48,9 @@ type LogTransfer struct {
 }
 
 const (
-	contract = "0x21fd0FBE5Fb40B9A86FF21f223dCbCB2A308c3E5"
-	key      = "./utils/blockchian/wallets/UTC--2021-05-11T06-48-26.264188000Z--8f2b1cea616b837b74ae5b5e31054a36cd2fd380" // 火币链 0x8f2b1CeA616b837b74Ae5B5E31054A36cd2FD380
+	contract = "0x21fd0FBE5Fb40B9A86FF21f223dCbCB2A308c3E5" // 旧的
+	// contract = "0x359f8217da7551808eccb7bf831be1b38c71d9ca"                                                               // 女优币 1万亿
+	key = "./utils/blockchian/wallets/UTC--2021-05-11T06-48-26.264188000Z--8f2b1cea616b837b74ae5b5e31054a36cd2fd380" // 火币链 0x8f2b1CeA616b837b74Ae5B5E31054A36cd2FD380
 	// key = "./wallets/UTC--2021-05-10T16-31-35.638486000Z--d7940959ec892652f2042fcb0f9feef3e498e724" // 私链     0xd7940959ec892652f2042fcb0f9feef3e498e724
 	RawUrl = "https://http-mainnet-node.huobichain.com"
 )
@@ -164,11 +166,14 @@ func (c *ClientManage) TransferToAddress(Address string, Number float64) (string
 		return "", txErr
 	}
 	ctx := context.Background()
-	_, WaitErr := bind.WaitMined(ctx, c.client, tx)
+	receipt, WaitErr := bind.WaitMined(ctx, c.client, tx)
 
 	if WaitErr != nil {
 		log.Printf("[%s]tx mining error:%v\n", time.Now(), WaitErr)
 		return "", WaitErr
+	}
+	if receipt.Status != 1 {
+		return "", errors.New("交易失败")
 	}
 	// fmt.Printf("tx is :%s\n", tx.Hash().String())
 	// fmt.Printf("receipt is :%s\n", receipt)
