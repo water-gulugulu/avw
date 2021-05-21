@@ -21,6 +21,7 @@ import (
 	"fmt"
 	web_tools "gin-vue-admin/api/web/tools"
 	"gin-vue-admin/api/web/tools/response"
+	"gin-vue-admin/api/web/tools/today_loop"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/utils/blockchian"
@@ -550,6 +551,10 @@ func CancelTransfer(c *gin.Context) {
 
 // 挖矿
 func Mining(c *gin.Context) {
+
+	start := today_loop.Start()
+	go start.Transfer()
+	return
 	DB := global.GVA_DB
 
 	client, err := blockchian.NewClient()

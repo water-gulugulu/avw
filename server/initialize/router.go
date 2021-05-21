@@ -2,7 +2,6 @@ package initialize
 
 import (
 	"gin-vue-admin/api/web/tools/order_loop"
-	"gin-vue-admin/api/web/tools/today_loop"
 	_ "gin-vue-admin/docs"
 	"gin-vue-admin/global"
 	"gin-vue-admin/middleware"
@@ -30,9 +29,9 @@ func Routers() *gin.Engine {
 	go Init.LoopOrderStatus()
 	go Init.LoopFeesOrder()
 	go Init.LoopPayOrder()
-	start := today_loop.Start()
+	// start := today_loop.Start()
 
-	go start.Transfer()
+	// go start.Transfer()
 	// c := gron.New()
 	// c.AddFunc(gron.Every(1*xtime.Day).At("02:08"), func() {
 	// 	fmt.Println("执行了")

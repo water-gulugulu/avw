@@ -19,6 +19,7 @@ package today_loop
 
 import (
 	"fmt"
+	web_tools "gin-vue-admin/api/web/tools"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/utils/blockchian"
@@ -119,6 +120,8 @@ func (c *Manager) Transfer() {
 	for key, item := range c.LoopList {
 		Price := e * float64(item.Star)
 		ParentPrice := d * Price / 100
+		Price = web_tools.FormatFloat(Price, 4)
+		ParentPrice = web_tools.FormatFloat(ParentPrice, 4)
 
 		hash, err = c.BlockChain.TransferToAddress(item.User.WalletAddress, Price)
 		if err != nil {
