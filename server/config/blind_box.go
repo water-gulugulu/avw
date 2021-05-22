@@ -18,6 +18,6 @@
 package config
 
 type BlindBox struct {
-	One int64 `mapstructure:"one" json:"one" yaml:"one"` // 一连抽
-	Ten int64 `mapstructure:"ten" json:"ten" yaml:"ten"` // 十连抽
+	One string `mapstructure:"one" json:"one" yaml:"one"` // 一连抽
+	Ten string `mapstructure:"ten" json:"ten" yaml:"ten"` // 十连抽
 }

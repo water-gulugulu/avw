@@ -101,10 +101,12 @@ func CreateOrder(c *gin.Context) {
 	number, _ := strconv.Atoi(num)
 	switch blindBoxType {
 	case "1":
-		price = blindBox.One * int64(number)
+		one, _ := strconv.Atoi(blindBox.One)
+		price = int64(one * number)
 		n = number
 	case "2":
-		price = blindBox.Ten * int64(number)
+		ten, _ := strconv.Atoi(blindBox.One)
+		price = int64(ten * number)
 		n = number * 10
 	default:
 		response.FailWithMessage("41007", c)

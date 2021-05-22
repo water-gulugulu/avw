@@ -19,8 +19,8 @@ autocode:
   web-table: /view
   web-flow: /view
 blind-box:
-  one: 100
-  ten: 950
+  one: "5"
+  ten: "45"
 captcha:
   key-long: 6
   img-width: 240
