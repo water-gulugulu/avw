@@ -60,6 +60,7 @@ type CreateOrderResponse struct {
 	OrderSn string      `json:"order_sn"` // 订单号
 	OrderId uint        `json:"order_id"` // 订单ID
 	Price   interface{} `json:"price"`    // 订单价格
+	Address string      `json:"address"`  // 支付地址
 }
 
 // 订单详情返回结果

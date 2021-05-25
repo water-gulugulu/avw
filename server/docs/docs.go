@@ -4593,7 +4593,7 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "页码111",
+                        "description": "页码",
                         "name": "page",
                         "in": "query"
                     },
@@ -5493,11 +5493,11 @@ var doc = `{
             "properties": {
                 "one": {
                     "description": "一连抽",
-                    "type": "integer"
+                    "type": "string"
                 },
                 "ten": {
                     "description": "十连抽",
-                    "type": "integer"
+                    "type": "string"
                 }
             }
         },
@@ -7962,6 +7962,10 @@ var doc = `{
         "web_tools.CreateOrderResponse": {
             "type": "object",
             "properties": {
+                "address": {
+                    "description": "支付地址",
+                    "type": "string"
+                },
                 "order_id": {
                     "description": "订单ID",
                     "type": "integer"

@@ -46,10 +46,10 @@ definitions:
     properties:
       one:
         description: 一连抽
-        type: integer
+        type: string
       ten:
         description: 十连抽
-        type: integer
+        type: string
     type: object
   config.Captcha:
     properties:
@@ -1826,6 +1826,9 @@ definitions:
     type: object
   web_tools.CreateOrderResponse:
     properties:
+      address:
+        description: 支付地址
+        type: string
       order_id:
         description: 订单ID
         type: integer
@@ -4823,7 +4826,7 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: 页码111
+      - description: 页码
         in: query
         name: page
         type: string

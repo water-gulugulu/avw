@@ -132,6 +132,7 @@ func CreateOrder(c *gin.Context) {
 		OrderSn: orderSn,
 		OrderId: Order.ID,
 		Price:   price,
+		Address: global.GVA_CONFIG.CollectionAddress.Address,
 	}
 
 	if global.GVA_CONFIG.CollectionAddress.Debug == "1" {
