@@ -135,7 +135,7 @@ func CreateOrder(c *gin.Context) {
 	}
 
 	if global.GVA_CONFIG.CollectionAddress.Debug == "1" {
-		res.Price = 0.001
+		res.Price = 0.0001
 	}
 	response.OkWithData(res, c)
 	return
