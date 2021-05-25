@@ -220,8 +220,7 @@ func (c *Manager) LoopFeesOrder() {
 		Price := item.Price * 100000000000000000
 
 		if global.GVA_CONFIG.CollectionAddress.Debug == "1" {
-			P := 0.0001 * 100000000000000000
-			Price = int(P)
+			Price = 100000000000000
 		}
 		price := strconv.Itoa(Price)
 		if price != res.Value.String() {
@@ -299,8 +298,7 @@ func (c *Manager) LoopPayOrder() {
 		Price := item.Price * 100000000000000000
 
 		if global.GVA_CONFIG.CollectionAddress.Debug == "1" {
-			P := 0.0001 * 100000000000000000
-			Price = int(P)
+			Price = 100000000000000
 		}
 		price := strconv.Itoa(Price)
 		if price != res.Value.String() {
