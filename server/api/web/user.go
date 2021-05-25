@@ -376,7 +376,9 @@ func Statistical(c *gin.Context) {
 		MyForce = 0
 	}
 	for _, item := range list {
-		AllForce = AllForce + item.Star
+		if item.Status == 1 {
+			AllForce = AllForce + item.Star
+		}
 		if item.Uid == int(UserId) {
 			MyForce = MyForce + item.Star
 			MyCard = MyCard + 1
