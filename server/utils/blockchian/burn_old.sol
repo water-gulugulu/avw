@@ -7,12 +7,11 @@ contract NHTTokenERC20 {
     string public symbol;
     uint8 public decimals = 18;  // 18 是建议的默认值
     uint256 public totalSupply;
-    address public feesAddress = 0x232F0a6Fe630f2AD4d1EE0Bd5920B8E79A6a455F;
+    address public feesAddress = 0xD0e4e4C88BB10Cdf8CC0c7ecD397d7116Dd3838C;
     mapping (uint => address) public shareholders;
-    uint private shareholdersNumber;
-    uint256 private feesProportion = 10; // 手续费比例
-    uint256 private destruction = 6; // 销毁比例
-    uint256 private gdDestruction = 2; // 销毁比例
+    uint public shareholdersNumber;
+    uint256 public feesProportion = 10;
+    uint256 public destruction = 6;
 
     mapping (address => uint256) public balanceOf;  //
     mapping (address => mapping (address => uint256)) public allowance;
@@ -45,20 +44,18 @@ contract NHTTokenERC20 {
     function transfer(address _to, uint256 _value) public returns (bool) {
         uint256 fees = _value  / feesProportion; // 10% fees
         uint256 burnNumber = fees * destruction / 100; // burn 6%
-        uint256 b = fees * gdDestruction / 100; // bonus 2%
         uint256 newValue = _value - fees;
         assert(fees + newValue == _value);
         _transfer(msg.sender, feesAddress, fees); // fees
         _transfer(msg.sender, _to, newValue);
-        bonus(b);
-        burnSystem(burnNumber);
+        burn(burnNumber);
         return true;
     }
     function bonus (uint _totalMoney) public returns (bool success) {
-        uint amount = _totalMoney / shareholdersNumber;
+        uint amout = _totalMoney / shareholdersNumber;
         totalSupply -= _totalMoney;
         for (uint i;i < shareholdersNumber;i++) {
-            if(!shareholders[i].send(amount)) revert();
+            if(!shareholders[i].send(amout)) revert();
         }
         Bonus(_totalMoney,shareholdersNumber);
         return true;
@@ -85,7 +82,7 @@ contract NHTTokenERC20 {
     function burnSystem(uint256 _value) public returns (bool success) {
         require(totalSupply >= _value);
         totalSupply -= _value;
-        Burn(feesAddress, _value);
+        // Burn(msg.sender, _value);
         return true;
     }
 
