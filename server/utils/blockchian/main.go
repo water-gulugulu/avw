@@ -74,7 +74,6 @@ func NewClient() (*ClientManage, error) {
 		log.Printf("[%s]Failed to init token error:%v\n", time.Now(), e)
 		return nil, e
 	}
-
 	return &ClientManage{
 		rpcConn: rpcDial,
 		client:  client,
