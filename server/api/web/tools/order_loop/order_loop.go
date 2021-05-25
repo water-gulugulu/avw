@@ -138,15 +138,15 @@ func (c *Manager) LoopOrderStatus() {
 
 		if global.GVA_CONFIG.CollectionAddress.Debug == "1" {
 			P := 0.0001 * 100000000000000000
-			fmt.Printf("orderPrice:%v,tx_price:%v\n", P, res.Value.Int64())
 			Price = int64(P)
 		}
 		// 0.00001
 		// 0.0001
 		// 10000000000000
 		// 100000000000000
-		// price := strconv.Itoa(int(Price))
-		if Price != res.Value.Int64() {
+		price := strconv.Itoa(int(Price))
+		fmt.Printf("orderPrice:%v,tx_price:%v\n", price, res.Value.String())
+		if price != res.Value.String() {
 			log.Printf("[%s]Failed to money not same money:%v,%v \n", time.Now(), Price, res.Value)
 			continue
 		}
