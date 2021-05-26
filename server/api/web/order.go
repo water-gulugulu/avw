@@ -69,9 +69,9 @@ func GetOrderList(c *gin.Context) {
 	}
 	level := map[int]string{1: "N", 2: "R", 3: "SR", 4: "SSR"}
 	newList := make([]web_tools.AvfOrder, 0)
-	var CardLevel string
 	orderCard := model.AvfOrderCard{}
 	for _, item := range list {
+		var CardLevel string
 		orderCard.OrderId = int(item.ID)
 		orderCard.Uid = item.Uid
 		cardList, _ := orderCard.FindListByOrderId(global.GVA_DB)
