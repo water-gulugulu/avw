@@ -422,17 +422,17 @@ func Statistical(c *gin.Context) {
 	}
 
 	for _, item := range billList {
-		All = All + (item.Money * 10000 / 10000)
+		All = (All*10000 + item.Money*10000) / 10000
 		if item.Type == 5 {
-			Direct = Direct + item.Money
+			Direct = (Direct*10000 + item.Money*10000) / 10000
 		}
 	}
 
 	res := web_tools.StatisticalResponse{
 		AllForce: AllForce,
 		MyForce:  MyForce,
-		Direct:   Direct,
-		All:      All,
+		Direct:   web_tools.FormatFloat(Direct, 5),
+		All:      web_tools.FormatFloat(All, 5),
 		MyBox:    MyBox,
 		MyTeam:   MyTeam,
 		BuyCard:  BuyCard,
