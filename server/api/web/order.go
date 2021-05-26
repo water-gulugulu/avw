@@ -73,6 +73,7 @@ func GetOrderList(c *gin.Context) {
 	orderCard := model.AvfOrderCard{}
 	for _, item := range list {
 		orderCard.OrderId = int(item.ID)
+		orderCard.Uid = item.Uid
 		cardList, _ := orderCard.FindListByOrderId(global.GVA_DB)
 
 		for _, item2 := range cardList {
