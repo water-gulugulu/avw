@@ -396,12 +396,12 @@ func Statistical(c *gin.Context) {
 	for _, item := range list {
 		if item.Status == 1 {
 			AllForce = AllForce + item.Star
-		}
-		if item.Uid == int(UserId) {
-			MyForce = MyForce + item.Star
-			MyCard = MyCard + 1
-			if item.GiveType == 2 {
-				BuyCard = BuyCard + 1
+			if item.Uid == int(UserId) {
+				MyForce = MyForce + item.Star
+				MyCard = MyCard + 1
+				if item.GiveType == 2 {
+					BuyCard = BuyCard + 1
+				}
 			}
 		}
 	}
