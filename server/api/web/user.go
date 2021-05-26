@@ -422,7 +422,7 @@ func Statistical(c *gin.Context) {
 	}
 
 	for _, item := range billList {
-		All = All + item.Money
+		All = All + (item.Money * 10000 / 10000)
 		if item.Type == 5 {
 			Direct = Direct + item.Money
 		}

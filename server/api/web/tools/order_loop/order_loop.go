@@ -54,7 +54,7 @@ func (c *Manager) timeOut() {
 			go c.LoopOrderStatus()
 			go c.LoopFeesOrder()
 			go c.LoopPayOrder()
-			fmt.Printf("[%s]Reset Timer success!\n", time.Now())
+			fmt.Printf("[%s]Reset Timer success!\n", time.Now().Format("2006-01-02 15:04:05"))
 		}
 	}
 }
@@ -65,7 +65,7 @@ func (c *Manager) getOrder() {
 	DB := global.GVA_DB
 	list, err := Order.FindListByStatus(DB)
 	if err != nil {
-		fmt.Printf("[%s]Query Order Failed! error:%e\n", time.Now(), err)
+		fmt.Printf("[%s]Query Order Failed! error:%e\n", time.Now().Format("2006-01-02 15:04:05"), err)
 		return
 	}
 	FeesOrder := model.AvfCardTransfer{
@@ -78,13 +78,13 @@ func (c *Manager) getOrder() {
 	feesList, err2 := FeesOrder.GetByStatus(DB)
 
 	if err2 != nil {
-		fmt.Printf("[%s]Query fees_order Failed! error:%e\n", time.Now(), err2)
+		fmt.Printf("[%s]Query fees_order Failed! error:%e\n", time.Now().Format("2006-01-02 15:04:05"), err2)
 		return
 	}
 	payList, err3 := PayOrder.GetByStatus(DB)
 
 	if err3 != nil {
-		fmt.Printf("[%s]Query pay_order Failed! error:%e\n", time.Now(), err3)
+		fmt.Printf("[%s]Query pay_order Failed! error:%e\n", time.Now().Format("2006-01-02 15:04:05"), err3)
 		return
 	}
 	c.OrderList = list
@@ -97,7 +97,7 @@ func Init() *Manager {
 	set := time.Second * 15
 	client, err := blockchian.NewClient()
 	if err != nil {
-		log.Printf("[%s]Failed to client RPC error:%e\n", time.Now(), err)
+		log.Printf("[%s]Failed to client RPC error:%e\n", time.Now().Format("2006-01-02 15:04:05"), err)
 		return nil
 	}
 	data := Manager{
@@ -111,7 +111,7 @@ func Init() *Manager {
 	go data.getOrder()
 	go data.timeOut()
 
-	fmt.Printf("[%s]Init Manager success\n", time.Now())
+	fmt.Printf("[%s]Init Manager success\n", time.Now().Format("2006-01-02 15:04:05"))
 	return &data
 }
 
@@ -204,17 +204,17 @@ func (c *Manager) LoopFeesOrder() {
 	for _, item := range c.OrderFeesList {
 		res, err2 := c.client.QueryTransactionByTxHash(item.FeesHash)
 		if err2 != nil {
-			log.Printf("[%s]Failed to query fees transaction error:%e\n", time.Now(), err2)
+			log.Printf("[%s]Failed to query fees transaction error:%e\n", time.Now().Format("2006-01-02 15:04:05"), err2)
 			continue
 		}
 		if res.Status != 1 {
-			log.Printf("[%s]Failed to fees status not 1\n", time.Now())
+			log.Printf("[%s]Failed to fees status not 1\n", time.Now().Format("2006-01-02 15:04:05"))
 			continue
 		}
 		res.From = strings.ToUpper(res.From)
 		item.From = strings.ToUpper(item.From)
 		if res.From != item.From {
-			log.Printf("[%s]Failed to fees form:%s orderForm:%s\n", time.Now(), res.From, item.From)
+			log.Printf("[%s]Failed to fees form:%s orderForm:%s\n", time.Now().Format("2006-01-02 15:04:05"), res.From, item.From)
 			continue
 		}
 		Price := item.Price * 100000000000000000
@@ -224,14 +224,14 @@ func (c *Manager) LoopFeesOrder() {
 		}
 		price := strconv.Itoa(Price)
 		if price != res.Value.String() {
-			log.Printf("[%s]Failed to fees money not same money:%v,%v \n", time.Now(), Price, res.Value)
+			log.Printf("[%s]Failed to fees money not same money:%v,%v \n", time.Now().Format("2006-01-02 15:04:05"), Price, res.Value)
 			continue
 		}
 
 		res.To = strings.ToUpper(res.To)
 		item.To = strings.ToUpper(global.GVA_CONFIG.CollectionAddress.Address)
 		if res.To != item.To {
-			log.Printf("[%s]Failed to fees to:%s orderTo:%s\n", time.Now(), res.To, item.To)
+			log.Printf("[%s]Failed to fees to:%s orderTo:%s\n", time.Now().Format("2006-01-02 15:04:05"), res.To, item.To)
 			continue
 		}
 
@@ -247,7 +247,7 @@ func (c *Manager) LoopFeesOrder() {
 			System:   res.To,
 		}
 		if err := Order.Update(global.GVA_DB); err != nil {
-			log.Printf("[%s]Failed to fees update Order error:%e\n", time.Now(), err)
+			log.Printf("[%s]Failed to fees update Order error:%e\n", time.Now().Format("2006-01-02 15:04:05"), err)
 			continue
 		}
 
@@ -268,7 +268,7 @@ func (c *Manager) LoopFeesOrder() {
 			Type:       2,
 		}
 		if err := Log.CreateLog(global.GVA_DB); err != nil {
-			log.Printf("[%s]Failed to fees update Order error:%e,Log:%s\n", time.Now(), err, Log)
+			log.Printf("[%s]Failed to fees update Order error:%e,Log:%s\n", time.Now().Format("2006-01-02 15:04:05"), err, Log)
 		}
 	}
 	// }
@@ -280,11 +280,11 @@ func (c *Manager) LoopPayOrder() {
 	for _, item := range c.OrderPayList {
 		res, err2 := c.client.QueryTransactionByTxHash(item.TxHash)
 		if err2 != nil {
-			log.Printf("[%s]Failed to pay transaction error:%e\n", time.Now(), err2)
+			log.Printf("[%s]Failed to pay transaction error:%e\n", time.Now().Format("2006-01-02 15:04:05"), err2)
 			continue
 		}
 		if res.Status != 1 {
-			log.Printf("[%s]Failed to pay status not 1\n", time.Now())
+			log.Printf("[%s]Failed to pay status not 1\n", time.Now().Format("2006-01-02 15:04:05"))
 			continue
 		}
 		res.From = strings.ToUpper(res.From)
@@ -292,7 +292,7 @@ func (c *Manager) LoopPayOrder() {
 		res.To = strings.ToUpper(res.To)
 		item.To = strings.ToUpper(item.To)
 		if res.From != item.To {
-			log.Printf("[%s]Failed to pay form:%s orderForm:%s\n", time.Now(), res.From, item.From)
+			log.Printf("[%s]Failed to pay form:%s orderForm:%s\n", time.Now().Format("2006-01-02 15:04:05"), res.From, item.From)
 			continue
 		}
 		Price := item.Price * 100000000000000000
@@ -302,12 +302,12 @@ func (c *Manager) LoopPayOrder() {
 		}
 		price := strconv.Itoa(Price)
 		if price != res.Value.String() {
-			log.Printf("[%s]Failed to pay money not same money:%v,%v \n", time.Now(), Price, res.Value)
+			log.Printf("[%s]Failed to pay money not same money:%v,%v \n", time.Now().Format("2006-01-02 15:04:05"), Price, res.Value)
 			continue
 		}
 
 		if res.To != item.From {
-			log.Printf("[%s]Failed to pay to:%s orderTo:%s\n", time.Now(), res.To, item.To)
+			log.Printf("[%s]Failed to pay to:%s orderTo:%s\n", time.Now().Format("2006-01-02 15:04:05"), res.To, item.To)
 			continue
 		}
 		_ = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
@@ -323,7 +323,7 @@ func (c *Manager) LoopPayOrder() {
 				To:     res.From,
 			}
 			if err := Order.Update(tx); err != nil {
-				log.Printf("[%s]Failed to pay update Order error:%e\n", time.Now(), err)
+				log.Printf("[%s]Failed to pay update Order error:%e\n", time.Now().Format("2006-01-02 15:04:05"), err)
 				return err
 			}
 			OrderRecord := model.AvfOrderCard{
@@ -357,7 +357,7 @@ func (c *Manager) LoopPayOrder() {
 				Type:       3,
 			}
 			if err := Log.CreateLog(tx); err != nil {
-				log.Printf("[%s]Failed to pay update Order error:%e,Log:%s\n", time.Now(), err, Log)
+				log.Printf("[%s]Failed to pay update Order error:%e,Log:%s\n", time.Now().Format("2006-01-02 15:04:05"), err, Log)
 				return err
 			}
 			return nil
@@ -374,5 +374,6 @@ func (c *Manager) ChangeOrderStatus() {
 	}
 
 	_ = PayOrder.ChangeStatusByExpireTime(global.GVA_DB)
+
 	return
 }

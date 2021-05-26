@@ -25,12 +25,10 @@ import (
 	Token "gin-vue-admin/utils/blockchian/token"
 	"gin-vue-admin/utils/blockchian/tools"
 	"github.com/ethereum/go-ethereum"
-	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/accounts/keystore"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/ethereum/go-ethereum/rpc"
 	"io/ioutil"
@@ -55,6 +53,8 @@ const (
 	RawUrl = "https://http-mainnet-node.huobichain.com"
 )
 
+var Now = time.Now().Format("2006-01-02 15:04:05")
+
 type ClientManage struct {
 	rpcConn *rpc.Client
 	client  *ethclient.Client
@@ -65,13 +65,13 @@ type ClientManage struct {
 func NewClient() (*ClientManage, error) {
 	rpcDial, err := rpc.Dial(RawUrl)
 	if err != nil {
-		log.Printf("[%s]Failed to init rpc client error:%v\n", time.Now(), err)
+		log.Printf("[%s]Failed to init rpc client error:%v\n", Now, err)
 		return nil, err
 	}
 	client := ethclient.NewClient(rpcDial)
 	token, e := Token.NewToken(common.HexToAddress(contract), client)
 	if e != nil {
-		log.Printf("[%s]Failed to init token error:%v\n", time.Now(), e)
+		log.Printf("[%s]Failed to init token error:%v\n", Now, e)
 		return nil, e
 	}
 	return &ClientManage{
@@ -86,12 +86,12 @@ func (c *ClientManage) CreateAccount(password string) (account string, err error
 	addressJson, _ := ks.NewAccount(password)
 	a, e := ks.Export(addressJson, password, password)
 	if e != nil {
-		log.Printf("[%s]Failed to create new account error:%v\n", time.Now(), e)
+		log.Printf("[%s]Failed to create new account error:%v\n", Now, e)
 		return "", e
 	}
 	address := tools.Address{}
 	if err := json.Unmarshal(a, &address); err != nil {
-		log.Printf("[%s]Failed to parse json error:%v\n", time.Now(), err)
+		log.Printf("[%s]Failed to parse json error:%v\n", Now, err)
 		return "", err
 	}
 	// fmt.Printf("account:%s\n", account)
@@ -103,7 +103,7 @@ func (c *ClientManage) CreateAccount(password string) (account string, err error
 func (c *ClientManage) SelectBalance(address string) (balance *big.Float, err error) {
 	b, e := c.token.BalanceOf(nil, common.HexToAddress(address))
 	if e != nil {
-		log.Printf("[%s]Failed to select wallet balance error:%v\n", time.Now(), e)
+		log.Printf("[%s]Failed to select wallet balance error:%v\n", Now, e)
 		return nil, e
 	}
 	BigFloat := new(big.Float)
@@ -117,13 +117,13 @@ func (c *ClientManage) SelectBalance(address string) (balance *big.Float, err er
 func (c *ClientManage) NewTransactorChainID() error {
 	data, err := ioutil.ReadFile(key)
 	if err != nil {
-		log.Printf("[%s]Read file error:%v\n", time.Now(), err)
+		log.Printf("[%s]Read file error:%v\n", Now, err)
 		return err
 	}
 
 	auth, err2 := bind.NewTransactorWithChainID(strings.NewReader(string(data)), "password", big.NewInt(128))
 	if err2 != nil {
-		log.Printf("[%s]Init Transactor chainId error:%v\n", time.Now(), err2)
+		log.Printf("[%s]Init Transactor chainId error:%v\n", Now, err2)
 		return err2
 	}
 	c.auth = auth
@@ -136,15 +136,15 @@ func (c *ClientManage) TransferToAddress(Address string, Number float64) (string
 	toAddress := common.HexToAddress(Address)
 	// val, err := c.SelectBalance(Address)
 	// if err != nil {
-	// 	log.Printf("[%s]Failed to select balance: %v\n", time.Now(), err)
+	// 	log.Printf("[%s]Failed to select balance: %v\n", Now, err)
 	// 	return err
 	// }
-	// fmt.Printf("[%s]before transfer :%s\n", time.Now(), val)
+	// fmt.Printf("[%s]before transfer :%s\n", Now, val)
 
 	// Create an authorized transactor and spend 1 unicorn
 	if c.auth == nil {
 		if err := c.NewTransactorChainID(); err != nil {
-			log.Printf("[%s]Failed to create authorized transactor: %v\n", time.Now(), err)
+			log.Printf("[%s]Failed to create authorized transactor: %v\n", Now, err)
 			return "", err
 		}
 	}
@@ -152,7 +152,7 @@ func (c *ClientManage) TransferToAddress(Address string, Number float64) (string
 	// 每个代币都会有相应的位数，例如eos是18位，那么我们转账的时候，需要在金额后面加18个0
 	decimal, err3 := c.token.Decimals(nil)
 	if err3 != nil {
-		log.Printf("[%s]Failed to create decimal: %v\n", time.Now(), err3)
+		log.Printf("[%s]Failed to create decimal: %v\n", Now, err3)
 		return "", err3
 	}
 
@@ -161,14 +161,14 @@ func (c *ClientManage) TransferToAddress(Address string, Number float64) (string
 	tx, txErr := c.token.Transfer(c.auth, toAddress, convertAmount)
 
 	if txErr != nil {
-		log.Printf("[%s]Failed to request token transfer: %v\n", time.Now(), txErr)
+		log.Printf("[%s]Failed to request token transfer: %v\n", Now, txErr)
 		return "", txErr
 	}
 	ctx := context.Background()
 	receipt, WaitErr := bind.WaitMined(ctx, c.client, tx)
 
 	if WaitErr != nil {
-		log.Printf("[%s]tx mining error:%v\n", time.Now(), WaitErr)
+		log.Printf("[%s]tx mining error:%v\n", Now, WaitErr)
 		return "", WaitErr
 	}
 	if receipt.Status != 1 {
@@ -181,76 +181,76 @@ func (c *ClientManage) TransferToAddress(Address string, Number float64) (string
 }
 
 // 读取事件日志
-func (c *ClientManage) ReadTransferInfo(FromBlock, ToBlock *big.Int) error {
-	// 操作的合约
-	contractAddress := common.HexToAddress(contract)
-	// 查询条件
-	query := ethereum.FilterQuery{
-		// FromBlock: big.NewInt(4607602),
-		FromBlock: FromBlock,
-		// ToBlock:   big.NewInt(4609317),
-		ToBlock: ToBlock,
-		Addresses: []common.Address{
-			contractAddress,
-		},
-	}
-	// 查询日志
-	logs, err := c.client.FilterLogs(context.Background(), query)
-	if err != nil {
-		log.Printf("[%s]Failed filter logs error:%e", time.Now(), err)
-		return err
-	}
-	contractAbi, err := abi.JSON(strings.NewReader(string(Token.TokenABI)))
-	if err != nil {
-		log.Printf("[%s]Failed filter logs error:%e", time.Now(), err)
-		return err
-	}
-	// fmt.Printf("losg:%s", logs)
-	logTransferSig := []byte("Transfer(address,address,uint256)")
-	// LogApprovalSig := []byte("Burn(address,uint256)")
-	logTransferSigHash := crypto.Keccak256Hash(logTransferSig)
-	// logApprovalSigHash := crypto.Keccak256Hash(LogApprovalSig)
-
-	for _, vLog := range logs {
-		block, _ := c.client.BlockByNumber(context.Background(), big.NewInt(int64(vLog.BlockNumber)))
-		fmt.Printf("time: %d\n", block.Time())
-		fmt.Printf("Log Block Number: %d\n", vLog.BlockNumber)
-		fmt.Printf("Log Index: %d\n", vLog.Index)
-		fmt.Printf("Log txHash: %d\n", vLog.TxHash.Hex())
-		fmt.Printf("address:%s\n", vLog.Address.Hex())
-		fmt.Printf("TxIndex:%d\n", vLog.TxIndex)
-		switch vLog.Topics[0].Hex() {
-		case logTransferSigHash.Hex():
-			fmt.Printf("Log Name: Transfer\n")
-
-			TransferData, err := contractAbi.Unpack("Transfer", vLog.Data)
-			if err != nil {
-				log.Fatal(err)
-				return err
-			}
-
-			var transferEvent LogTransfer
-
-			fmt.Printf("transfer:%s\n", TransferData[0])
-			transferEvent.From = common.HexToAddress(vLog.Topics[1].Hex())
-			transferEvent.To = common.HexToAddress(vLog.Topics[2].Hex())
-
-			fmt.Printf("topics0: %s\n", vLog.Topics[0].Hex())
-			fmt.Printf("From: %s\n", transferEvent.From.Hex())
-			fmt.Printf("To: %s\n", transferEvent.To.Hex())
-			fmt.Printf("Tokens: %s\n", transferEvent.Tokens.String())
-		}
-	}
-
-	return nil
-}
+// func (c *ClientManage) ReadTransferInfo(FromBlock, ToBlock *big.Int) error {
+// 	// 操作的合约
+// 	contractAddress := common.HexToAddress(contract)
+// 	// 查询条件
+// 	query := ethereum.FilterQuery{
+// 		// FromBlock: big.NewInt(4607602),
+// 		FromBlock: FromBlock,
+// 		// ToBlock:   big.NewInt(4609317),
+// 		ToBlock: ToBlock,
+// 		Addresses: []common.Address{
+// 			contractAddress,
+// 		},
+// 	}
+// 	// 查询日志
+// 	logs, err := c.client.FilterLogs(context.Background(), query)
+// 	if err != nil {
+// 		log.Printf("[%s]Failed filter logs error:%e", Now, err)
+// 		return err
+// 	}
+// 	contractAbi, err := abi.JSON(strings.NewReader(string(Token.TokenABI)))
+// 	if err != nil {
+// 		log.Printf("[%s]Failed filter logs error:%e", Now, err)
+// 		return err
+// 	}
+// 	// fmt.Printf("losg:%s", logs)
+// 	logTransferSig := []byte("Transfer(address,address,uint256)")
+// 	// LogApprovalSig := []byte("Burn(address,uint256)")
+// 	logTransferSigHash := crypto.Keccak256Hash(logTransferSig)
+// 	// logApprovalSigHash := crypto.Keccak256Hash(LogApprovalSig)
+//
+// 	for _, vLog := range logs {
+// 		block, _ := c.client.BlockByNumber(context.Background(), big.NewInt(int64(vLog.BlockNumber)))
+// 		// fmt.Printf("time: %d\n", block.Time())
+// 		// fmt.Printf("Log Block Number: %d\n", vLog.BlockNumber)
+// 		// fmt.Printf("Log Index: %d\n", vLog.Index)
+// 		// fmt.Printf("Log txHash: %d\n", vLog.TxHash.Hex())
+// 		// fmt.Printf("address:%s\n", vLog.Address.Hex())
+// 		// fmt.Printf("TxIndex:%d\n", vLog.TxIndex)
+// 		switch vLog.Topics[0].Hex() {
+// 		case logTransferSigHash.Hex():
+// 			fmt.Printf("Log Name: Transfer\n")
+//
+// 			TransferData, err := contractAbi.Unpack("Transfer", vLog.Data)
+// 			if err != nil {
+// 				log.Fatal(err)
+// 				return err
+// 			}
+//
+// 			var transferEvent LogTransfer
+//
+// 			// fmt.Printf("transfer:%s\n", TransferData[0])
+// 			transferEvent.From = common.HexToAddress(vLog.Topics[1].Hex())
+// 			transferEvent.To = common.HexToAddress(vLog.Topics[2].Hex())
+//
+// 			// fmt.Printf("topics0: %s\n", vLog.Topics[0].Hex())
+// 			// fmt.Printf("From: %s\n", transferEvent.From.Hex())
+// 			// fmt.Printf("To: %s\n", transferEvent.To.Hex())
+// 			// fmt.Printf("Tokens: %s\n", transferEvent.Tokens.String())
+// 		}
+// 	}
+//
+// 	return nil
+// }
 
 // 读取最新的头部区块数
 func (c *ClientManage) ReadNewHeaderBlock() (int64, error) {
 	header, err := c.client.HeaderByNumber(context.Background(), nil)
 
 	if err != nil {
-		log.Printf("[%s]Failed to read header block error:%e", time.Now(), err)
+		log.Printf("[%s]Failed to read header block error:%e", Now, err)
 		return 0, err
 	}
 
@@ -265,7 +265,7 @@ func (c *ClientManage) ReadBlockInfo(blockNumber int64) (*types.Block, error) {
 	block, err := c.client.BlockByNumber(context.Background(), number)
 
 	if err != nil {
-		log.Printf("[%s]Failed to read block info error:%e", time.Now(), err)
+		log.Printf("[%s]Failed to read block info error:%e", Now, err)
 		return nil, err
 	}
 
@@ -286,25 +286,25 @@ func (c *ClientManage) QueryTransactionByTxHash(hash string) (res tools.Transact
 	// 通过hash查询交易事务信息
 	tx, _, e := c.client.TransactionByHash(ctx, TxHash)
 	if e != nil {
-		log.Printf("[%s]Failed to query transaction error:%e", time.Now(), e)
+		log.Printf("[%s]Failed to query transaction error:%e", Now, e)
 		return res, e
 	}
 	// 获取最新的链ID
 	chainID, e3 := c.client.NetworkID(context.Background())
 	if e3 != nil {
-		log.Printf("[%s]Failed to query transaction error:%e", time.Now(), e3)
+		log.Printf("[%s]Failed to query transaction error:%e", Now, e3)
 		return res, e3
 	}
 	// 通过链ID来获取消息
 	msg, e4 := tx.AsMessage(types.NewEIP155Signer(chainID))
 	if e4 != nil {
-		log.Printf("[%s]Failed to query transaction error:%e", time.Now(), e4)
+		log.Printf("[%s]Failed to query transaction error:%e", Now, e4)
 		return res, e4
 	}
 	// 通过单个hash来获取状态等信息
 	receipt, e5 := c.client.TransactionReceipt(context.Background(), tx.Hash())
 	if e5 != nil {
-		log.Printf("[%s]Failed to query transaction error:%e", time.Now(), e5)
+		log.Printf("[%s]Failed to query transaction error:%e", Now, e5)
 		return res, e5
 	}
 	// 返回结果
