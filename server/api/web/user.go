@@ -204,8 +204,13 @@ func MyTeam(c *gin.Context) {
 func LoopUserLower(list []*model.AvfUser, pid string) int {
 	var count int
 	for _, item := range list {
-		if item.Pid == pid {
-			count = count + LoopUserLower(list, item.WalletAddress)
+		fmt.Printf("itempid:%s,pid:%s\n", item.Pid, pid)
+		if item.Pid != "" {
+			if item.Pid == pid {
+				count = count + 1
+				fmt.Printf("message:%s\n", count)
+				count = count + LoopUserLower(list, item.WalletAddress)
+			}
 		}
 	}
 	return count
@@ -404,8 +409,13 @@ func Statistical(c *gin.Context) {
 	User := model.AvfUser{
 		GVA_MODEL: global.GVA_MODEL{ID: UserId},
 	}
+	if err := User.FindUserID(DB); err != nil {
+		response.FailWithMessage("41003", c)
+		return
+	}
 
 	listAll, err3 := User.GetListAll(DB)
+	// fmt.Printf("list:%s\n", listAll)
 	if err3 != nil {
 		MyTeam = 0
 	} else {
