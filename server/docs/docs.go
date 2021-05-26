@@ -6330,10 +6330,10 @@ var doc = `{
                 },
                 "card": {
                     "description": "卡牌信息",
-                    "$ref": "#/definitions/model.AvfCard"
+                    "$ref": "#/definitions/model.AvfOrderCard"
                 },
                 "cardId": {
-                    "description": "卡牌ID",
+                    "description": "卡牌记录ID",
                     "type": "integer"
                 },
                 "createTime": {
@@ -6366,6 +6366,10 @@ var doc = `{
                 },
                 "payment": {
                     "description": "收入支出",
+                    "type": "integer"
+                },
+                "pid": {
+                    "description": "卡牌ID",
                     "type": "integer"
                 },
                 "tx_hash": {
@@ -7293,10 +7297,10 @@ var doc = `{
                 },
                 "card": {
                     "description": "卡牌信息",
-                    "$ref": "#/definitions/model.AvfCard"
+                    "$ref": "#/definitions/model.AvfOrderCard"
                 },
                 "cardId": {
-                    "description": "卡牌ID",
+                    "description": "卡牌记录ID",
                     "type": "integer"
                 },
                 "createTime": {
@@ -7337,6 +7341,10 @@ var doc = `{
                 },
                 "payment": {
                     "description": "收入支出",
+                    "type": "integer"
+                },
+                "pid": {
+                    "description": "卡牌ID",
                     "type": "integer"
                 },
                 "tx_hash": {
@@ -7800,6 +7808,79 @@ var doc = `{
                 }
             }
         },
+        "web_tools.AvfOrder": {
+            "type": "object",
+            "properties": {
+                "block": {
+                    "description": "区块号",
+                    "type": "string"
+                },
+                "card_level": {
+                    "description": "卡牌等级",
+                    "type": "string"
+                },
+                "created_at": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "from": {
+                    "description": "支付地址",
+                    "type": "string"
+                },
+                "gas": {
+                    "description": "手续费",
+                    "type": "string"
+                },
+                "gasPrice": {
+                    "description": "手续费价格",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "订单ID",
+                    "type": "integer"
+                },
+                "num": {
+                    "description": "数量",
+                    "type": "integer"
+                },
+                "number": {
+                    "description": "剩余数量",
+                    "type": "integer"
+                },
+                "orderSn": {
+                    "description": "订单编号",
+                    "type": "string"
+                },
+                "payTime": {
+                    "description": "支付时间",
+                    "type": "integer"
+                },
+                "price": {
+                    "description": "价格",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态 1-待支付 2-待确认 3-已完成 4-已取消5-已关闭",
+                    "type": "integer"
+                },
+                "to": {
+                    "description": "收款地址",
+                    "type": "string"
+                },
+                "txHash": {
+                    "description": "交易hash",
+                    "type": "string"
+                },
+                "uid": {
+                    "description": "用户ID",
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
         "web_tools.AvfOrderCard": {
             "type": "object",
             "properties": {
@@ -8159,7 +8240,7 @@ var doc = `{
                     "description": "订单列表",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/model.AvfOrder"
+                        "$ref": "#/definitions/web_tools.AvfOrder"
                     }
                 },
                 "total": {
