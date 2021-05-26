@@ -80,6 +80,9 @@ func GetOrderList(c *gin.Context) {
 			CardLevel = CardLevel + level[item2.Level] + ","
 		}
 		CardLevel = strings.TrimRight(CardLevel, ",")
+		if len(CardLevel) == 0 {
+			CardLevel = "--"
+		}
 		l := web_tools.AvfOrder{
 			Id:        item.ID,
 			CreatedAt: item.CreatedAt,
