@@ -286,7 +286,9 @@ func MyStatistical(c *gin.Context) {
 		AllForce = 0
 	} else {
 		for _, item := range list2 {
-			AllForce = AllForce + item.Star
+			if item.Status == 1 {
+				AllForce = AllForce + item.Star
+			}
 		}
 	}
 	UserBill := model.AvfUserBill{
