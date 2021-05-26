@@ -271,6 +271,19 @@ func MyStatistical(c *gin.Context) {
 		response.FailWithMessage("41003", c)
 		return
 	}
+	var AllForce int
+
+	OrderCard := model.AvfOrderCard{
+		Uid: int(UserId),
+	}
+	list2, err2 := OrderCard.GetListAll(global.GVA_DB)
+	if err2 != nil {
+		AllForce = 0
+	} else {
+		for _, item := range list2 {
+			AllForce = AllForce + item.Star
+		}
+	}
 	UserBill := model.AvfUserBill{
 		Uid: int(UserId),
 	}
@@ -294,7 +307,7 @@ func MyStatistical(c *gin.Context) {
 			yesterday = (yesterday*10000 + item.Money*10000) / 10000
 		}
 	}
-
+	res.AllForce = AllForce
 	res.AllEarnings = web_tools.FormatFloat(all, 5)
 	res.TodayEarnings = web_tools.FormatFloat(today, 5)
 	res.YesterdayEarnings = web_tools.FormatFloat(yesterday, 5)

@@ -12,7 +12,8 @@ import (
 type AvfUserBill struct {
 	global.GVA_MODEL
 	Uid        int          `json:"uid" form:"uid" gorm:"column:uid;comment:用户ID;type:int;size:10;"`                                  // 用户ID
-	CardId     int          `json:"cardId" form:"cardId" gorm:"column:card_id;comment:卡牌ID;type:int;size:10;"`                        // 卡牌ID
+	CardId     int          `json:"cardId" form:"cardId" gorm:"column:card_id;comment:卡牌记录ID;type:int;size:10;"`                      // 卡牌记录ID
+	Pid        int          `json:"pid" form:"pid" gorm:"column:pid;comment:卡牌ID;type:int;size:10;"`                                  // 卡牌ID
 	Address    string       `json:"address" form:"address" gorm:"column:address;comment:钱包地址;type:varchar(255);size:255;"`            // 钱包地址
 	Type       int          `json:"type" form:"type" gorm:"column:type;comment:类型 1-发放收益 2-盲盒 3-购买卡牌 4-手续费 5-直推收益;type:int;size:10;"` // 类型 1-发放收益 2-盲盒 3-购买卡牌 4-手续费 5-直推收益
 	Money      float64      `json:"money" form:"money" gorm:"column:money;comment:金额;type:decimal;size:9,4;"`                         // 金额

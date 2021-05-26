@@ -202,9 +202,9 @@ func MyCardDetail(c *gin.Context) {
 	}
 	// 用户账单
 	UserBill := model.AvfUserBill{
-		Uid:    int(UserId),
-		CardId: int(OrderCard.ID),
-		Type:   1,
+		Uid:  int(UserId),
+		Pid:  int(OrderCard.ID),
+		Type: 1,
 	}
 	var yesterday, today, all float64
 
@@ -232,9 +232,9 @@ func MyCardDetail(c *gin.Context) {
 
 	res := web_tools.MyCardDetailResponse{
 		OrderCard: OrderCard,
-		All:       all,
-		Today:     today,
-		Yesterday: yesterday,
+		All:       web_tools.FormatFloat(all, 5),
+		Today:     web_tools.FormatFloat(today, 5),
+		Yesterday: web_tools.FormatFloat(yesterday, 5),
 	}
 
 	Order := model.AvfCardTransfer{

@@ -80,8 +80,11 @@ func (h *AvfOrderCard) GetListByMining(DB *gorm.DB) (list []*AvfOrderCard, err e
 }
 
 func (h *AvfOrderCard) GetListAll(DB *gorm.DB) (list []*AvfOrderCard, err error) {
-
-	if err = DB.Table(h.TableName()).Find(&list).Error; err != nil {
+	DB = DB.Table(h.TableName())
+	if h.Uid != 0 {
+		DB = DB.Where("uid = ?", h.Uid)
+	}
+	if err = DB.Find(&list).Error; err != nil {
 		return nil, err
 	}
 	return
