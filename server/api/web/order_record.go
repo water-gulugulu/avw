@@ -202,9 +202,9 @@ func MyCardDetail(c *gin.Context) {
 	}
 	// 用户账单
 	UserBill := model.AvfUserBill{
-		Uid:  int(UserId),
-		Pid:  int(OrderCard.ID),
-		Type: 1,
+		Uid:    int(UserId),
+		CardId: int(OrderCard.ID),
+		Type:   1,
 	}
 	var yesterday, today, all float64
 
