@@ -59,6 +59,23 @@ func (h *AvfUserBill) GetByUidAndCardId(DB *gorm.DB) (list []AvfUserBill, err er
 	return
 }
 
+func (h *AvfUserBill) GetByUidAndPid(DB *gorm.DB) (list []AvfUserBill, err error) {
+	DB = DB.Table(h.TableName()).Where("uid = ? and pid = ?", h.Uid, h.Pid)
+	if h.CreateTime != 0 {
+		DB = DB.Where("create_time between ? and ?", h.CreateTime, h.CreateTime+86400)
+	}
+	if h.PayType != 0 {
+		DB = DB.Where("pay_type = ?", h.PayType)
+	}
+	if h.Type != 0 {
+		DB = DB.Where("type = ?", h.Type)
+	}
+	if err = DB.Order("id desc").Find(&list).Error; err != nil {
+		return nil, err
+	}
+	return
+}
+
 func (h *AvfUserBill) Create(DB *gorm.DB) error {
 	return DB.Table(h.TableName()).Create(&h).Error
 }
