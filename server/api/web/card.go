@@ -308,16 +308,16 @@ func PayCard(c *gin.Context) {
 			log.Printf("pay update error:%e\n", err)
 			return err
 		}
-
+		Price := web_tools.IntToFloat(CardTransfer.Price)
 		UserBill := model.AvfUserBill{
 			GVA_MODEL:  global.GVA_MODEL{CreatedAt: time.Now(), UpdatedAt: time.Now()},
 			Uid:        int(UserId),
 			Address:    Address,
 			Type:       3,
-			Money:      float64(CardTransfer.Price),
+			Money:      Price,
 			Payment:    2,
 			PayType:    2,
-			Detail:     fmt.Sprintf("购买卡牌支付金额:%v", CardTransfer.Price),
+			Detail:     fmt.Sprintf("购买卡牌支付金额:%v", Price),
 			CreateTime: int(time.Now().Unix()),
 		}
 		if err := UserBill.Create(tx); err != nil {

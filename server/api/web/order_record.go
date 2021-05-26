@@ -447,16 +447,17 @@ func PayFees(c *gin.Context) {
 			return err
 		}
 
+		Fees := web_tools.IntToFloat(cardTransfer.Fees)
 		UserBill := model.AvfUserBill{
 			GVA_MODEL:  global.GVA_MODEL{CreatedAt: time.Now(), UpdatedAt: time.Now()},
 			Uid:        int(UserId),
 			Address:    Address,
 			Type:       4,
-			Money:      float64(cardTransfer.Fees),
-			Fees:       float64(cardTransfer.Fees),
+			Money:      Fees,
+			Fees:       Fees,
 			Payment:    2,
 			PayType:    2,
-			Detail:     fmt.Sprintf("转让卡牌支付手续费:%v", cardTransfer.Fees),
+			Detail:     fmt.Sprintf("转让卡牌支付手续费:%v", Fees),
 			CreateTime: int(time.Now().Unix()),
 		}
 		if err := UserBill.Create(tx); err != nil {

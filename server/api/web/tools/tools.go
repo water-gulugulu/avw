@@ -31,8 +31,10 @@ import (
 	"github.com/w3liu/go-common/constant/timeformat"
 	"go.uber.org/zap"
 	"math"
+	"math/big"
 	"math/rand"
 	"os"
+	"strconv"
 	"sync/atomic"
 	"time"
 )
@@ -180,4 +182,13 @@ func FormatFloat(num float64, decimal int) float64 {
 	// 再除回去，小数点后无效的0也就不存在了
 	return math.Trunc(num*d) / d
 	// return strconv.FormatFloat(math.Trunc(num*d)/d, 'f', -1, 64)
+}
+
+func IntToFloat(num int) float64 {
+	totalAmount := num
+	numrator, _ := new(big.Float).SetPrec(uint(1024)).SetString(strconv.Itoa(totalAmount))
+
+	denominator := big.NewFloat(1)
+	denominator1, _ := numrator.Mul(numrator, denominator).Float64()
+	return denominator1
 }

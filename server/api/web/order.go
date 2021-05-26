@@ -217,15 +217,16 @@ func PayOrder(c *gin.Context) {
 		if err := Order.UpdateOrder(tx); err != nil {
 			return err
 		}
+		Price := web_tools.IntToFloat(int(Order.Price))
 		UserBill := model.AvfUserBill{
 			GVA_MODEL:  global.GVA_MODEL{CreatedAt: time.Now(), UpdatedAt: time.Now()},
 			Uid:        int(UserId),
 			Address:    address,
 			Type:       2,
-			Money:      float64(Order.Price),
+			Money:      Price,
 			Payment:    2,
 			PayType:    2,
-			Detail:     fmt.Sprintf("购买卡牌盲盒支付金额:%v", Order.Price),
+			Detail:     fmt.Sprintf("购买卡牌盲盒支付金额:%v", Price),
 			CreateTime: int(time.Now().Unix()),
 		}
 		if err := UserBill.Create(tx); err != nil {
