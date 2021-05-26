@@ -286,18 +286,18 @@ func MyStatistical(c *gin.Context) {
 	yesterdayTime := todayTime - 84600
 
 	for _, item := range list {
-		all = all + item.Money
+		all = (all*10000 + item.Money*10000) / 10000
 		if item.CreateTime > todayTime && item.CreateTime < todayTime+86399 {
-			today = today + item.Money
+			today = (today*10000 + item.Money*10000) / 10000
 		}
 		if item.CreateTime > yesterdayTime && item.CreateTime < yesterdayTime+86399 {
-			yesterday = yesterday + item.Money
+			yesterday = (yesterday*10000 + item.Money*10000) / 10000
 		}
 	}
 
-	res.AllEarnings = all
-	res.TodayEarnings = today
-	res.YesterdayEarnings = yesterday
+	res.AllEarnings = web_tools.FormatFloat(all, 5)
+	res.TodayEarnings = web_tools.FormatFloat(today, 5)
+	res.YesterdayEarnings = web_tools.FormatFloat(yesterday, 5)
 
 	response.OkWithData(res, c)
 	return
