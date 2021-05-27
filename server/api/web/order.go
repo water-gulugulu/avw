@@ -26,6 +26,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -62,12 +63,50 @@ func GetOrderList(c *gin.Context) {
 	res := web_tools.OrderListResponse{}
 	list, total, err := Order.FindList(global.GVA_DB, p, s)
 	if err != nil {
-		res.List = make([]model.AvfOrder, 0)
+		res.List = make([]web_tools.AvfOrder, 0)
 		response.OkWithData(res, c)
 		return
 	}
+	level := map[int]string{1: "N", 2: "R", 3: "SR", 4: "SSR"}
+	newList := make([]web_tools.AvfOrder, 0)
+	orderCard := model.AvfOrderCard{}
+	for _, item := range list {
+		var CardLevel string
+		orderCard.OrderId = int(item.ID)
+		orderCard.Uid = item.Uid
+		cardList, _ := orderCard.FindListByOrderId(global.GVA_DB)
+
+		for _, item2 := range cardList {
+			CardLevel = CardLevel + level[item2.Level] + ","
+		}
+		CardLevel = strings.TrimRight(CardLevel, ",")
+		if len(CardLevel) == 0 {
+			CardLevel = "--"
+		}
+		l := web_tools.AvfOrder{
+			Id:        item.ID,
+			CreatedAt: item.CreatedAt,
+			UpdatedAt: item.UpdatedAt,
+			DeletedAt: item.DeletedAt,
+			Uid:       item.Uid,
+			OrderSn:   item.OrderSn,
+			Price:     item.Price,
+			Num:       item.Num,
+			Number:    item.Number,
+			Status:    item.Status,
+			PayTime:   item.PayTime,
+			TxHash:    item.TxHash,
+			Block:     item.Block,
+			Gas:       item.Gas,
+			GasPrice:  item.GasPrice,
+			From:      item.From,
+			To:        item.To,
+			CardLevel: CardLevel,
+		}
+		newList = append(newList, l)
+	}
 	res = web_tools.OrderListResponse{
-		List:  list,
+		List:  newList,
 		Total: total,
 	}
 	response.OkWithData(res, c)
