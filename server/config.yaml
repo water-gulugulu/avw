@@ -5,7 +5,7 @@ aliyun-oss:
   bucket-name: yourBucketName
   bucket-url: yourBucketUrl
 autocode:
-  root: /Users/mt/tools/接单/NEF
+  root: /home/avw
   server: /server
   server-api: /api/v1
   server-initialize: /initialize
@@ -19,8 +19,8 @@ autocode:
   web-table: /view
   web-flow: /view
 blind-box:
-  one: "5"
-  ten: "45"
+  one: "0.1"
+  ten: "0.95"
 captcha:
   key-long: 6
   img-width: 240
