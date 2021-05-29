@@ -46,14 +46,10 @@
       <!--  BlindBox start  -->
       <h2>盲盒配置</h2>
       <el-form-item label="一连抽">
-        <el-input v-model="config.blindBox.one" show-word-limit clearable prefix-icon='el-icon-money'></el-input>
-        <template slot="prepend">价格</template>
-        <template slot="append">HT</template>
+        <el-input v-model="config.blindBox.one" :precision="2" :step="0.1" :max="10"></el-input>
       </el-form-item>
       <el-form-item label="十连抽">
-        <el-input v-model="config.blindBox.ten" show-word-limit clearable prefix-icon='el-icon-money'></el-input>
-        <template slot="prepend">价格</template>
-        <template slot="append">HT</template>
+        <el-input v-model="config.blindBox.ten" :precision="2" :step="0.1" :max="10"></el-input>
       </el-form-item>
       <!--  BlindBox end  -->
       <!--  BlindBox start  -->
@@ -65,19 +61,22 @@
       <!--  BlindBox start  -->
       <h2>卡牌转让设置</h2>
       <el-form-item label="手续费百分比">
-        <el-input v-model="config.collectionAddress.fees"></el-input>
+        <el-input v-model.number="config.collectionAddress.fees"></el-input>
       </el-form-item>
       <el-form-item label="转让原价百分比">
-        <el-input v-model="config.collectionAddress.proportion"></el-input>
+        <el-input v-model.number="config.collectionAddress.proportion"></el-input>
       </el-form-item>
       <!--  BlindBox end  -->
       <!--  BlindBox start  -->
       <h2>收益设置</h2>
-      <el-form-item label="算力比例">
-        <el-input v-model="config.collectionAddress.exchange" placeholder="此处为:1算力=(X)AVW"></el-input>
-      </el-form-item>
+      <!--<el-form-item label="算力比例">
+        <el-input v-model.number="config.collectionAddress.exchange" placeholder="此处为:1算力=(X)AVW"></el-input>
+      </el-form-item>-->
       <el-form-item label="直推收益比例">
-        <el-input v-model="config.collectionAddress.direct" placeholder="直推收益比例百分比"></el-input>
+        <el-input v-model.number="config.collectionAddress.direct" placeholder="直推收益比例百分比"></el-input>
+      </el-form-item>
+      <el-form-item label="每日收益上限">
+        <el-input v-model.number="config.collectionAddress.maxExchange" placeholder="每日发出的收益总额"></el-input>
       </el-form-item>
       <!--  BlindBox end  -->
 
@@ -367,7 +366,8 @@ export default {
         zap: {},
         local: {},
         email: {},
-        blindBox: {}
+        blindBox: {},
+        collectionAddress: {}
       }
     };
   },

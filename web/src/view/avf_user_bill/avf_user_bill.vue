@@ -30,37 +30,37 @@
       tooltip-effect="dark"
     >
     <el-table-column type="selection" width="55"></el-table-column>
-    <el-table-column label="日期" width="180">
-         <template slot-scope="scope">{{scope.row.CreatedAt|formatDate}}</template>
-    </el-table-column>
     
-    <el-table-column label="用户ID" prop="uid" width="120"></el-table-column> 
+    <!--<el-table-column label="用户ID" prop="uid" width="120"></el-table-column> -->
     
-    <el-table-column label="卡牌ID" prop="cardId" width="120"></el-table-column> 
+    <el-table-column label="卡牌ID" prop="cardId" width="70"></el-table-column>
     
-    <el-table-column label="钱包地址" prop="address" width="120"></el-table-column> 
+    <el-table-column label="钱包地址" prop="address" width="360"></el-table-column>
     
-    <el-table-column label="账单类型" prop="type" width="120">
+    <el-table-column label="账单类型" prop="type" width="80">
          <template slot-scope="scope">{{scope.row.type|formatBoolean}}</template>
     </el-table-column>
     
     <el-table-column label="金额" prop="money" width="120"></el-table-column> 
     
-    <el-table-column label="手续费" prop="fees" width="120"></el-table-column> 
+    <el-table-column label="手续费" prop="fees" width="80"></el-table-column>
     
-    <el-table-column label="余额" prop="balance" width="120"></el-table-column> 
+    <!--<el-table-column label="余额" prop="balance" width="120"></el-table-column> -->
     
-    <el-table-column label="收入支出" prop="payment" width="120">
-         <template slot-scope="scope">{{scope.row.payment|formatBoolean}}</template>
+    <el-table-column label="收入支出" prop="payment" width="80">
+         <template slot-scope="scope">{{scope.row.payment|formatPayment}}</template>
     </el-table-column>
     
-    <el-table-column label="支付方式" prop="payType" width="120">
-         <template slot-scope="scope">{{scope.row.payType|formatBoolean}}</template>
+    <el-table-column label="支付方式" prop="payType" width="80">
+         <template slot-scope="scope">{{scope.row.payType|formatPayType}}</template>
     </el-table-column>
     
-    <el-table-column label="描述" prop="detail" width="120"></el-table-column> 
-    
-    <el-table-column label="创建时间" prop="createTime" width="120"></el-table-column> 
+    <el-table-column label="描述" prop="detail" width="350"></el-table-column>
+
+    <el-table-column label="创建日期" width="180">
+        <template slot-scope="scope">{{scope.row.CreatedAt|formatDate}}</template>
+    </el-table-column>
+    <!--<el-table-column label="创建时间" prop="createTime" width="120"></el-table-column> -->
     
       <el-table-column label="按钮组">
         <template slot-scope="scope">
@@ -157,8 +157,8 @@ export default {
             money:0,
             fees:0,
             balance:0,
-            payment:false,
-            payType:false,
+            payment:1,
+            payType:1,
             detail:"",
             createTime:0,
             
@@ -179,6 +179,20 @@ export default {
         return bool ? "是" :"否";
       } else {
         return "";
+      }
+    },
+    formatPayType: function(payType) {
+      if (payType == 1) {
+        return "AVW";
+      } else {
+        return "HT";
+      }
+    },
+    formatPayment: function(payment) {
+      if (payment == 1) {
+        return "收入";
+      } else {
+        return "支出";
       }
     }
   },
