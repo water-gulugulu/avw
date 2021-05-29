@@ -135,17 +135,17 @@ func CreateOrder(c *gin.Context) {
 		return
 	}
 	blindBox := global.GVA_CONFIG.BlindBox
-	var price int64
+	var price float64
 	var n int = 1
 	number, _ := strconv.Atoi(num)
 	switch blindBoxType {
 	case "1":
-		one, _ := strconv.Atoi(blindBox.One)
-		price = int64(one * number)
+		one, _ := strconv.ParseFloat(blindBox.One, 64)
+		price = one * web_tools.IntToFloat(number)
 		n = number
 	case "2":
-		ten, _ := strconv.Atoi(blindBox.One)
-		price = int64(ten * number)
+		ten, _ := strconv.ParseFloat(blindBox.Ten, 64)
+		price = ten * web_tools.IntToFloat(number)
 		n = number * 10
 	default:
 		response.FailWithMessage("41007", c)
@@ -256,16 +256,16 @@ func PayOrder(c *gin.Context) {
 		if err := Order.UpdateOrder(tx); err != nil {
 			return err
 		}
-		Price := web_tools.IntToFloat(int(Order.Price))
+		// Price := web_tools.IntToFloat(int(Order.Price))
 		UserBill := model.AvfUserBill{
 			GVA_MODEL:  global.GVA_MODEL{CreatedAt: time.Now(), UpdatedAt: time.Now()},
 			Uid:        int(UserId),
 			Address:    address,
 			Type:       2,
-			Money:      Price,
+			Money:      Order.Price,
 			Payment:    2,
 			PayType:    2,
-			Detail:     fmt.Sprintf("购买卡牌盲盒支付金额:%v", Price),
+			Detail:     fmt.Sprintf("购买卡牌盲盒支付金额:%v", Order.Price),
 			CreateTime: int(time.Now().Unix()),
 		}
 		if err := UserBill.Create(tx); err != nil {

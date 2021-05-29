@@ -10,19 +10,19 @@ import (
 // 如果含有time.Time 请自行import time包
 type AvfOrder struct {
 	global.GVA_MODEL
-	Uid      int    `json:"uid" form:"uid" gorm:"column:uid;comment:用户ID;type:int;size:10;"`                             // 用户ID
-	OrderSn  string `json:"orderSn" form:"orderSn" gorm:"column:order_sn;comment:订单编号;type:varchar(255);size:255;"`      // 订单编号
-	Price    int64  `json:"price" form:"price" gorm:"column:price;comment:支付价格;type:int;size:10;"`                       // 价格
-	Num      int    `json:"num" form:"num" gorm:"column:num;comment:购买数量;type:int;size:10;"`                             // 数量
-	Number   int    `json:"number" form:"number" gorm:"force;column:number;comment:剩余数量;type:int;size:10;"`              // 剩余数量
-	Status   int    `json:"status" form:"status" gorm:"column:status;comment:状态 1-待支付 2-待确认 3-已完成 4-已取消5-已关闭;type:int;"` // 状态 1-待支付 2-待确认 3-已完成 4-已取消5-已关闭
-	PayTime  int    `json:"payTime" form:"payTime" gorm:"column:pay_time;comment:支付时间;type:int;size:10;"`                // 支付时间
-	TxHash   string `json:"txHash" form:"txHash" gorm:"column:tx_hash;comment:事务哈希;type:varchar(255);size:255;"`         // 交易hash
-	Block    string `json:"block" form:"block" gorm:"column:block;comment:区块编号;type:varchar(30);size:30;"`               // 区块号
-	Gas      string `json:"gas" form:"gas" gorm:"column:gas;comment:手续费;type:varchar(50);size:50;"`                      // 手续费
-	GasPrice string `json:"gasPrice" form:"gasPrice" gorm:"column:gas_price;comment:手续费价格;type:varchar(50);size:50;"`    // 手续费价格
-	From     string `json:"from" form:"from" gorm:"column:from;comment:支付地址;type:varchar(255);size:255;"`                // 支付地址
-	To       string `json:"to" form:"to" gorm:"column:to;comment:收款地址;type:varchar(255);size:255;"`                      // 收款地址
+	Uid      int     `json:"uid" form:"uid" gorm:"column:uid;comment:用户ID;type:int;size:10;"`                             // 用户ID
+	OrderSn  string  `json:"orderSn" form:"orderSn" gorm:"column:order_sn;comment:订单编号;type:varchar(255);size:255;"`      // 订单编号
+	Price    float64 `json:"price" form:"price" gorm:"column:price;comment:支付价格;type:decimal;size:9,4;"`                  // 价格
+	Num      int     `json:"num" form:"num" gorm:"column:num;comment:购买数量;type:int;size:10;"`                             // 数量
+	Number   int     `json:"number" form:"number" gorm:"force;column:number;comment:剩余数量;type:int;size:10;"`              // 剩余数量
+	Status   int     `json:"status" form:"status" gorm:"column:status;comment:状态 1-待支付 2-待确认 3-已完成 4-已取消5-已关闭;type:int;"` // 状态 1-待支付 2-待确认 3-已完成 4-已取消5-已关闭
+	PayTime  int     `json:"payTime" form:"payTime" gorm:"column:pay_time;comment:支付时间;type:int;size:10;"`                // 支付时间
+	TxHash   string  `json:"txHash" form:"txHash" gorm:"column:tx_hash;comment:事务哈希;type:varchar(255);size:255;"`         // 交易hash
+	Block    string  `json:"block" form:"block" gorm:"column:block;comment:区块编号;type:varchar(30);size:30;"`               // 区块号
+	Gas      string  `json:"gas" form:"gas" gorm:"column:gas;comment:手续费;type:varchar(50);size:50;"`                      // 手续费
+	GasPrice string  `json:"gasPrice" form:"gasPrice" gorm:"column:gas_price;comment:手续费价格;type:varchar(50);size:50;"`    // 手续费价格
+	From     string  `json:"from" form:"from" gorm:"column:from;comment:支付地址;type:varchar(255);size:255;"`                // 支付地址
+	To       string  `json:"to" form:"to" gorm:"column:to;comment:收款地址;type:varchar(255);size:255;"`                      // 收款地址
 }
 
 func (h *AvfOrder) TableName() string {

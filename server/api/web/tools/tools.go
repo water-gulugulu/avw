@@ -192,7 +192,7 @@ func GetTodayZeroTimeStamp() int {
 
 func FormatFloat(num float64, decimal int) float64 {
 	// 默认乘1
-	d := float64(1)
+	d := float64(100000000000000000)
 	if decimal > 0 {
 		// 10的N次方
 		d = math.Pow10(decimal)
@@ -210,4 +210,10 @@ func IntToFloat(num int) float64 {
 	denominator := big.NewFloat(1)
 	denominator1, _ := numrator.Mul(numrator, denominator).Float64()
 	return denominator1
+}
+
+// 截取小数位数
+func Round(f float64, n int) float64 {
+	pow10_n := math.Pow10(n)
+	return math.Trunc((f/pow10_n)*pow10_n) / pow10_n
 }

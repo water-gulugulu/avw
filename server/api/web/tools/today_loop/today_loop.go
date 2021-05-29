@@ -24,7 +24,7 @@ import (
 	"gin-vue-admin/model"
 	"gin-vue-admin/utils/blockchian"
 	"log"
-	"strconv"
+	"math/big"
 	"time"
 )
 
@@ -90,9 +90,14 @@ func (c *Manager) Transfer() {
 		return
 	}
 	l := make(map[int]*model.AvfOrderCard, 0)
+	var allStar int
 	for key, item := range list {
 		l[key] = item
+		allStar = allStar + item.Star
 	}
+	starExchange := global.GVA_CONFIG.CollectionAddress.MaxExchange
+	oneStarExchange := new(big.Float).Quo(big.NewFloat(web_tools.IntToFloat(starExchange)), big.NewFloat(web_tools.IntToFloat(allStar)))
+
 	c.LoopList = l
 	if len(c.LoopList) == 0 {
 		fmt.Println("列表空的")
@@ -102,11 +107,9 @@ func (c *Manager) Transfer() {
 	var Parent *model.AvfUser
 	var UserBill model.AvfUserBill
 	var hash, parentHash string
-	Exchange := global.GVA_CONFIG.CollectionAddress.Exchange
 	Direct := global.GVA_CONFIG.CollectionAddress.Direct
-
-	e, _ := strconv.ParseFloat(Exchange, 64)
-	d, _ := strconv.ParseFloat(Direct, 64)
+	e, _ := oneStarExchange.Float64()
+	d := web_tools.IntToFloat(Direct)
 
 	UserList, err2 := new(model.AvfUser).GetListAll(DB)
 	if err2 != nil {
@@ -118,11 +121,12 @@ func (c *Manager) Transfer() {
 		UserMap[item.WalletAddress] = item
 	}
 	for key, item := range c.LoopList {
-		Price := e * float64(item.Star)
-		ParentPrice := d * Price / 100
-		Price = web_tools.FormatFloat(Price, 4)
+		Price := e * web_tools.IntToFloat(item.Star)
+		Price = web_tools.Round(Price, 4)
+		ParentPrice := Price * d / 100
 		ParentPrice = web_tools.FormatFloat(ParentPrice, 4)
 
+		// fmt.Printf("price:%v,parentPrice:%v\n", Price, ParentPrice)
 		hash, err = c.BlockChain.TransferToAddress(item.User.WalletAddress, Price)
 		if err != nil {
 			log.Printf("[%s]用户地址：%s,发放每日挖矿收益失败，金额：%v,:%e\n", time.Now(), item.User.WalletAddress, Price, err)
