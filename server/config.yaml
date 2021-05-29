@@ -33,7 +33,7 @@ collection-address:
   proportion: 80
   exchange: 0
   direct: 20
-  debug: "1"
+  debug: "0"
   max-exchange: 10000000
 email:
   to: xxx@qq.com
