@@ -36,7 +36,7 @@ type AvfOrder struct {
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`                                                                              // 删除时间
 	Uid       int            `json:"uid" form:"uid" gorm:"column:uid;comment:用户ID;type:int;size:10;"`                             // 用户ID
 	OrderSn   string         `json:"orderSn" form:"orderSn" gorm:"column:order_sn;comment:订单编号;type:varchar(255);size:255;"`      // 订单编号
-	Price     int64          `json:"price" form:"price" gorm:"column:price;comment:支付价格;type:int;size:10;"`                       // 价格
+	Price     float64        `json:"price" form:"price" gorm:"column:price;comment:支付价格;type:int;size:10;"`                       // 价格
 	Num       int            `json:"num" form:"num" gorm:"column:num;comment:购买数量;type:int;size:10;"`                             // 数量
 	Number    int            `json:"number" form:"number" gorm:"force;column:number;comment:剩余数量;type:int;size:10;"`              // 剩余数量
 	Status    int            `json:"status" form:"status" gorm:"column:status;comment:状态 1-待支付 2-待确认 3-已完成 4-已取消5-已关闭;type:int;"` // 状态 1-待支付 2-待确认 3-已完成 4-已取消5-已关闭
@@ -124,8 +124,8 @@ type MyCardDetailResponse struct {
 	All             float64                `json:"all"`              // 全部收益
 	Today           float64                `json:"today"`            // 今日收益
 	Yesterday       float64                `json:"yesterday"`        // 昨日收益
-	Fees            interface{}            `json:"fees"`             // 手续费
-	Price           interface{}            `json:"price"`            // 最低价格
+	Fees            float64                `json:"fees"`             // 手续费
+	Price           float64                `json:"price"`            // 最低价格
 	PricePercentage int                    `json:"price_percentage"` // 手续费百分比
 	FeesPercentage  int                    `json:"fees_percentage"`  // 最低价格百分比
 }

@@ -5539,19 +5539,23 @@ var doc = `{
                 },
                 "direct": {
                     "description": "直推奖金比例",
-                    "type": "string"
+                    "type": "integer"
                 },
                 "exchange": {
                     "description": "算力每日释放avw比例",
-                    "type": "string"
+                    "type": "integer"
                 },
                 "fees": {
                     "description": "转卡手续费百分比",
-                    "type": "string"
+                    "type": "integer"
+                },
+                "maxExchange": {
+                    "description": "每日收益上线",
+                    "type": "integer"
                 },
                 "proportion": {
                     "description": "卡牌卖出原价比例",
-                    "type": "string"
+                    "type": "integer"
                 }
             }
         },
@@ -6171,7 +6175,7 @@ var doc = `{
                 },
                 "price": {
                     "description": "价格",
-                    "type": "integer"
+                    "type": "number"
                 },
                 "status": {
                     "description": "状态 1-待支付 2-待确认 3-已完成 4-已取消5-已关闭",
@@ -7260,7 +7264,7 @@ var doc = `{
                 },
                 "price": {
                     "description": "价格",
-                    "type": "integer"
+                    "type": "number"
                 },
                 "status": {
                     "description": "状态 1-待支付 2-待确认 3-已完成 4-已取消5-已关闭",
@@ -7857,7 +7861,7 @@ var doc = `{
                 },
                 "price": {
                     "description": "价格",
-                    "type": "integer"
+                    "type": "number"
                 },
                 "status": {
                     "description": "状态 1-待支付 2-待确认 3-已完成 4-已取消5-已关闭",
@@ -8099,7 +8103,7 @@ var doc = `{
                 },
                 "fees": {
                     "description": "手续费",
-                    "type": "object"
+                    "type": "number"
                 },
                 "fees_percentage": {
                     "description": "最低价格百分比",
@@ -8115,7 +8119,7 @@ var doc = `{
                 },
                 "price": {
                     "description": "最低价格",
-                    "type": "object"
+                    "type": "number"
                 },
                 "price_percentage": {
                     "description": "手续费百分比",

@@ -39,37 +39,39 @@
       tooltip-effect="dark"
     >
     <el-table-column type="selection" width="55"></el-table-column>
-    <el-table-column label="日期" width="180">
-         <template slot-scope="scope">{{scope.row.CreatedAt|formatDate}}</template>
+    <el-table-column label="用户的上级地址" prop="pid" width="350">
+        <template slot-scope="scope">{{ scope.row.pid}}</template>
     </el-table-column>
     
-    <el-table-column label="用户的上级地址" prop="pid" width="120"></el-table-column> 
+    <el-table-column label="用户名" prop="username" width="160"></el-table-column>
     
-    <el-table-column label="用户名" prop="username" width="120"></el-table-column> 
+    <!--<el-table-column label="帐号手机号" prop="mobile" width="120"></el-table-column> -->
     
-    <el-table-column label="帐号手机号" prop="mobile" width="120"></el-table-column> 
-    
-    <el-table-column label="钱包地址" prop="walletAddress" width="120"></el-table-column> 
+    <el-table-column label="钱包地址" prop="walletAddress" width="350"></el-table-column>
     
     <!-- <el-table-column label="密码" prop="password" width="120"></el-table-column> -->
     
     <!-- <el-table-column label="支付密码" prop="payPassword" width="120"></el-table-column> -->
+
+        <!-- <el-table-column label="登录时间" prop="loginTime" width="120"></el-table-column> -->
     
-    <el-table-column label="登录时间" prop="loginTime" width="120"></el-table-column> 
+    <el-table-column label="登录ip" prop="loginIp" width="150"></el-table-column>
     
-    <el-table-column label="登录ip" prop="loginIp" width="120"></el-table-column> 
-    
-    <el-table-column label="登录次数" prop="loginTimes" width="120"></el-table-column> 
-    
-    <el-table-column label="创建时间" prop="createdTime" width="120"></el-table-column> 
-    
+    <el-table-column label="登录次数" prop="loginTimes" width="120"></el-table-column>
+
+        <el-table-column label="创建时间" width="180">
+            <template slot-scope="scope">{{scope.row.CreatedAt|formatDate}}</template>
+        </el-table-column>
+
+        <!--<el-table-column label="创建时间" prop="CreatedAt" width="120"></el-table-column> -->
+
     <el-table-column label="状态" prop="status" width="120">
          <template slot-scope="scope">{{scope.row.status|formatBoolean}}</template>
     </el-table-column>
     
       <el-table-column label="按钮组">
         <template slot-scope="scope">
-          <el-button class="table-button" @click="updateAvfUser(scope.row)" size="small" type="primary" icon="el-icon-edit">变更</el-button>
+          <!--<el-button class="table-button" @click="updateAvfUser(scope.row)" size="small" type="primary" icon="el-icon-edit">变更</el-button> -->
           <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteRow(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -112,18 +114,18 @@
             <el-input v-model="formData.payPassword" clearable placeholder="请输入" ></el-input>
       </el-form-item> -->
        
-         <el-form-item label="登录时间:"><el-input v-model.number="formData.loginTime" clearable placeholder="请输入"></el-input>
+       <!--  <el-form-item label="登录时间:"><el-input v-model.number="formData.loginTime" clearable placeholder="请输入"></el-input>
       </el-form-item>
-       
+
          <el-form-item label="登录ip:">
             <el-input v-model="formData.loginIp" clearable placeholder="请输入" ></el-input>
       </el-form-item>
-       
+
          <el-form-item label="登录次数:"><el-input v-model.number="formData.loginTimes" clearable placeholder="请输入"></el-input>
       </el-form-item>
-       
+
          <el-form-item label="创建时间:"><el-input v-model.number="formData.createdTime" clearable placeholder="请输入"></el-input>
-      </el-form-item>
+      </el-form-item> -->
        
          <el-form-item label="状态:">
             <el-switch active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" v-model="formData.status" clearable ></el-switch>
@@ -167,7 +169,7 @@ export default {
             loginTime:0,
             loginIp:"",
             loginTimes:0,
-            createdTime:0,
+            CreatedAt:"0",
             status:false,
             
       }

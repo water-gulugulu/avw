@@ -29,11 +29,12 @@ casbin:
   model-path: ./resource/rbac_model.conf
 collection-address:
   address: 0x5029C7e715cB5FAA4c17E6f503f6a1ea8b3870A5
-  fees: "5"
-  proportion: "80"
-  exchange: "0.001"
-  direct: "20"
-  debug: "1"
+  fees: 5
+  proportion: 80
+  exchange: 0
+  direct: 20
+  debug: "0"
+  max-exchange: 10000000
 email:
   to: xxx@qq.com
   port: 465
@@ -60,16 +61,6 @@ mysql:
   max-open-conns: 0
   log-mode: false
   log-zap: ""
-mysql2:
-  config: charset=utf8mb4&parseTime=True&loc=Local
-  db-name: avf
-  log-mode: false
-  log-zap: ""
-  max-idle-conns: 0
-  max-open-conns: 0
-  password: pa2pDs8daPfNYGhD
-  path: 127.0.0.1:3306
-  username: avf
 qiniu:
   zone: ZoneHuaDong
   bucket: ""

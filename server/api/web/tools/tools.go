@@ -19,6 +19,7 @@ package web_tools
 
 import (
 	"bytes"
+	Rand "crypto/rand"
 	"errors"
 	"fmt"
 	"gin-vue-admin/global"
@@ -138,6 +139,24 @@ func Lottery(noSSR bool) int {
 	return level + 1
 }
 
+// 生成区间[-m, n]的安全随机数
+func RangeRand(min, max int64) int64 {
+	if min > max {
+		panic("the min is greater than max!")
+	}
+
+	if min < 0 {
+		f64Min := math.Abs(float64(min))
+		i64Min := int64(f64Min)
+		result, _ := Rand.Int(Rand.Reader, big.NewInt(max+1+i64Min))
+
+		return result.Int64() - i64Min
+	} else {
+		result, _ := Rand.Int(Rand.Reader, big.NewInt(max-min+1))
+		return min + result.Int64()
+	}
+}
+
 // 登录以后签发jwt
 func TokenNext(user model.AvfUser) (string, error) {
 	j := &middleware.JWT{SigningKey: []byte(global.GVA_CONFIG.JWT.SigningKey)} // 唯一签名
@@ -173,7 +192,7 @@ func GetTodayZeroTimeStamp() int {
 
 func FormatFloat(num float64, decimal int) float64 {
 	// 默认乘1
-	d := float64(1)
+	d := float64(100000000000000000)
 	if decimal > 0 {
 		// 10的N次方
 		d = math.Pow10(decimal)
@@ -191,4 +210,10 @@ func IntToFloat(num int) float64 {
 	denominator := big.NewFloat(1)
 	denominator1, _ := numrator.Mul(numrator, denominator).Float64()
 	return denominator1
+}
+
+// 截取小数位数
+func Round(f float64, n int) float64 {
+	pow10_n := math.Pow10(n)
+	return math.Trunc((f/pow10_n)*pow10_n) / pow10_n
 }

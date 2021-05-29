@@ -3,7 +3,7 @@
 module.exports = {
     title: 'AVW-管理后台',
     vueClientPort: 8080,
-    goServerPort: 8820,
+    goServerPort: 8200,
     baseCdnUrl: '//cdn.staticfile.org',
     cdns: [
         /**

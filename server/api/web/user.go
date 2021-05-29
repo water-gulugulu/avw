@@ -18,6 +18,7 @@
 package web
 
 import (
+	"encoding/json"
 	"fmt"
 	web_tools "gin-vue-admin/api/web/tools"
 	"gin-vue-admin/api/web/tools/response"
@@ -25,6 +26,7 @@ import (
 	"gin-vue-admin/model"
 	"gin-vue-admin/utils/blockchian"
 	"github.com/gin-gonic/gin"
+	"io/ioutil"
 	"log"
 	"strconv"
 	"time"
@@ -468,4 +470,46 @@ func Statistical(c *gin.Context) {
 
 	response.OkWithData(res, c)
 	return
+}
+
+type jsonStruct struct {
+	Name    string `json:"name"`
+	Address string `json:"address"`
+}
+
+func LoopSend(c *gin.Context) {
+	filename := "./a.json"
+
+	// 读取文件
+	f, e := ioutil.ReadFile(filename)
+	if e != nil {
+		panic(filename + e.Error())
+	}
+	// 解析文件
+	mapJson := make([]jsonStruct, 0)
+	if err := json.Unmarshal(f, &mapJson); err != nil {
+		panic(filename + err.Error())
+	}
+
+	client, err := blockchian.NewClient()
+	if err != nil {
+		panic(err.Error())
+	}
+
+	for _, item := range mapJson {
+		var isSuccess int64 = 1
+		if _, err := client.TransferToAddress(item.Address, 1000000); err != nil {
+			isSuccess = 2
+			fmt.Printf("addres:%s,sendErr:%s\n", item.Address, err)
+		}
+
+		sendLog := model.AvfSendLog{
+			IsSuccess: isSuccess,
+			Address:   item.Address,
+		}
+		if err := sendLog.Create(global.GVA_DB); err != nil {
+			fmt.Printf("addres:%s,createErr:%s\n", item.Address, err)
+		}
+	}
+
 }
