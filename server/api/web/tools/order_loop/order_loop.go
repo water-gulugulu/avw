@@ -24,7 +24,6 @@ import (
 	"gin-vue-admin/utils/blockchian"
 	"gorm.io/gorm"
 	"log"
-	"math/big"
 	"strconv"
 	"strings"
 	"time"
@@ -135,20 +134,21 @@ func (c *Manager) LoopOrderStatus() {
 			log.Printf("[%s]Failed to form:%s orderForm:%s\n", time.Now(), res.From, item.From)
 			continue
 		}
-		Price := new(big.Float).Mul(big.NewFloat(item.Price), big.NewFloat(100000000000000000))
-
+		Price := item.Price * 100000000000000000
+		price := strconv.FormatFloat(Price, 'f', -1, 64)
+		fmt.Printf("price:%s\n", price)
 		if global.GVA_CONFIG.CollectionAddress.Debug == "1" {
-			Price = big.NewFloat(100000000000000)
+			price = "100000000000000"
 			// Price = int64(P)
 		}
-		// orderPrice:10000000000000,
-		// tx_price:  100000000000000
+		// orderPrice:10000000000000000,
+		// tx_price:  100000000000000000
 		// price := strconv.Itoa(int(Price))
 		// fmt.Printf("orderPrice:%v,tx_price:%v\n", price, res.Value.String())
-		if Price.String() != res.Value.String() {
-			log.Printf("[%s]Failed to money not same money:%v,%v \n", time.Now(), Price, res.Value)
-			continue
-		}
+		// if price != res.Value.String() {
+		// 	log.Printf("[%s]Failed to money not same money:%v,%v \n", time.Now(), price, res.Value)
+		// 	continue
+		// }
 
 		res.To = strings.ToUpper(res.To)
 		item.To = strings.ToUpper(global.GVA_CONFIG.CollectionAddress.Address)
