@@ -62,7 +62,7 @@ func Start() {
 	forever := make(chan bool)
 	t := &TestPro{}
 	// for {
-	rabbitmq.Recv(queueExchange, t, 10)
+	rabbitmq.Recv(queueExchange, t, 2)
 	// }
 	<-forever
 	// return &manager
