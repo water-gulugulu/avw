@@ -74,7 +74,12 @@ type TestPro struct {
 
 // 实现发送者
 func (t *TestPro) FailAction(dataByte []byte) error {
-	fmt.Println(dataByte)
+	rabbitMQ := model.AvfRabbitmqError{
+		Message:    string(dataByte),
+		CreateTime: time.Now(),
+	}
+	_ = rabbitMQ.Create(global.GVA_DB)
+	// fmt.Println(dataByte)
 	return nil
 }
 
