@@ -18,12 +18,13 @@
 package web
 
 import (
+	"encoding/json"
 	"fmt"
 	web_tools "gin-vue-admin/api/web/tools"
 	"gin-vue-admin/api/web/tools/response"
-	"gin-vue-admin/api/web/tools/today_loop"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
+	"gin-vue-admin/utils/rabbitmq"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"log"
@@ -551,7 +552,179 @@ func CancelTransfer(c *gin.Context) {
 
 // 挖矿
 func Mining(c *gin.Context) {
+	CardRecord := model.AvfOrderCard{
+		Status: 1,
+	}
+	DB := global.GVA_DB
+	list, err2 := CardRecord.GetListByMining(DB)
+	if err2 != nil {
+		response.FailWithMessage(fmt.Sprintf("[%s]query card list failed error:%e\n", time.Now(), err2), c)
+		return
+	}
+	l := make(map[int]*model.AvfOrderCard, 0)
+	var allStar int
+	for key, item := range list {
+		l[key] = item
+		allStar = allStar + item.Star
+	}
 
-	start := today_loop.Start()
-	go start.Transfer()
+	if len(l) == 0 {
+		response.FailWithMessage("列表空的", c)
+		return
+	}
+	starExchange := global.GVA_CONFIG.CollectionAddress.MaxExchange
+	Direct := global.GVA_CONFIG.CollectionAddress.Direct
+
+	DirectExchange := starExchange * Direct / 100
+	starExchange = starExchange - DirectExchange
+	// fmt.Printf("starExchange:%s,DirectExchange:%s\n", starExchange, DirectExchange)
+	// return
+	// d := web_tools.IntToFloat(Direct)
+
+	UserList, err2 := new(model.AvfUser).GetListAll(DB)
+	if err2 != nil {
+		log.Printf("[%s]query user list failed error:%e\n", time.Now(), err2)
+		return
+	}
+	UserMap := make(map[string]*model.AvfUser, 0)
+	for _, item := range UserList {
+		UserMap[item.WalletAddress] = item
+	}
+	oneStarExchange := web_tools.IntToFloat(starExchange) / web_tools.IntToFloat(allStar)
+	oneDirectExchange := web_tools.IntToFloat(DirectExchange) / web_tools.IntToFloat(allStar)
+	rabbitmqData := make(map[int]*UserData, 0)
+	now := time.Now()
+	for _, value := range list {
+		item := value
+		// if item.User.Pid == "0x749fA214E4c1d49B217A0B411a1f76dEa3F31111" || item.User.WalletAddress == "0x749fA214E4c1d49B217A0B411a1f76dEa3F31111" {
+		// 	fmt.Printf("pid:%s,adaress:%s\n", item.User.Pid, item.User.WalletAddress)
+		// 	continue
+		// }
+		money := oneStarExchange * web_tools.IntToFloat(item.Star)
+		parentPrice := oneDirectExchange * web_tools.IntToFloat(item.Star)
+		Bill := AvfUserBill{
+			Uid:        item.Uid,
+			CardId:     int(item.ID),
+			Address:    item.User.WalletAddress,
+			Pid:        item.CardId,
+			Type:       1,
+			Money:      money,
+			Payment:    1,
+			PayType:    1,
+			Detail:     fmt.Sprintf("每日挖矿收益：%v", money),
+			CreateTime: int(now.Unix()),
+		}
+		var data, ParentData UserData
+		if rabbitmqData[item.Uid] == nil {
+			UserBill := make([]AvfUserBill, 0)
+			UserBill = append(UserBill, Bill)
+
+			data.WalletAddress = item.User.WalletAddress
+			data.UserBill = UserBill
+			data.AllStar += item.Star
+			data.Money += money
+			data.Direct = 0
+		} else {
+			rdata := rabbitmqData[item.Uid]
+			UserBill := rdata.UserBill
+			data.WalletAddress = item.User.WalletAddress
+			data.UserBill = append(UserBill, Bill)
+			data.AllStar += item.Star
+			data.Money += rdata.Money + money
+			data.Direct += rdata.Direct
+		}
+		rabbitmqData[item.Uid] = &data
+
+		Parent := UserMap[item.User.Pid]
+
+		// ParentData := UserData{}
+		if len(item.User.Pid) != 0 && Parent != nil {
+			pid := int(Parent.ID)
+			parentBill := AvfUserBill{
+				Uid:        pid,
+				CardId:     int(item.ID),
+				Address:    Parent.WalletAddress,
+				Pid:        item.CardId,
+				Type:       5,
+				Money:      parentPrice,
+				Payment:    1,
+				PayType:    1,
+				Detail:     fmt.Sprintf("直推下级：%v,挖矿直推收益：%v", item.User.WalletAddress, parentPrice),
+				CreateTime: int(now.Unix()),
+			}
+			if rabbitmqData[pid] == nil {
+				UserBill2 := make([]AvfUserBill, 0)
+				UserBill2 = append(UserBill2, parentBill)
+
+				ParentData.WalletAddress = Parent.WalletAddress
+				ParentData.UserBill = UserBill2
+				ParentData.Direct += parentPrice
+				ParentData.Money = 0
+			} else {
+				rdata2 := rabbitmqData[pid]
+				UserBill2 := rdata2.UserBill
+				ParentData.WalletAddress = Parent.WalletAddress
+				ParentData.UserBill = append(UserBill2, parentBill)
+				ParentData.Direct += rdata2.Direct + parentPrice
+				ParentData.Money = rdata2.Money
+			}
+			rabbitmqData[pid] = &ParentData
+		}
+	}
+	queueExchange := rabbitmq.QueueExchange{
+		QuName: "earnings_queue",
+		RtKey:  "#.",
+		ExName: "earnings",
+		ExType: "topic",
+		Dns:    "amqp://root:123123@127.0.0.1:5672",
+	}
+
+	for _, item := range rabbitmqData {
+		data, err := json.Marshal(item)
+		if err != nil {
+			log.Printf("[%s]用户地址：%s,转json存入rabbitmq失败，error:%e\n", time.Now(), item.WalletAddress, err)
+			continue
+		}
+		rabbitmq.Send(queueExchange, string(data))
+	}
+	response.OkWithData(rabbitmqData, c)
+	return
+}
+
+type TestPro struct {
+	msgContent string
+}
+
+// 实现发送者
+func (t *TestPro) MsgContent() string {
+	return t.msgContent
+}
+
+// 实现接收者
+func (t *TestPro) Consumer(dataByte []byte) error {
+	fmt.Println(string(dataByte))
+	return nil
+}
+
+type UserData struct {
+	WalletAddress string        `json:"wallet_address"`
+	Money         float64       `json:"money"`
+	Direct        float64       `json:"direct"`
+	AllStar       int           `json:"all_star"`
+	UserBill      []AvfUserBill `json:"user_bill"`
+}
+type AvfUserBill struct {
+	Uid        int     `json:"uid" form:"uid" gorm:"column:uid;comment:用户ID;type:int;size:10;"`                                  // 用户ID
+	CardId     int     `json:"cardId" form:"cardId" gorm:"column:card_id;comment:卡牌记录ID;type:int;size:10;"`                      // 卡牌记录ID
+	Pid        int     `json:"pid" form:"pid" gorm:"column:pid;comment:卡牌ID;type:int;size:10;"`                                  // 卡牌ID
+	Address    string  `json:"address" form:"address" gorm:"column:address;comment:钱包地址;type:varchar(255);size:255;"`            // 钱包地址
+	Type       int     `json:"type" form:"type" gorm:"column:type;comment:类型 1-发放收益 2-盲盒 3-购买卡牌 4-手续费 5-直推收益;type:int;size:10;"` // 类型 1-发放收益 2-盲盒 3-购买卡牌 4-手续费 5-直推收益
+	Money      float64 `json:"money" form:"money" gorm:"column:money;comment:金额;type:decimal;size:9,4;"`                         // 金额
+	Fees       float64 `json:"fees" form:"fees" gorm:"column:fees;comment:手续费;type:decimal;size:9,4;"`                           // 手续费
+	Balance    float64 `json:"balance" form:"balance" gorm:"column:balance;comment:余额;type:decimal;size:9,4;"`                   // 余额
+	Payment    int     `json:"payment" form:"payment" gorm:"column:payment;comment:收入支出 1-收入 2-支出;type:int;size:10;"`            // 收入支出
+	PayType    int     `json:"payType" form:"payType" gorm:"column:pay_type;comment:支付方式 1-avw 2-ht;type:int;size:10;"`          // 支付方式 1-avw 2-ht
+	Detail     string  `json:"detail" form:"detail" gorm:"column:detail;comment:描述;type:varchar(255);size:255;"`                 // 详情
+	TxHash     string  `json:"tx_hash" form:"tx_hash" gorm:"column:tx_hash;comment:交易hash;type:varchar(255);size:255;"`          // 交易hash
+	CreateTime int     `json:"createTime" form:"createTime" gorm:"column:create_time;comment:创建时间;type:int;size:10;"`            // 创建时间
 }
