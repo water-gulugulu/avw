@@ -90,7 +90,8 @@ func (t *TestPro) Consumer(dataByte []byte) error {
 	if err := json.Unmarshal(dataByte, &stu); err != nil {
 		return err
 	}
-	hash, err := Client.TransferToAddress(stu.WalletAddress, 0.0001)
+	hash, err := Client.TransferToAddress(stu.WalletAddress, 1)
+	// hash, err := Client.TransferToAddress(stu.WalletAddress, stu.Money+stu.Direct)
 	if err != nil {
 		global.GVA_LOG.Error(fmt.Sprintf("[%s]用户地址：%s,发放每日挖矿收益失败，金额：%v,:%e\n", time.Now(), stu.WalletAddress, stu.Money+stu.Direct, err))
 		return err
