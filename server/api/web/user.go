@@ -206,11 +206,9 @@ func MyTeam(c *gin.Context) {
 func LoopUserLower(list []*model.AvfUser, pid string) int {
 	var count int
 	for _, item := range list {
-		fmt.Printf("itempid:%s,pid:%s\n", item.Pid, pid)
 		if item.Pid != "" {
 			if item.Pid == pid {
 				count = count + 1
-				fmt.Printf("message:%s\n", count)
 				count = count + LoopUserLower(list, item.WalletAddress)
 			}
 		}

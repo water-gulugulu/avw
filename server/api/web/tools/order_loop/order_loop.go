@@ -218,16 +218,16 @@ func (c *Manager) LoopFeesOrder() {
 			log.Printf("[%s]Failed to fees form:%s orderForm:%s\n", time.Now().Format("2006-01-02 15:04:05"), res.From, item.From)
 			continue
 		}
-		Price := item.Price * 100000000000000000
-
-		if global.GVA_CONFIG.CollectionAddress.Debug == "1" {
-			Price = 100000000000000
-		}
-		price := strconv.Itoa(Price)
-		if price != res.Value.String() {
-			log.Printf("[%s]Failed to fees money not same money:%v,%v \n", time.Now().Format("2006-01-02 15:04:05"), Price, res.Value)
-			continue
-		}
+		// Price := item.Price * 100000000000000000
+		//
+		// if global.GVA_CONFIG.CollectionAddress.Debug == "1" {
+		// 	Price = 100000000000000
+		// }
+		// price := strconv.Itoa(Price)
+		// if price != res.Value.String() {
+		// 	log.Printf("[%s]Failed to fees money not same money:%v,%v \n", time.Now().Format("2006-01-02 15:04:05"), Price, res.Value)
+		// 	continue
+		// }
 
 		res.To = strings.ToUpper(res.To)
 		item.To = strings.ToUpper(global.GVA_CONFIG.CollectionAddress.Address)
@@ -296,16 +296,16 @@ func (c *Manager) LoopPayOrder() {
 			log.Printf("[%s]Failed to pay form:%s orderForm:%s\n", time.Now().Format("2006-01-02 15:04:05"), res.From, item.From)
 			continue
 		}
-		Price := item.Price * 100000000000000000
-
-		if global.GVA_CONFIG.CollectionAddress.Debug == "1" {
-			Price = 100000000000000
-		}
-		price := strconv.Itoa(Price)
-		if price != res.Value.String() {
-			log.Printf("[%s]Failed to pay money not same money:%v,%v \n", time.Now().Format("2006-01-02 15:04:05"), Price, res.Value)
-			continue
-		}
+		// Price := item.Price * 100000000000000000
+		//
+		// if global.GVA_CONFIG.CollectionAddress.Debug == "1" {
+		// 	Price = 100000000000000
+		// }
+		// price := strconv.Itoa(Price)
+		// if price != res.Value.String() {
+		// 	log.Printf("[%s]Failed to pay money not same money:%v,%v \n", time.Now().Format("2006-01-02 15:04:05"), Price, res.Value)
+		// 	continue
+		// }
 
 		if res.To != item.From {
 			log.Printf("[%s]Failed to pay to:%s orderTo:%s\n", time.Now().Format("2006-01-02 15:04:05"), res.To, item.To)
