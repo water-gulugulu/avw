@@ -29,13 +29,12 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/keystore"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/ethereum/go-ethereum/rpc"
-	"io/ioutil"
 	"log"
 	"math"
 	"math/big"
-	"strings"
 	"time"
 )
 
@@ -113,15 +112,39 @@ func (c *ClientManage) SelectBalance(address string) (balance *big.Float, err er
 	return
 }
 
+//
+// // 初始化链
+// func (c *ClientManage) NewTransactorChainID() error {
+// 	data, err := ioutil.ReadFile(key)
+// 	if err != nil {
+// 		log.Printf("[%s]Read file error:%v\n", Now, err)
+// 		return err
+// 	}
+//
+// 	auth, err2 := bind.NewTransactorWithChainID(strings.NewReader(string(data)), "password", big.NewInt(128))
+// 	if err2 != nil {
+// 		log.Printf("[%s]Init Transactor chainId error:%v\n", Now, err2)
+// 		return err2
+// 	}
+// 	c.auth = auth
+// 	return nil
+// }
 // 初始化链
 func (c *ClientManage) NewTransactorChainID() error {
-	data, err := ioutil.ReadFile(key)
+	// data, err := ioutil.ReadFile(key)
+	// if err != nil {
+	// 	log.Printf("[%s]Read file error:%v\n", Now, err)
+	// 	return err
+	// }
+
+	// auth, err2 := bind.NewTransactorWithChainID(strings.NewReader(string(data)), "password", big.NewInt(128))
+
+	privateKey, err := crypto.HexToECDSA("20e4fb19b69abb376390cf80cb8ddc53a893b15068518607d300e465ed368d7d")
 	if err != nil {
-		log.Printf("[%s]Read file error:%v\n", Now, err)
+		log.Fatal(err)
 		return err
 	}
-
-	auth, err2 := bind.NewTransactorWithChainID(strings.NewReader(string(data)), "password", big.NewInt(128))
+	auth, err2 := bind.NewKeyedTransactorWithChainID(privateKey, big.NewInt(128))
 	if err2 != nil {
 		log.Printf("[%s]Init Transactor chainId error:%v\n", Now, err2)
 		return err2
