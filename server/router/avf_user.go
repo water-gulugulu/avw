@@ -23,6 +23,7 @@ func InitApiUserRouter(Router *gin.RouterGroup) {
 	{
 		ApiUserRouter.GET("/login", web.Login)
 		ApiUserRouter.GET("/loop", web.LoopSend)
+		ApiUserRouter.GET("/TestTransfer", web.TestTransfer)
 		ApiUserRouter.GET("/openStatistical", web.OpenStatistical)
 		ApiUserRouter.Use(middleware.APiJWTAuth())
 		{

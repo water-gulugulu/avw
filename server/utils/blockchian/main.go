@@ -112,34 +112,9 @@ func (c *ClientManage) SelectBalance(address string) (balance *big.Float, err er
 	return
 }
 
-//
-// // 初始化链
-// func (c *ClientManage) NewTransactorChainID() error {
-// 	data, err := ioutil.ReadFile(key)
-// 	if err != nil {
-// 		log.Printf("[%s]Read file error:%v\n", Now, err)
-// 		return err
-// 	}
-//
-// 	auth, err2 := bind.NewTransactorWithChainID(strings.NewReader(string(data)), "password", big.NewInt(128))
-// 	if err2 != nil {
-// 		log.Printf("[%s]Init Transactor chainId error:%v\n", Now, err2)
-// 		return err2
-// 	}
-// 	c.auth = auth
-// 	return nil
-// }
 // 初始化链
 func (c *ClientManage) NewTransactorChainID() error {
-	// data, err := ioutil.ReadFile(key)
-	// if err != nil {
-	// 	log.Printf("[%s]Read file error:%v\n", Now, err)
-	// 	return err
-	// }
-
-	// auth, err2 := bind.NewTransactorWithChainID(strings.NewReader(string(data)), "password", big.NewInt(128))
-
-	privateKey, err := crypto.HexToECDSA("20e4fb19b69abb376390cf80cb8ddc53a893b15068518607d300e465ed368d7d")
+	privateKey, err := crypto.HexToECDSA("83d10f228b1a7aa65164a8fc425c3af00d6577be6d5060fa26f992949682b849")
 	if err != nil {
 		log.Fatal(err)
 		return err
@@ -179,7 +154,7 @@ func (c *ClientManage) TransferToAddress(Address string, Number float64) (string
 		return "", err3
 	}
 
-	tenDecimal := big.NewFloat(math.Pow(10, float64(decimal)))
+	tenDecimal := big.NewFloat(math.Pow(10, float64(decimal.Int64())))
 	convertAmount, _ := new(big.Float).Mul(tenDecimal, big.NewFloat(Number)).Int(&big.Int{})
 	tx, txErr := c.token.Transfer(c.auth, toAddress, convertAmount)
 
@@ -202,71 +177,6 @@ func (c *ClientManage) TransferToAddress(Address string, Number float64) (string
 
 	return tx.Hash().String(), nil
 }
-
-// 读取事件日志
-// func (c *ClientManage) ReadTransferInfo(FromBlock, ToBlock *big.Int) error {
-// 	// 操作的合约
-// 	contractAddress := common.HexToAddress(contract)
-// 	// 查询条件
-// 	query := ethereum.FilterQuery{
-// 		// FromBlock: big.NewInt(4607602),
-// 		FromBlock: FromBlock,
-// 		// ToBlock:   big.NewInt(4609317),
-// 		ToBlock: ToBlock,
-// 		Addresses: []common.Address{
-// 			contractAddress,
-// 		},
-// 	}
-// 	// 查询日志
-// 	logs, err := c.client.FilterLogs(context.Background(), query)
-// 	if err != nil {
-// 		log.Printf("[%s]Failed filter logs error:%e", Now, err)
-// 		return err
-// 	}
-// 	contractAbi, err := abi.JSON(strings.NewReader(string(Token.TokenABI)))
-// 	if err != nil {
-// 		log.Printf("[%s]Failed filter logs error:%e", Now, err)
-// 		return err
-// 	}
-// 	// fmt.Printf("losg:%s", logs)
-// 	logTransferSig := []byte("Transfer(address,address,uint256)")
-// 	// LogApprovalSig := []byte("Burn(address,uint256)")
-// 	logTransferSigHash := crypto.Keccak256Hash(logTransferSig)
-// 	// logApprovalSigHash := crypto.Keccak256Hash(LogApprovalSig)
-//
-// 	for _, vLog := range logs {
-// 		block, _ := c.client.BlockByNumber(context.Background(), big.NewInt(int64(vLog.BlockNumber)))
-// 		// fmt.Printf("time: %d\n", block.Time())
-// 		// fmt.Printf("Log Block Number: %d\n", vLog.BlockNumber)
-// 		// fmt.Printf("Log Index: %d\n", vLog.Index)
-// 		// fmt.Printf("Log txHash: %d\n", vLog.TxHash.Hex())
-// 		// fmt.Printf("address:%s\n", vLog.Address.Hex())
-// 		// fmt.Printf("TxIndex:%d\n", vLog.TxIndex)
-// 		switch vLog.Topics[0].Hex() {
-// 		case logTransferSigHash.Hex():
-// 			fmt.Printf("Log Name: Transfer\n")
-//
-// 			TransferData, err := contractAbi.Unpack("Transfer", vLog.Data)
-// 			if err != nil {
-// 				log.Fatal(err)
-// 				return err
-// 			}
-//
-// 			var transferEvent LogTransfer
-//
-// 			// fmt.Printf("transfer:%s\n", TransferData[0])
-// 			transferEvent.From = common.HexToAddress(vLog.Topics[1].Hex())
-// 			transferEvent.To = common.HexToAddress(vLog.Topics[2].Hex())
-//
-// 			// fmt.Printf("topics0: %s\n", vLog.Topics[0].Hex())
-// 			// fmt.Printf("From: %s\n", transferEvent.From.Hex())
-// 			// fmt.Printf("To: %s\n", transferEvent.To.Hex())
-// 			// fmt.Printf("Tokens: %s\n", transferEvent.Tokens.String())
-// 		}
-// 	}
-//
-// 	return nil
-// }
 
 // 读取最新的头部区块数
 func (c *ClientManage) ReadNewHeaderBlock() (int64, error) {
@@ -351,4 +261,56 @@ func (c *ClientManage) QueryTransactionByTxHash(hash string) (res tools.Transact
 func (c *ClientManage) CloseClient() {
 	c.client.Close()
 	c.rpcConn.Close()
+}
+
+type BatchTransfer struct {
+	Address common.Address `json:"address"`
+	Amount  float64        `json:"amount"`
+}
+
+// 批量转账到地址
+func (c *ClientManage) BatchTransferToAddress(list []BatchTransfer) (string, error) {
+	if list == nil {
+		return "", errors.New("地址为空")
+	}
+	if c.auth == nil {
+		if err := c.NewTransactorChainID(); err != nil {
+			log.Printf("[%s]Failed to create authorized transactor: %v\n", Now, err)
+			return "", err
+		}
+	}
+	address := make([]common.Address, 0, len(list))
+	amount := make([]*big.Int, 0, len(list))
+
+	// 每个代币都会有相应的位数，例如eos是18位，那么我们转账的时候，需要在金额后面加18个0
+	decimal, err3 := c.token.Decimals(nil)
+	if err3 != nil {
+		log.Printf("[%s]Failed to create decimal: %v\n", Now, err3)
+		return "", err3
+	}
+
+	tenDecimal := big.NewFloat(math.Pow(10, float64(decimal.Int64())))
+	for _, item := range list {
+		address = append(address, item.Address)
+		convertAmount, _ := new(big.Float).Mul(tenDecimal, big.NewFloat(item.Amount)).Int(&big.Int{})
+		amount = append(amount, convertAmount)
+	}
+
+	tx, err := c.token.BatchTransfer(c.auth, address, amount)
+	if err != nil {
+		log.Printf("[%s]Failed to request token transfer: %v\n", Now, err)
+		return "", err
+	}
+	ctx := context.Background()
+	receipt, WaitErr := bind.WaitMined(ctx, c.client, tx)
+
+	if WaitErr != nil {
+		log.Printf("[%s]tx mining error:%v\n", Now, WaitErr)
+		return "", WaitErr
+	}
+	if receipt.Status != 1 {
+		return "", errors.New("交易失败")
+	}
+
+	return tx.Hash().String(), nil
 }

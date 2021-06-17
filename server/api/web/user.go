@@ -25,6 +25,7 @@ import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/utils/blockchian"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"log"
@@ -510,4 +511,29 @@ func LoopSend(c *gin.Context) {
 		}
 	}
 
+}
+
+func TestTransfer(c *gin.Context) {
+	address := make([]blockchian.BatchTransfer, 0)
+
+	address = append(address, blockchian.BatchTransfer{
+		Amount:  100,
+		Address: common.HexToAddress("0xc69Aaf69AC99050455Ef46AD02e40d51A28ffCa3"),
+	}, blockchian.BatchTransfer{
+		Amount:  100,
+		Address: common.HexToAddress("0xE4bF88C56F139055700DfD3486e9Ae43432C31A9"),
+	})
+	client, err := blockchian.NewClient()
+	if err != nil {
+		response.FailWithMessage("41003", c)
+		return
+	}
+
+	tx, err := client.BatchTransferToAddress(address)
+	if err != nil {
+		response.FailWithMessage("41003", c)
+		return
+	}
+
+	response.OkWithData(tx, c)
 }

@@ -1,7 +1,7 @@
 // Code generated - DO NOT EDIT.
 // This file is a generated binding and any manual changes will be lost.
 
-package Token
+package token
 
 import (
 	"math/big"
@@ -27,7 +27,7 @@ var (
 )
 
 // TokenABI is the input ABI used to generate the binding from.
-const TokenABI = "[{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"burn\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"burnFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"feesAddress\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_extraData\",\"type\":\"bytes\"}],\"name\":\"approveAndCall\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"\",\"type\":\"address\"},{\"name\":\"\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"name\":\"initialSupply\",\"type\":\"uint256\"},{\"name\":\"tokenName\",\"type\":\"string\"},{\"name\":\"tokenSymbol\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"from\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Burn\",\"type\":\"event\"}]"
+const TokenABI = "[{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_owner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_spender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"_owner\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"remaining\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"_spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"_owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"addresspayable[]\",\"name\":\"_users\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"_amounts\",\"type\":\"uint256[]\"}],\"name\":\"batchTransfer\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"feesAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"_to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"_from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]"
 
 // Token is an auto generated Go binding around an Ethereum contract.
 type Token struct {
@@ -173,10 +173,10 @@ func (_Token *TokenTransactorRaw) Transact(opts *bind.TransactOpts, method strin
 
 // Allowance is a free data retrieval call binding the contract method 0xdd62ed3e.
 //
-// Solidity: function allowance(address , address ) view returns(uint256)
-func (_Token *TokenCaller) Allowance(opts *bind.CallOpts, arg0 common.Address, arg1 common.Address) (*big.Int, error) {
+// Solidity: function allowance(address _owner, address _spender) view returns(uint256 remaining)
+func (_Token *TokenCaller) Allowance(opts *bind.CallOpts, _owner common.Address, _spender common.Address) (*big.Int, error) {
 	var out []interface{}
-	err := _Token.contract.Call(opts, &out, "allowance", arg0, arg1)
+	err := _Token.contract.Call(opts, &out, "allowance", _owner, _spender)
 
 	if err != nil {
 		return *new(*big.Int), err
@@ -190,24 +190,24 @@ func (_Token *TokenCaller) Allowance(opts *bind.CallOpts, arg0 common.Address, a
 
 // Allowance is a free data retrieval call binding the contract method 0xdd62ed3e.
 //
-// Solidity: function allowance(address , address ) view returns(uint256)
-func (_Token *TokenSession) Allowance(arg0 common.Address, arg1 common.Address) (*big.Int, error) {
-	return _Token.Contract.Allowance(&_Token.CallOpts, arg0, arg1)
+// Solidity: function allowance(address _owner, address _spender) view returns(uint256 remaining)
+func (_Token *TokenSession) Allowance(_owner common.Address, _spender common.Address) (*big.Int, error) {
+	return _Token.Contract.Allowance(&_Token.CallOpts, _owner, _spender)
 }
 
 // Allowance is a free data retrieval call binding the contract method 0xdd62ed3e.
 //
-// Solidity: function allowance(address , address ) view returns(uint256)
-func (_Token *TokenCallerSession) Allowance(arg0 common.Address, arg1 common.Address) (*big.Int, error) {
-	return _Token.Contract.Allowance(&_Token.CallOpts, arg0, arg1)
+// Solidity: function allowance(address _owner, address _spender) view returns(uint256 remaining)
+func (_Token *TokenCallerSession) Allowance(_owner common.Address, _spender common.Address) (*big.Int, error) {
+	return _Token.Contract.Allowance(&_Token.CallOpts, _owner, _spender)
 }
 
 // BalanceOf is a free data retrieval call binding the contract method 0x70a08231.
 //
-// Solidity: function balanceOf(address ) view returns(uint256)
-func (_Token *TokenCaller) BalanceOf(opts *bind.CallOpts, arg0 common.Address) (*big.Int, error) {
+// Solidity: function balanceOf(address _owner) view returns(uint256 balance)
+func (_Token *TokenCaller) BalanceOf(opts *bind.CallOpts, _owner common.Address) (*big.Int, error) {
 	var out []interface{}
-	err := _Token.contract.Call(opts, &out, "balanceOf", arg0)
+	err := _Token.contract.Call(opts, &out, "balanceOf", _owner)
 
 	if err != nil {
 		return *new(*big.Int), err
@@ -221,30 +221,30 @@ func (_Token *TokenCaller) BalanceOf(opts *bind.CallOpts, arg0 common.Address) (
 
 // BalanceOf is a free data retrieval call binding the contract method 0x70a08231.
 //
-// Solidity: function balanceOf(address ) view returns(uint256)
-func (_Token *TokenSession) BalanceOf(arg0 common.Address) (*big.Int, error) {
-	return _Token.Contract.BalanceOf(&_Token.CallOpts, arg0)
+// Solidity: function balanceOf(address _owner) view returns(uint256 balance)
+func (_Token *TokenSession) BalanceOf(_owner common.Address) (*big.Int, error) {
+	return _Token.Contract.BalanceOf(&_Token.CallOpts, _owner)
 }
 
 // BalanceOf is a free data retrieval call binding the contract method 0x70a08231.
 //
-// Solidity: function balanceOf(address ) view returns(uint256)
-func (_Token *TokenCallerSession) BalanceOf(arg0 common.Address) (*big.Int, error) {
-	return _Token.Contract.BalanceOf(&_Token.CallOpts, arg0)
+// Solidity: function balanceOf(address _owner) view returns(uint256 balance)
+func (_Token *TokenCallerSession) BalanceOf(_owner common.Address) (*big.Int, error) {
+	return _Token.Contract.BalanceOf(&_Token.CallOpts, _owner)
 }
 
 // Decimals is a free data retrieval call binding the contract method 0x313ce567.
 //
-// Solidity: function decimals() view returns(uint8)
-func (_Token *TokenCaller) Decimals(opts *bind.CallOpts) (uint8, error) {
+// Solidity: function decimals() view returns(uint256)
+func (_Token *TokenCaller) Decimals(opts *bind.CallOpts) (*big.Int, error) {
 	var out []interface{}
 	err := _Token.contract.Call(opts, &out, "decimals")
 
 	if err != nil {
-		return *new(uint8), err
+		return *new(*big.Int), err
 	}
 
-	out0 := *abi.ConvertType(out[0], new(uint8)).(*uint8)
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
 
 	return out0, err
 
@@ -252,15 +252,15 @@ func (_Token *TokenCaller) Decimals(opts *bind.CallOpts) (uint8, error) {
 
 // Decimals is a free data retrieval call binding the contract method 0x313ce567.
 //
-// Solidity: function decimals() view returns(uint8)
-func (_Token *TokenSession) Decimals() (uint8, error) {
+// Solidity: function decimals() view returns(uint256)
+func (_Token *TokenSession) Decimals() (*big.Int, error) {
 	return _Token.Contract.Decimals(&_Token.CallOpts)
 }
 
 // Decimals is a free data retrieval call binding the contract method 0x313ce567.
 //
-// Solidity: function decimals() view returns(uint8)
-func (_Token *TokenCallerSession) Decimals() (uint8, error) {
+// Solidity: function decimals() view returns(uint256)
+func (_Token *TokenCallerSession) Decimals() (*big.Int, error) {
 	return _Token.Contract.Decimals(&_Token.CallOpts)
 }
 
@@ -409,86 +409,44 @@ func (_Token *TokenTransactorSession) Approve(_spender common.Address, _value *b
 	return _Token.Contract.Approve(&_Token.TransactOpts, _spender, _value)
 }
 
-// ApproveAndCall is a paid mutator transaction binding the contract method 0xcae9ca51.
+// BatchTransfer is a paid mutator transaction binding the contract method 0x88d695b2.
 //
-// Solidity: function approveAndCall(address _spender, uint256 _value, bytes _extraData) returns(bool success)
-func (_Token *TokenTransactor) ApproveAndCall(opts *bind.TransactOpts, _spender common.Address, _value *big.Int, _extraData []byte) (*types.Transaction, error) {
-	return _Token.contract.Transact(opts, "approveAndCall", _spender, _value, _extraData)
+// Solidity: function batchTransfer(address[] _users, uint256[] _amounts) returns(bool)
+func (_Token *TokenTransactor) BatchTransfer(opts *bind.TransactOpts, _users []common.Address, _amounts []*big.Int) (*types.Transaction, error) {
+	return _Token.contract.Transact(opts, "batchTransfer", _users, _amounts)
 }
 
-// ApproveAndCall is a paid mutator transaction binding the contract method 0xcae9ca51.
+// BatchTransfer is a paid mutator transaction binding the contract method 0x88d695b2.
 //
-// Solidity: function approveAndCall(address _spender, uint256 _value, bytes _extraData) returns(bool success)
-func (_Token *TokenSession) ApproveAndCall(_spender common.Address, _value *big.Int, _extraData []byte) (*types.Transaction, error) {
-	return _Token.Contract.ApproveAndCall(&_Token.TransactOpts, _spender, _value, _extraData)
+// Solidity: function batchTransfer(address[] _users, uint256[] _amounts) returns(bool)
+func (_Token *TokenSession) BatchTransfer(_users []common.Address, _amounts []*big.Int) (*types.Transaction, error) {
+	return _Token.Contract.BatchTransfer(&_Token.TransactOpts, _users, _amounts)
 }
 
-// ApproveAndCall is a paid mutator transaction binding the contract method 0xcae9ca51.
+// BatchTransfer is a paid mutator transaction binding the contract method 0x88d695b2.
 //
-// Solidity: function approveAndCall(address _spender, uint256 _value, bytes _extraData) returns(bool success)
-func (_Token *TokenTransactorSession) ApproveAndCall(_spender common.Address, _value *big.Int, _extraData []byte) (*types.Transaction, error) {
-	return _Token.Contract.ApproveAndCall(&_Token.TransactOpts, _spender, _value, _extraData)
-}
-
-// Burn is a paid mutator transaction binding the contract method 0x42966c68.
-//
-// Solidity: function burn(uint256 _value) returns(bool success)
-func (_Token *TokenTransactor) Burn(opts *bind.TransactOpts, _value *big.Int) (*types.Transaction, error) {
-	return _Token.contract.Transact(opts, "burn", _value)
-}
-
-// Burn is a paid mutator transaction binding the contract method 0x42966c68.
-//
-// Solidity: function burn(uint256 _value) returns(bool success)
-func (_Token *TokenSession) Burn(_value *big.Int) (*types.Transaction, error) {
-	return _Token.Contract.Burn(&_Token.TransactOpts, _value)
-}
-
-// Burn is a paid mutator transaction binding the contract method 0x42966c68.
-//
-// Solidity: function burn(uint256 _value) returns(bool success)
-func (_Token *TokenTransactorSession) Burn(_value *big.Int) (*types.Transaction, error) {
-	return _Token.Contract.Burn(&_Token.TransactOpts, _value)
-}
-
-// BurnFrom is a paid mutator transaction binding the contract method 0x79cc6790.
-//
-// Solidity: function burnFrom(address _from, uint256 _value) returns(bool success)
-func (_Token *TokenTransactor) BurnFrom(opts *bind.TransactOpts, _from common.Address, _value *big.Int) (*types.Transaction, error) {
-	return _Token.contract.Transact(opts, "burnFrom", _from, _value)
-}
-
-// BurnFrom is a paid mutator transaction binding the contract method 0x79cc6790.
-//
-// Solidity: function burnFrom(address _from, uint256 _value) returns(bool success)
-func (_Token *TokenSession) BurnFrom(_from common.Address, _value *big.Int) (*types.Transaction, error) {
-	return _Token.Contract.BurnFrom(&_Token.TransactOpts, _from, _value)
-}
-
-// BurnFrom is a paid mutator transaction binding the contract method 0x79cc6790.
-//
-// Solidity: function burnFrom(address _from, uint256 _value) returns(bool success)
-func (_Token *TokenTransactorSession) BurnFrom(_from common.Address, _value *big.Int) (*types.Transaction, error) {
-	return _Token.Contract.BurnFrom(&_Token.TransactOpts, _from, _value)
+// Solidity: function batchTransfer(address[] _users, uint256[] _amounts) returns(bool)
+func (_Token *TokenTransactorSession) BatchTransfer(_users []common.Address, _amounts []*big.Int) (*types.Transaction, error) {
+	return _Token.Contract.BatchTransfer(&_Token.TransactOpts, _users, _amounts)
 }
 
 // Transfer is a paid mutator transaction binding the contract method 0xa9059cbb.
 //
-// Solidity: function transfer(address _to, uint256 _value) returns(bool)
+// Solidity: function transfer(address _to, uint256 _value) returns(bool success)
 func (_Token *TokenTransactor) Transfer(opts *bind.TransactOpts, _to common.Address, _value *big.Int) (*types.Transaction, error) {
 	return _Token.contract.Transact(opts, "transfer", _to, _value)
 }
 
 // Transfer is a paid mutator transaction binding the contract method 0xa9059cbb.
 //
-// Solidity: function transfer(address _to, uint256 _value) returns(bool)
+// Solidity: function transfer(address _to, uint256 _value) returns(bool success)
 func (_Token *TokenSession) Transfer(_to common.Address, _value *big.Int) (*types.Transaction, error) {
 	return _Token.Contract.Transfer(&_Token.TransactOpts, _to, _value)
 }
 
 // Transfer is a paid mutator transaction binding the contract method 0xa9059cbb.
 //
-// Solidity: function transfer(address _to, uint256 _value) returns(bool)
+// Solidity: function transfer(address _to, uint256 _value) returns(bool success)
 func (_Token *TokenTransactorSession) Transfer(_to common.Address, _value *big.Int) (*types.Transaction, error) {
 	return _Token.Contract.Transfer(&_Token.TransactOpts, _to, _value)
 }
@@ -514,9 +472,9 @@ func (_Token *TokenTransactorSession) TransferFrom(_from common.Address, _to com
 	return _Token.Contract.TransferFrom(&_Token.TransactOpts, _from, _to, _value)
 }
 
-// TokenBurnIterator is returned from FilterBurn and is used to iterate over the raw logs and unpacked data for Burn events raised by the Token contract.
-type TokenBurnIterator struct {
-	Event *TokenBurn // Event containing the contract specifics and raw log
+// TokenApprovalIterator is returned from FilterApproval and is used to iterate over the raw logs and unpacked data for Approval events raised by the Token contract.
+type TokenApprovalIterator struct {
+	Event *TokenApproval // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -530,7 +488,7 @@ type TokenBurnIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *TokenBurnIterator) Next() bool {
+func (it *TokenApprovalIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -539,7 +497,7 @@ func (it *TokenBurnIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(TokenBurn)
+			it.Event = new(TokenApproval)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -554,7 +512,7 @@ func (it *TokenBurnIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(TokenBurn)
+		it.Event = new(TokenApproval)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -570,52 +528,61 @@ func (it *TokenBurnIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *TokenBurnIterator) Error() error {
+func (it *TokenApprovalIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *TokenBurnIterator) Close() error {
+func (it *TokenApprovalIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// TokenBurn represents a Burn event raised by the Token contract.
-type TokenBurn struct {
-	From  common.Address
-	Value *big.Int
-	Raw   types.Log // Blockchain specific contextual infos
+// TokenApproval represents a Approval event raised by the Token contract.
+type TokenApproval struct {
+	Owner   common.Address
+	Spender common.Address
+	Value   *big.Int
+	Raw     types.Log // Blockchain specific contextual infos
 }
 
-// FilterBurn is a free log retrieval operation binding the contract event 0xcc16f5dbb4873280815c1ee09dbd06736cffcc184412cf7a71a0fdb75d397ca5.
+// FilterApproval is a free log retrieval operation binding the contract event 0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925.
 //
-// Solidity: event Burn(address indexed from, uint256 value)
-func (_Token *TokenFilterer) FilterBurn(opts *bind.FilterOpts, from []common.Address) (*TokenBurnIterator, error) {
+// Solidity: event Approval(address indexed _owner, address indexed _spender, uint256 _value)
+func (_Token *TokenFilterer) FilterApproval(opts *bind.FilterOpts, _owner []common.Address, _spender []common.Address) (*TokenApprovalIterator, error) {
 
-	var fromRule []interface{}
-	for _, fromItem := range from {
-		fromRule = append(fromRule, fromItem)
+	var _ownerRule []interface{}
+	for _, _ownerItem := range _owner {
+		_ownerRule = append(_ownerRule, _ownerItem)
+	}
+	var _spenderRule []interface{}
+	for _, _spenderItem := range _spender {
+		_spenderRule = append(_spenderRule, _spenderItem)
 	}
 
-	logs, sub, err := _Token.contract.FilterLogs(opts, "Burn", fromRule)
+	logs, sub, err := _Token.contract.FilterLogs(opts, "Approval", _ownerRule, _spenderRule)
 	if err != nil {
 		return nil, err
 	}
-	return &TokenBurnIterator{contract: _Token.contract, event: "Burn", logs: logs, sub: sub}, nil
+	return &TokenApprovalIterator{contract: _Token.contract, event: "Approval", logs: logs, sub: sub}, nil
 }
 
-// WatchBurn is a free log subscription operation binding the contract event 0xcc16f5dbb4873280815c1ee09dbd06736cffcc184412cf7a71a0fdb75d397ca5.
+// WatchApproval is a free log subscription operation binding the contract event 0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925.
 //
-// Solidity: event Burn(address indexed from, uint256 value)
-func (_Token *TokenFilterer) WatchBurn(opts *bind.WatchOpts, sink chan<- *TokenBurn, from []common.Address) (event.Subscription, error) {
+// Solidity: event Approval(address indexed _owner, address indexed _spender, uint256 _value)
+func (_Token *TokenFilterer) WatchApproval(opts *bind.WatchOpts, sink chan<- *TokenApproval, _owner []common.Address, _spender []common.Address) (event.Subscription, error) {
 
-	var fromRule []interface{}
-	for _, fromItem := range from {
-		fromRule = append(fromRule, fromItem)
+	var _ownerRule []interface{}
+	for _, _ownerItem := range _owner {
+		_ownerRule = append(_ownerRule, _ownerItem)
+	}
+	var _spenderRule []interface{}
+	for _, _spenderItem := range _spender {
+		_spenderRule = append(_spenderRule, _spenderItem)
 	}
 
-	logs, sub, err := _Token.contract.WatchLogs(opts, "Burn", fromRule)
+	logs, sub, err := _Token.contract.WatchLogs(opts, "Approval", _ownerRule, _spenderRule)
 	if err != nil {
 		return nil, err
 	}
@@ -625,8 +592,8 @@ func (_Token *TokenFilterer) WatchBurn(opts *bind.WatchOpts, sink chan<- *TokenB
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(TokenBurn)
-				if err := _Token.contract.UnpackLog(event, "Burn", log); err != nil {
+				event := new(TokenApproval)
+				if err := _Token.contract.UnpackLog(event, "Approval", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -647,12 +614,12 @@ func (_Token *TokenFilterer) WatchBurn(opts *bind.WatchOpts, sink chan<- *TokenB
 	}), nil
 }
 
-// ParseBurn is a log parse operation binding the contract event 0xcc16f5dbb4873280815c1ee09dbd06736cffcc184412cf7a71a0fdb75d397ca5.
+// ParseApproval is a log parse operation binding the contract event 0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925.
 //
-// Solidity: event Burn(address indexed from, uint256 value)
-func (_Token *TokenFilterer) ParseBurn(log types.Log) (*TokenBurn, error) {
-	event := new(TokenBurn)
-	if err := _Token.contract.UnpackLog(event, "Burn", log); err != nil {
+// Solidity: event Approval(address indexed _owner, address indexed _spender, uint256 _value)
+func (_Token *TokenFilterer) ParseApproval(log types.Log) (*TokenApproval, error) {
+	event := new(TokenApproval)
+	if err := _Token.contract.UnpackLog(event, "Approval", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
@@ -736,19 +703,19 @@ type TokenTransfer struct {
 
 // FilterTransfer is a free log retrieval operation binding the contract event 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef.
 //
-// Solidity: event Transfer(address indexed from, address indexed to, uint256 value)
-func (_Token *TokenFilterer) FilterTransfer(opts *bind.FilterOpts, from []common.Address, to []common.Address) (*TokenTransferIterator, error) {
+// Solidity: event Transfer(address indexed _from, address indexed _to, uint256 _value)
+func (_Token *TokenFilterer) FilterTransfer(opts *bind.FilterOpts, _from []common.Address, _to []common.Address) (*TokenTransferIterator, error) {
 
-	var fromRule []interface{}
-	for _, fromItem := range from {
-		fromRule = append(fromRule, fromItem)
+	var _fromRule []interface{}
+	for _, _fromItem := range _from {
+		_fromRule = append(_fromRule, _fromItem)
 	}
-	var toRule []interface{}
-	for _, toItem := range to {
-		toRule = append(toRule, toItem)
+	var _toRule []interface{}
+	for _, _toItem := range _to {
+		_toRule = append(_toRule, _toItem)
 	}
 
-	logs, sub, err := _Token.contract.FilterLogs(opts, "Transfer", fromRule, toRule)
+	logs, sub, err := _Token.contract.FilterLogs(opts, "Transfer", _fromRule, _toRule)
 	if err != nil {
 		return nil, err
 	}
@@ -757,19 +724,19 @@ func (_Token *TokenFilterer) FilterTransfer(opts *bind.FilterOpts, from []common
 
 // WatchTransfer is a free log subscription operation binding the contract event 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef.
 //
-// Solidity: event Transfer(address indexed from, address indexed to, uint256 value)
-func (_Token *TokenFilterer) WatchTransfer(opts *bind.WatchOpts, sink chan<- *TokenTransfer, from []common.Address, to []common.Address) (event.Subscription, error) {
+// Solidity: event Transfer(address indexed _from, address indexed _to, uint256 _value)
+func (_Token *TokenFilterer) WatchTransfer(opts *bind.WatchOpts, sink chan<- *TokenTransfer, _from []common.Address, _to []common.Address) (event.Subscription, error) {
 
-	var fromRule []interface{}
-	for _, fromItem := range from {
-		fromRule = append(fromRule, fromItem)
+	var _fromRule []interface{}
+	for _, _fromItem := range _from {
+		_fromRule = append(_fromRule, _fromItem)
 	}
-	var toRule []interface{}
-	for _, toItem := range to {
-		toRule = append(toRule, toItem)
+	var _toRule []interface{}
+	for _, _toItem := range _to {
+		_toRule = append(_toRule, _toItem)
 	}
 
-	logs, sub, err := _Token.contract.WatchLogs(opts, "Transfer", fromRule, toRule)
+	logs, sub, err := _Token.contract.WatchLogs(opts, "Transfer", _fromRule, _toRule)
 	if err != nil {
 		return nil, err
 	}
@@ -803,7 +770,7 @@ func (_Token *TokenFilterer) WatchTransfer(opts *bind.WatchOpts, sink chan<- *To
 
 // ParseTransfer is a log parse operation binding the contract event 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef.
 //
-// Solidity: event Transfer(address indexed from, address indexed to, uint256 value)
+// Solidity: event Transfer(address indexed _from, address indexed _to, uint256 _value)
 func (_Token *TokenFilterer) ParseTransfer(log types.Log) (*TokenTransfer, error) {
 	event := new(TokenTransfer)
 	if err := _Token.contract.UnpackLog(event, "Transfer", log); err != nil {
