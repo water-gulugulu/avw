@@ -41,8 +41,8 @@ import (
 // @Success 200 {object} model.AvfCard
 // @Router /web/order_card/luckyDraw [post]
 func LuckyDraw(c *gin.Context) {
-	response.FailWithMessage("41024", c)
-	return
+	// response.FailWithMessage("41024", c)
+	// return
 	UserId, err := web_tools.GetUserId(c)
 	if err != nil {
 		response.FailWithMessage("41003", c)
