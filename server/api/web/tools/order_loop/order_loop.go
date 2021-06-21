@@ -203,7 +203,7 @@ func (c *Manager) LoopOrderStatus() {
 func (c *Manager) LoopFeesOrder() {
 	// for {
 	for _, item := range c.OrderFeesList {
-		res, err2 := c.client.QueryTransactionByTxHash(item.FeesHash)
+		res, err2 := c.client.CheckUsdHash(item.FeesHash)
 		if err2 != nil {
 			log.Printf("[%s]Failed to query fees transaction error:%e\n", time.Now().Format("2006-01-02 15:04:05"), err2)
 			continue
@@ -279,7 +279,7 @@ func (c *Manager) LoopFeesOrder() {
 func (c *Manager) LoopPayOrder() {
 	// for {
 	for _, item := range c.OrderPayList {
-		res, err2 := c.client.QueryTransactionByTxHash(item.TxHash)
+		res, err2 := c.client.CheckUsdHash(item.TxHash)
 		if err2 != nil {
 			log.Printf("[%s]Failed to pay transaction error:%e\n", time.Now().Format("2006-01-02 15:04:05"), err2)
 			continue
