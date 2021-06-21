@@ -35,6 +35,7 @@ import (
 	"log"
 	"math"
 	"math/big"
+	"strings"
 	"time"
 )
 
@@ -46,7 +47,8 @@ type LogTransfer struct {
 
 const (
 	// contract = "0x21fd0FBE5Fb40B9A86FF21f223dCbCB2A308c3E5" // 旧的
-	contract = "0x3c94f2bb9a35e38a827feae443bc63d5a80a409f"                                                               // 女优币 1万亿
+	// contract = "0x3c94f2bb9a35e38a827feae443bc63d5a80a409f"                                                               // 女优币 1万亿
+	contract = "0x8429937eaD794f4B82009B4aCf18Db52E2171235"                                                               // 女优币 1万亿
 	key      = "./utils/blockchian/wallets/UTC--2021-05-11T06-48-26.264188000Z--8f2b1cea616b837b74ae5b5e31054a36cd2fd380" // 火币链 0x8f2b1CeA616b837b74Ae5B5E31054A36cd2FD380
 	// key = "./wallets/UTC--2021-05-10T16-31-35.638486000Z--d7940959ec892652f2042fcb0f9feef3e498e724" // 私链     0xd7940959ec892652f2042fcb0f9feef3e498e724
 	RawUrl = "https://http-mainnet-node.huobichain.com"
@@ -313,4 +315,37 @@ func (c *ClientManage) BatchTransferToAddress(list []BatchTransfer) (string, err
 	}
 
 	return tx.Hash().String(), nil
+}
+
+// 检查usd的hash
+func (c *ClientManage) CheckUsdHash(hash string) (res *tools.TransactionResponse, err error) {
+	hashReply, err := c.client.TransactionReceipt(context.Background(), common.HexToHash(hash))
+	if err != nil {
+		log.Printf("[%v]query hash failed error:%e\n", time.Now().Format("2006-05-04 15:02:01"), err)
+		return nil, err
+	}
+	if len(hashReply.Logs) == 0 {
+		return nil, errors.New("哈希地址日志为空")
+	}
+	if len(hashReply.Logs[0].Topics) == 0 {
+		return nil, errors.New("充值地址日志主题为空")
+	}
+
+	hashFrom := strings.ToLower(common.HexToAddress(hashReply.Logs[0].Topics[1].Hex()).Hex())
+	hashTo := strings.ToLower(common.HexToAddress(hashReply.Logs[0].Topics[2].Hex()).Hex())
+	hashMoney := common.BytesToHash(hashReply.Logs[0].Data).Big().String()
+
+	fmt.Printf("to:%s,money:%s\n", hashTo, hashMoney)
+
+	if hashReply.Status != 1 {
+		return nil, errors.New("交易未完成")
+	}
+	res = &tools.TransactionResponse{
+		TxHash: hash,
+		Block:  hashReply.BlockNumber,
+		From:   hashFrom,
+		To:     hashTo,
+		Status: hashReply.Status,
+	}
+	return res, nil
 }
