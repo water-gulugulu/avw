@@ -338,9 +338,9 @@ func (mq *RabbitMQ) ListenReceiver(receiver Receiver, routineNum int) {
 	}
 }
 
-//消息处理失败之后 延时尝试
+// 消息处理失败之后 延时尝试
 func retry_msg(msg []byte, retry_nums int32, queueExchange QueueExchange) {
-	//原始队列名称 交换机名称
+	// 原始队列名称 交换机名称
 	oldQName := queueExchange.QuName
 	oldExchangeName := queueExchange.ExName
 	oldRoutingKey := queueExchange.RtKey
@@ -358,7 +358,7 @@ func retry_msg(msg []byte, retry_nums int32, queueExchange QueueExchange) {
 		queueExchange.RtKey = queueExchange.QuName + "_retry_3"
 	}
 
-	//fmt.Printf("%+v",queueExchange)
+	// fmt.Printf("%+v",queueExchange)
 
 	mq := NewMq(queueExchange)
 	mq.MqConnect()
@@ -366,7 +366,7 @@ func retry_msg(msg []byte, retry_nums int32, queueExchange QueueExchange) {
 	// defer func() {
 	// 	mq.CloseMqConnect()
 	// }()
-	//fmt.Printf("%+v",queueExchange)
+	// fmt.Printf("%+v",queueExchange)
 	mq.sendRetryMsg(string(msg), retry_nums, oldRoutingKey, oldExchangeName)
 
 }
