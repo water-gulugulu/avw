@@ -49,7 +49,7 @@ type LogTransfer struct {
 const (
 	contract = "0x8429937eaD794f4B82009B4aCf18Db52E2171235" // 女优币 1万亿
 	// key      = "./utils/blockchian/wallets/UTC--2021-05-11T06-48-26.264188000Z--8f2b1cea616b837b74ae5b5e31054a36cd2fd380" // 火币链 0x8f2b1CeA616b837b74Ae5B5E31054A36cd2FD380
-	key    = "./middleware/blockchian/wallets/avwt" // 0xdA23Ac49c81C4d7d05A4b8913202C34d978d78c3
+	key    = "./utils/blockchian/wallets/avwt" // 0xdA23Ac49c81C4d7d05A4b8913202C34d978d78c3
 	RawUrl = "https://http-mainnet-node.huobichain.com"
 )
 
