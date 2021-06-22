@@ -341,3 +341,36 @@ func (c *ClientManage) BatchTransferToAddress(list []BatchTransfer) (string, err
 
 	return tx.Hash().String(), nil
 }
+
+// 检查usd的hash
+func (c *ClientManage) CheckUsdHash(hash string) (res *tools.TransactionResponse, err error) {
+	hashReply, err := c.client.TransactionReceipt(context.Background(), common.HexToHash(hash))
+	if err != nil {
+		log.Printf("[%v]query hash failed error:%e\n", time.Now().Format("2006-05-04 15:02:01"), err)
+		return nil, err
+	}
+	if len(hashReply.Logs) == 0 {
+		return nil, errors.New("哈希地址日志为空")
+	}
+	if len(hashReply.Logs[0].Topics) == 0 {
+		return nil, errors.New("充值地址日志主题为空")
+	}
+
+	hashFrom := strings.ToLower(common.HexToAddress(hashReply.Logs[0].Topics[1].Hex()).Hex())
+	hashTo := strings.ToLower(common.HexToAddress(hashReply.Logs[0].Topics[2].Hex()).Hex())
+	hashMoney := common.BytesToHash(hashReply.Logs[0].Data).Big().String()
+
+	fmt.Printf("to:%s,money:%s\n", hashTo, hashMoney)
+
+	if hashReply.Status != 1 {
+		return nil, errors.New("交易未完成")
+	}
+	res = &tools.TransactionResponse{
+		TxHash: hash,
+		Block:  hashReply.BlockNumber,
+		From:   hashFrom,
+		To:     hashTo,
+		Status: hashReply.Status,
+	}
+	return res, nil
+}
