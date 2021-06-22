@@ -55,11 +55,22 @@ func LuckyDraw(c *gin.Context) {
 	}
 	DB := global.GVA_DB
 
+	Count, err := new(model.AvfOrderCard).FindCount(DB)
+	if err != nil {
+		response.FailWithMessage("60001", c)
+		return
+	}
+	if Count >= 8700 {
+		response.FailWithMessage("41025", c)
+		return
+	}
+
 	oid, _ := strconv.Atoi(orderID)
 	Order := model.AvfOrder{
 		GVA_MODEL: global.GVA_MODEL{ID: uint(oid)},
 		Uid:       int(UserId),
 	}
+
 	if err := Order.FindByIdAndUserId(DB); err != nil {
 		response.FailWithMessage("60001", c)
 		return

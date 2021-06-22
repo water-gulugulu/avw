@@ -47,7 +47,6 @@ func (h *AvfOrder) FindList(DB *gorm.DB, p, size int) (list []AvfOrder, total in
 func (h *AvfOrder) CreateOrder(DB *gorm.DB) error {
 	return DB.Table(h.TableName()).Create(&h).Error
 }
-
 func (h *AvfOrder) FindById(DB *gorm.DB) error {
 	if h.ID == 0 {
 		return errors.New("ID不能为空")

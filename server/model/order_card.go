@@ -38,6 +38,13 @@ func (h *AvfOrderCard) FindListByOrderId(DB *gorm.DB) (list []AvfOrderCard, err 
 
 	return
 }
+
+func (h *AvfOrderCard) FindCount(DB *gorm.DB) (total int64, err error) {
+	if err := DB.Table(h.TableName()).Count(&total).Error; err != nil {
+		return 0, err
+	}
+	return
+}
 func (h *AvfOrderCard) FindListByUid(DB *gorm.DB, page, size int) (list []*AvfOrderCard, total int64, err error) {
 	if h.Uid == 0 {
 		return nil, 0, errors.New("用户ID不能为空")
