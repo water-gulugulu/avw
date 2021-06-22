@@ -32,9 +32,11 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/ethereum/go-ethereum/rpc"
+	"io/ioutil"
 	"log"
 	"math"
 	"math/big"
+	"strings"
 	"time"
 )
 
@@ -45,10 +47,9 @@ type LogTransfer struct {
 }
 
 const (
-	// contract = "0x21fd0FBE5Fb40B9A86FF21f223dCbCB2A308c3E5" // 旧的
-	contract = "0x3c94f2bb9a35e38a827feae443bc63d5a80a409f"                                                               // 女优币 1万亿
-	key      = "./utils/blockchian/wallets/UTC--2021-05-11T06-48-26.264188000Z--8f2b1cea616b837b74ae5b5e31054a36cd2fd380" // 火币链 0x8f2b1CeA616b837b74Ae5B5E31054A36cd2FD380
-	// key = "./wallets/UTC--2021-05-10T16-31-35.638486000Z--d7940959ec892652f2042fcb0f9feef3e498e724" // 私链     0xd7940959ec892652f2042fcb0f9feef3e498e724
+	contract = "0x8429937eaD794f4B82009B4aCf18Db52E2171235" // 女优币 1万亿
+	// key      = "./utils/blockchian/wallets/UTC--2021-05-11T06-48-26.264188000Z--8f2b1cea616b837b74ae5b5e31054a36cd2fd380" // 火币链 0x8f2b1CeA616b837b74Ae5B5E31054A36cd2FD380
+	key    = "./middleware/blockchian/wallets/avwt" // 0xdA23Ac49c81C4d7d05A4b8913202C34d978d78c3
 	RawUrl = "https://http-mainnet-node.huobichain.com"
 )
 
@@ -128,6 +129,30 @@ func (c *ClientManage) NewTransactorChainID() error {
 	return nil
 }
 
+// 初始化链
+func (c *ClientManage) NewTransactorChainIdByKeystore() error {
+	// privateKey, err := crypto.HexToECDSA("83d10f228b1a7aa65164a8fc425c3af00d6577be6d5060fa26f992949682b849")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// 	return err
+	// }
+	// auth, err2 := bind.NewKeyedTransactorWithChainID(privateKey, big.NewInt(128))
+
+	data, err := ioutil.ReadFile(key)
+	if err != nil {
+		log.Printf("[%s]Read file error:%v\n", Now, err)
+		return err
+	}
+
+	auth, err2 := bind.NewTransactorWithChainID(strings.NewReader(string(data)), "Ljl19960203..", big.NewInt(128))
+	if err2 != nil {
+		log.Printf("[%s]Init Transactor chainId error:%v\n", Now, err2)
+		return err2
+	}
+	c.auth = auth
+	return nil
+}
+
 // 转账到地址
 // Address 收款地址
 func (c *ClientManage) TransferToAddress(Address string, Number float64) (string, error) {
@@ -141,7 +166,8 @@ func (c *ClientManage) TransferToAddress(Address string, Number float64) (string
 
 	// Create an authorized transactor and spend 1 unicorn
 	if c.auth == nil {
-		if err := c.NewTransactorChainID(); err != nil {
+		// if err := c.NewTransactorChainID(); err != nil {
+		if err := c.NewTransactorChainIdByKeystore(); err != nil {
 			log.Printf("[%s]Failed to create authorized transactor: %v\n", Now, err)
 			return "", err
 		}
@@ -274,7 +300,8 @@ func (c *ClientManage) BatchTransferToAddress(list []BatchTransfer) (string, err
 		return "", errors.New("地址为空")
 	}
 	if c.auth == nil {
-		if err := c.NewTransactorChainID(); err != nil {
+		// if err := c.NewTransactorChainID(); err != nil {
+		if err := c.NewTransactorChainIdByKeystore(); err != nil {
 			log.Printf("[%s]Failed to create authorized transactor: %v\n", Now, err)
 			return "", err
 		}
